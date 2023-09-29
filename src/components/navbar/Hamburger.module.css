@@ -30,7 +30,7 @@
 }
 
 .navItems {
-  @apply grid gap-6 p-8 justify-center justify-items-center;
+  @apply grid gap-6 p-8 justify-center justify-items-center mt-10;
   @apply sm:px-6;
   @apply xs:px-3 xs:gap-4;
 }
@@ -42,7 +42,7 @@
 }
 
 .navLink:hover {
-  @apply text-blue;
+  @apply text-accent;
 }
 
 .navLink:hover::after {

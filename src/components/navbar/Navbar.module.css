@@ -1,10 +1,9 @@
 .navbar {
-  @apply sticky top-0 left-0 right-0 w-full py-2 px-20 flex justify-between items-center overflow-hidden z-[100];
+  @apply sticky top-0 left-0 right-0 w-full md:py-4 py-3 px-20 flex justify-between items-center overflow-hidden z-[100];
   @apply 2xl:px-10;
   @apply xl:px-8;
   @apply sm:px-6;
   @apply xs:px-3;
-  background-color: rgba(24, 30, 35, 0.45);
   backdrop-filter: blur(8px);
 }
 
@@ -28,7 +27,7 @@
 }
 
 .navbarList>.navLink:hover {
-  @apply text-blue;
+  @apply text-accent;
 }
 
 .humburgerMenu {

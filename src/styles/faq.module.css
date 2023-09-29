@@ -1,4 +1,4 @@
-.active.item > .title {
+.active.item>.title {
   border-bottom-color: #ffff;
 }
 
@@ -13,7 +13,7 @@
   transition: border 0.28s;
 }
 
-.title > svg {
+.title>svg {
   transition: all 0.28s;
 }
 
@@ -31,10 +31,10 @@
 }
 
 .body a {
-  @apply text-blue;
+  @apply text-accent;
 }
 
 .body a:hover {
   border-bottom: 1px solid;
-  @apply border-b-blue;
+  @apply border-b-accent;
 }

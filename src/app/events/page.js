@@ -6,6 +6,7 @@ import BottomGlitter from '@/components/StyledText/BottomGlitter';
 import styles from '@/styles/events.module.css';
 import AnimatedScrollButton from '@/components/AnimatedScrollButton';
 import EventsData from '@/lib/data/EventsData';
+import Image from 'next/image';
 
 function Events() {
   useEffect(() => {
@@ -114,7 +115,9 @@ function EventBox({ title, description, src, link, id }) {
           style={{ clipPath: `url(#${id})` }}
         >
           <div className="absolute top-0 left-0 right-0 bottom-0 z-10 lg:static">
-            <img
+            <Image
+              width={100}
+              height={100}
               src={src}
               alt="abc"
               className="h-full w-full object-cover object-top"

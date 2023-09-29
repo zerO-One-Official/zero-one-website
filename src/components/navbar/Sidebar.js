@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { CgClose } from 'react-icons/cg';
-import Image from 'next/image';
 import Link from 'next/link';
 import styles from './Hamburger.module.css';
 import Button from '../button/Button';
+import Logo from '../logo/Logo';
 
 const SpanStyle = {
   zIndex: 1,
@@ -59,11 +59,7 @@ function Sidebar({ isMounted, unmount }) {
         }`.trim()}
     >
       <div className={styles.navbar}>
-        <div>
-          <Link href="/" onClick={unmount}>
-            <Image src={'/logo.png'} alt="Zero-one" height={60} width={60} />
-          </Link>
-        </div>
+        <Logo />
         <div onClick={unmount} className="cursor-pointer">
           <CgClose size={32} className={styles.closeIcon} />
         </div>
@@ -79,19 +75,14 @@ function Sidebar({ isMounted, unmount }) {
         <Link href="/resources" className={styles.navLink} onClick={unmount}>
           Resources
         </Link>
-        <a
-          href="https://docs.google.com/forms/d/e/1FAIpQLSeFWPMFDjxyBqTli8Getr_SuURcj7mSXv_vxt_8JDib0haB4Q/viewform?usp=sf_link"
-          target="_blank"
-          className="flex rounded-full"
-          rel="noreferrer"
-        >
+        <Link href={'/signup'} className='mt-10' onClick={unmount}>
           <Button
             style={{ border: 'none' }}
             className="bg-primary-light text-primary hover:text-primary-light xs:!py-3"
           >
             <span style={SpanStyle}>Join Us</span>
           </Button>
-        </a>
+        </Link>
       </div>
     </section>,
     document.getElementById('overlay'),

@@ -36,10 +36,10 @@
   --col-size: 60%;
 }
 
-.col > .header {
+.col>.header {
   position: sticky;
   top: calc(150px);
-  @apply text-6xl sm:text-5xl;
+  @apply text-6xl sm:text-5xl font-semibold;
 }
 
 .headDescription {
@@ -53,15 +53,15 @@
 .content {
   flex: 1;
   min-width: 50%;
-  @apply pr-4 py-4 mb-20 sm:mb-12;
+  @apply pr-4 py-4 mb-20 sm:mb-12 opacity-90;
 }
 
-.content > h2 {
-  @apply text-4xl font-bold mb-6 sm:text-2xl;
+.content>h2 {
+  @apply text-4xl font-semibold mb-6 sm:text-2xl;
   word-break: normal;
 }
 
-.content > p {
+.content>p {
   @apply text-lg pr-4 font-extralight sm:text-base;
 }
 

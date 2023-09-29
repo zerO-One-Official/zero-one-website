@@ -1,12 +1,10 @@
 .card {
   @apply p-4 relative flex flex-col justify-center items-center overflow-hidden rounded-2xl;
   min-height: 350px;
-  background: rgb(0, 204, 255);
-  background: linear-gradient(
-    45deg,
-    rgba(0, 204, 255, 0.44861694677871145) 0%,
-    rgba(152, 232, 252, 0.4) 100%
-  );
+  background: var(--accent);
+  background: linear-gradient(45deg,
+      rgba(165, 165, 165, 0.5) 0%,
+      rgba(57, 57, 57, 0.5) 100%);
   transition: all 300ms ease-in-out;
 }
 
@@ -22,7 +20,7 @@
 .card::before {
   @apply absolute w-32;
   content: '';
-  background: linear-gradient(#00ccff, #98e8fc);
+  background: linear-gradient(var(--accent), var(--accent-light));
   animation: animate 4s linear infinite;
   height: 140%;
   opacity: 0;
@@ -43,7 +41,7 @@
   @apply flex justify-around items-center w-full z-10 mb-2;
 }
 
-.socials > a:hover > svg {
+.socials>a:hover>svg {
   fill: #51bcff;
 }
 
@@ -55,6 +53,7 @@
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
