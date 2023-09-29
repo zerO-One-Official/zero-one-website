@@ -20,12 +20,14 @@
   @apply text-sm;
   top: -45%;
   left: 0.5rem;
+  opacity: .8;
 }
 
 @media (max-width: 1200px) {
   .inputContainer {
     @apply w-full;
   }
+
   .input {
     @apply w-full;
   }

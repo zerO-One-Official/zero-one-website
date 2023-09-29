@@ -19,7 +19,7 @@ function LandingPage() {
   );
 
   return (
-    <section className={styles.video}>
+    <section className='relative h-[90vh] container-70 flex items-center justify-center' >
       <div className={styles.content}>
         <Heading text="Design." link={'design'} />
         <Heading text="Develop." link={'develop'} />

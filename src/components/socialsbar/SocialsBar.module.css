@@ -4,7 +4,7 @@
 }
 
 .socialsBar>a {
-  @apply my-3 text-blue-light;
+  @apply my-3 text-accent-light;
 }
 
 .socialsBarIcons {
@@ -13,6 +13,6 @@
 }
 
 .socialsBarIcons:hover {
-  @apply text-blue-light opacity-100;
-  fill: rgb(56, 200, 236) !important;
+  @apply text-accent-light opacity-100;
+  fill: var(--accent) !important;
 }

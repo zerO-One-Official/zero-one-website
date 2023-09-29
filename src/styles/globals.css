@@ -1,19 +1,65 @@
 /* ./styles/globals.css */
+
+@font-face {
+  font-family: 'Gilroy';
+  src: url('/font/Gilroy-Regular.ttf');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Gilroy';
+  src: url('/font/Gilroy-Medium.ttf');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Gilroy';
+  src: url('/font/Gilroy-SemiBold.ttf');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Gilroy';
+  src: url('/font/Gilroy-Heavy.ttf');
+  font-weight: 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Gilroy';
+  src: url('/font/Gilroy-ExtraBold.ttf');
+  font-weight: 900;
+  font-style: normal;
+}
+
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --background: #000000;
+  --accent: #FF3333;
+  --accent-light: #FF3366;
+}
 
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
   color: #fff;
-  font-family: 'Overpass', sans-serif;
+  font-family: 'Gilroy', sans-serif !important;
   scroll-behavior: smooth;
+
 }
 
 body {
-  background-color: #000;
+  background: var(--background);
+  accent-color: var(--accent);
 }
 
 ::-webkit-scrollbar {
@@ -107,9 +153,25 @@ a {
 }
 
 .cursor {
-  background: rgb(51, 121, 238);
+  background: var(--accent);
   transform: translate(-50%, -50%);
   @apply h-[10px] w-[10px] fixed top-0 left-0 z-[9999999] pointer-events-none rounded-2xl;
   transition: all 0.15s ease;
   @apply md:hidden;
+}
+
+/* .cursor {
+  width: 32px;
+  height: 32px;
+  background: #fff;
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateX(-50%) translateY(-50%);
+  mix-blend-mode: difference;
+} */
+
+input[type="number"]::-webkit-inner-spin-button {
+  appearance: none;
 }

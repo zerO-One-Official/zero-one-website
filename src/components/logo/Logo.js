@@ -1,89 +1,15 @@
-import React from 'react';
-import styles from './Logo.module.css'; // Import the CSS module
+import Image from "next/image"
+import Link from "next/link"
 
-function Logo(props) {
-  const { width, height, fontSize } = props;
-  const style = { fontSize };
+const Logo = () => {
   return (
-    <div className={styles.logo}>
-      {/* Use the styles as a class */}
-      <div className={styles.titleText} style={style}>
-        zerO-
+    <Link href="/" className="flex items-stretch xs:gap-2 gap-4">
+      <Image src={'/logo.png'} quality={100} width={80} height={80} className="w-16 h-auto lg:w-10 xs:w-8" alt="zero-one logo" />
+      <div className="flex flex-col justify-end">
+        <h1 className="font-semibold text-5xl xs:text-2xl lg:text-4xl">ZERO ONE</h1>
+        <p className="font-normal text-zinc-400 leading-4 xs:leading-3 xs:text-sm">Create. Code. Conquer.</p>
       </div>
-      {/* <div className={styles.specsSvg}>
-        <svg
-          width={width}
-          height={height}
-          viewBox="0 0 484 208"
-          fill="#fff"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <defs>
-            <linearGradient id={styles.bg1}>
-              <stop offset="5%" stopColor="#00dfd8" />
-              <stop offset="95%" stopColor="#007cf0" />
-            </linearGradient>
-          </defs>
-          <path
-            className={styles.chasma}
-            id={styles.chasma1}
-            fill={`url(#bg1)`}
-            fillRule="evenodd"
-            clipRule="evenodd"
-            d="M473 100C473 149.153 433.153 189 384 189C334.847 189 295 149.153 295 100C295 50.8467 334.847 11 384 11C433.153 11 473 50.8467 473 100ZM484 100C484 155.228 439.228 200 384 200C340.75 200 303.912 172.543 289.968 134.108L289.797 134.282C269.498 114.358 249.911 110.639 233.81 113.389C217.46 116.182 203.99 125.788 196.634 133.822C185.25 176.535 146.299 208 100 208C44.7715 208 0 163.228 0 108C0 52.7715 44.7715 8 100 8C151.853 8 194.489 47.4668 199.506 98H284.02C285.085 43.6947 329.44 0 384 0C439.228 0 484 44.7715 484 100ZM189 108C189 157.153 149.153 197 100 197C50.8467 197 11 157.153 11 108C11 58.8467 50.8467 19 100 19C149.153 19 189 58.8467 189 108Z"
-          />
-        </svg>
-        <svg
-          width={width}
-          height={height}
-          viewBox="0 0 484 208"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <defs>
-            <linearGradient id="styles.bg2">
-              <stop offset="5%" stopColor="#ff0080" />
-              <stop offset="95%" stopColor="#7928ca" />
-            </linearGradient>
-          </defs>
-          <path
-            className="styles.chasma"
-            id="styles.chasma2"
-            fill={`url(#bg2)`}
-            fillRule="evenodd"
-            clipRule="evenodd"
-            d="M473 100C473 149.153 433.153 189 384 189C334.847 189 295 149.153 295 100C295 50.8467 334.847 11 384 11C433.153 11 473 50.8467 473 100ZM484 100C484 155.228 439.228 200 384 200C340.75 200 303.912 172.543 289.968 134.108L289.797 134.282C269.498 114.358 249.911 110.639 233.81 113.389C217.46 116.182 203.99 125.788 196.634 133.822C185.25 176.535 146.299 208 100 208C44.7715 208 0 163.228 0 108C0 52.7715 44.7715 8 100 8C151.853 8 194.489 47.4668 199.506 98H284.02C285.085 43.6947 329.44 0 384 0C439.228 0 484 44.7715 484 100ZM189 108C189 157.153 149.153 197 100 197C50.8467 197 11 157.153 11 108C11 58.8467 50.8467 19 100 19C149.153 19 189 58.8467 189 108Z"
-          />
-        </svg>
-
-        <svg
-          width={width}
-          height={height}
-          viewBox="0 0 484 208"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <defs>
-            <linearGradient id="styles.bg3">
-              <stop offset="5%" stopColor="#f9cb28" />
-              <stop offset="95%" stopColor="#ff4d4d" />
-            </linearGradient>
-          </defs>
-          <path
-            className="styles.chasma"
-            id="styles.chasma3"
-            fill={`url(#bg3)`}
-            fillRule="evenodd"
-            clipRule="evenodd"
-            d="M473 100C473 149.153 433.153 189 384 189C334.847 189 295 149.153 295 100C295 50.8467 334.847 11 384 11C433.153 11 473 50.8467 473 100ZM484 100C484 155.228 439.228 200 384 200C340.75 200 303.912 172.543 289.968 134.108L289.797 134.282C269.498 114.358 249.911 110.639 233.81 113.389C217.46 116.182 203.99 125.788 196.634 133.822C185.25 176.535 146.299 208 100 208C44.7715 208 0 163.228 0 108C0 52.7715 44.7715 8 100 8C151.853 8 194.489 47.4668 199.506 98H284.02C285.085 43.6947 329.44 0 384 0C439.228 0 484 44.7715 484 100ZM189 108C189 157.153 149.153 197 100 197C50.8467 197 11 157.153 11 108C11 58.8467 50.8467 19 100 19C149.153 19 189 58.8467 189 108Z"
-          />
-        </svg>
-      </div> */}
-      <div className={styles.titleText} style={style}>
-        One
-      </div>
-    </div>
-  );
+    </Link>
+  )
 }
-
-export default Logo;
+export default Logo

@@ -12,6 +12,10 @@
   width: fit-content;
 }
 
+.linksContainer a:hover {
+  color: var(--accent);
+}
+
 .copyrightBottom {
   @apply flex flex-wrap justify-between items-center w-full pt-20 pb-8;
   @apply sm:pt-12 sm:pb-0;

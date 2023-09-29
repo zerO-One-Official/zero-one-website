@@ -8,14 +8,14 @@
 }
 
 .headingText {
-  @apply text-7xl text-primary-light font-semibold leading-none sm:text-6xl xs:text-5xl;
+  @apply text-6xl text-primary-light font-semibold leading-none sm:text-5xl xs:text-4xl;
 }
 
-.heading > span {
+.heading>span {
   position: absolute;
   bottom: 0;
   left: 0;
-  background: linear-gradient(to right, transparent, #24acff);
+  background: linear-gradient(to right, transparent, var(--accent));
   height: 3px;
   width: 100%;
   animation: animate 2s linear infinite;
@@ -25,20 +25,22 @@
   transition: all 400ms ease-in-out;
 }
 
-.heading > span:nth-child(2) {
+.heading>span:nth-child(2) {
   left: -100%;
   transition: all 400ms ease-in-out;
   animation: animate 2s linear infinite;
   animation-delay: 2s;
 }
 
-.heading:hover > span {
+.heading:hover>span {
   opacity: 1;
 }
+
 @keyframes animate {
   0% {
     transform: translateX(-100%);
   }
+
   100% {
     transform: translateX(100%);
   }

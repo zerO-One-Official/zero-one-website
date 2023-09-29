@@ -2,11 +2,8 @@ import Footer from '@/components/footer/Footer'
 import Navbar from '@/components/navbar/Navbar'
 import SocialsBar from '@/components/socialsbar/SocialsBar'
 import '@/styles/globals.css'
-import { Overpass, Poppins } from 'next/font/google'
-
-const overpass = Overpass({ subsets: ['latin'], weight: ['400', '500', '600', '700', '800', '900'] })
-const poppins = Poppins({ subsets: ['latin'], weight: ['400', '500', '600', '700', '800', '900'] })
-
+import Providers from './Providers'
+import { ToastBar, Toaster } from 'react-hot-toast';
 export const metadata = {
   title: 'Zero-one Coding Club',
   description: 'Zero-one Coding Club of Motihari College of Engineering, Motihari',
@@ -15,13 +12,19 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${overpass.className} ${poppins.className}`}>
-        <Navbar />
-        <SocialsBar />
-        <main>
+      <body>
+        <Providers>
+          <Navbar />
+          <SocialsBar />
           {children}
-        </main>
-        <Footer />
+          <Footer />
+        </Providers>
+        {/* <Toaster />
+        <ToastBar
+          toast={t}
+          style={{}} // Overwrite styles
+          position="top-center" // Used to adapt the animation
+        /> */}
       </body>
     </html>
   )
