@@ -1,7 +1,7 @@
+import { emailTemplate } from "@/lib/emailTemplate";
+import { sendMail } from "@/lib/sendMail";
 import Code from "@/models/Code";
-import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
-import { options } from "../auth/[...nextauth]/options";
 
 function generateAccessCode() {
     // Define the character set for alphanumeric code
@@ -18,22 +18,26 @@ function generateAccessCode() {
 
     return code;
 }
-
-export async function POST(req) {
-    const session = await getServerSession(options);
-
-    if (!session || session.role !== 'admin') {
-
-        return NextResponse.json(
-            { message: "Unauthorized Access", type: "error", success: false },
-            { status: 401 }
-        )
-    }
+export async function POST(req, { host }) {
 
     try {
         const reqBody = await req.json();
 
-        const { roll } = reqBody;
+
+        const { roll, role, email } = reqBody;
+
+        if (!roll || !role || !email)
+            return NextResponse.json(
+                { message: "Please fill all details", type: "error", success: false },
+                { status: 400 }
+            )
+
+        if (role !== 'admin') {
+            return NextResponse.json(
+                { message: "Unauthorized Access", type: "error", success: false },
+                { status: 401 }
+            )
+        }
 
         const alreadyExist = await Code.findOne({ roll });
 
@@ -54,9 +58,16 @@ export async function POST(req) {
 
         await Code.create({ roll, code });
 
+        const joiningLink = `${process.env.NEXTAUTH_URL}/signup/${code}`;
+
+        const to = email;
+        const subject = 'Congratulations! You have been selected to join the Zero One Coding Club.';
+        const html = emailTemplate(joiningLink);
+
+        const messageId = await sendMail(to, subject, html);
 
         return NextResponse.json(
-            { message: "Code generated successfully", code, type: "success", success: true },
+            { message: "Code has been sent successfully messageId:" + messageId, code, type: "success", success: true },
             { status: 200 }
         )
 

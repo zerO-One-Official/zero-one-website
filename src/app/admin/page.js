@@ -5,26 +5,31 @@ import StyledInput from '@/components/input/StyledInput';
 import React, { useState } from 'react'
 import toast from 'react-hot-toast'
 import LoadingText from '@/components/loader/LoadingText';
+import { useSession } from 'next-auth/react';
 
 const AdminPage = () => {
 
+    const { data: session } = useSession();
+
+
     const [link, setLink] = useState('')
     const [roll, setRoll] = useState('')
+    const [email, setEmail] = useState('')
     const [loading, setLoading] = useState(false)
 
 
     const generateLink = async (e) => {
         e.preventDefault();
-        console.log(window.location.origin);
 
-        if (loading) return;
+
+        if (loading || !session?.user) return;
 
         try {
             setLoading(true);
 
             const res = await fetch('/api/genCode', {
                 method: "POST",
-                body: JSON.stringify({ roll })
+                body: JSON.stringify({ roll, email, role: session.user.role })
             })
 
             const data = await res.json();
@@ -56,17 +61,32 @@ const AdminPage = () => {
 
             <BottomGlitter text={'Create a Joining Link'} />
 
-            <form onSubmit={generateLink} className='flex flex-col items-center fill-white'>
-                <StyledInput
-                    id="roll"
-                    value={roll}
-                    onChange={(e) => setRoll(e.target.value)}
-                    name="roll"
-                    label="Roll Number"
-                    required
-                    className="w-full"
-                    type="number"
-                />
+            <form onSubmit={generateLink} className='flex flex-col items-center fill-white w-full'>
+                <div className="w-full">
+
+                    <StyledInput
+                        id="roll"
+                        value={roll}
+                        onChange={(e) => setRoll(e.target.value)}
+                        name="roll"
+                        label="Roll Number"
+                        required
+                        className="w-full"
+                        type="number"
+                    />
+                </div>
+                <div className="w-full">
+                    <StyledInput
+                        id="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        name="email"
+                        label="Student Email"
+                        required
+                        className="w-full"
+                        type="email"
+                    />
+                </div>
                 <button >
                     <Button
                         className=" ml-auto sm:w-full "
@@ -83,7 +103,7 @@ const AdminPage = () => {
                                     className="z-10"
                                 >
 
-                                    Generate Link
+                                    Send Joining Link
                                 </span>
                         }
 
