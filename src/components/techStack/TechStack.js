@@ -105,7 +105,7 @@ function Conquer() {
   }, []);
 
   return (
-    <div ref={ref} className={`${Styles.row} mt-40 fadeonscroll sm:mt-4`} id='code'>
+    <div ref={ref} className={`${Styles.row} mt-40 fadeonscroll sm:mt-4`} id='conquer'>
       <div className={`${Styles.col} ${Styles.col40}`}>
         <h2 className={Styles.header}>Conquer.</h2>
       </div>
@@ -173,7 +173,7 @@ function Code() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
   return (
-    <div ref={ref} className={`${Styles.row} mt-40 fadeonscroll sm:mt-4`} id='conquer'>
+    <div ref={ref} className={`${Styles.row} mt-40 fadeonscroll sm:mt-4`} id='code'>
       <div className={`${Styles.col} ${Styles.col40}`}>
         <h2 className={Styles.header}>Code.</h2>
       </div>

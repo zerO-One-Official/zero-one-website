@@ -1,10 +1,14 @@
+"use client"
 import Link from 'next/link';
 import BottomGlitter from '../StyledText/BottomGlitter';
 import Styles from './Footer.module.css';
 import Logo from '../logo/Logo';
+import { usePathname } from 'next/navigation';
 
 function Footer() {
+  const pathname = usePathname();
   return (
+    !pathname.includes('/admin') &&
     <footer className={`${Styles.footer} container-70 `}>
       <div className="">
         <BottomGlitter text="Get In Touch" />

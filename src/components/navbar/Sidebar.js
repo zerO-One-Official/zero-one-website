@@ -97,7 +97,7 @@ function Sidebar({ isMounted, unmount }) {
         <Link href="/events" className={styles.navLink} onClick={unmount}>
           Events
         </Link>
-        <LoginBtn />
+        <LoginBtn unmount={unmount} />
       </div>
     </section>,
     document.getElementById('overlay'),
