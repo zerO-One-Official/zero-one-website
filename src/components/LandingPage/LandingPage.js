@@ -19,11 +19,11 @@ function LandingPage() {
   );
 
   return (
-    <section className='relative h-[90vh] container-70 flex items-center justify-center' >
+    <section className='relative h-[81vh] bg-container-70 flex items-center justify-center' >
       <div className={styles.content}>
-        <Heading text="Design." link={'design'} />
-        <Heading text="Develop." link={'develop'} />
+        <Heading text="Create." link={'create'} />
         <Heading text="Code." link={'code'} />
+        <Heading text="Conquer." link={'conquer'} />
       </div>
     </section>
   );

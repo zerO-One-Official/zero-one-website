@@ -1,43 +1,68 @@
 import bcrypt from 'bcrypt'
 import mongoose from "mongoose";
+import validator from 'validator'
 
 const UserSchema = new mongoose.Schema({
     firstName: {
         type: String,
-        required: [true, "first name can't be empty"],
+        required: [true, "First name can't be empty"],
         trim: true,
         lowercase: true
     },
     lastName: {
         type: String,
-        required: [true, "last name can't be empty"],
+        required: [true, "Last name can't be empty"],
         trim: true,
         lowercase: true
     },
+    gender: {
+        type: String,
+        enum: ['Male', 'Female'],
+        required: true,
+    },
     email: {
         type: String,
-        required: [true, "email is required"],
+        required: [true, "Email is required"],
         trim: true,
         lowercase: true,
         unique: true,
+        validate(value) {
+            if (!validator.isEmail(value)) {
+                throw new Error('Please enter a valid email');
+            }
+        },
     },
     roll: {
         type: Number,
         required: [true, "rollno is required"],
+        min: [20100, "Enter a roll no. after 2019 batch."],
+        max: [(new Date().getFullYear() % 100) * 1000 + 700, `Enter a roll no. before ${new Date().getFullYear()} batch.`],
         trim: true,
         unique: true,
     },
     phone: {
-        type: String,
-        required: [true, "mobile number is required"],
+        type: Number,
+        required: [true, "Mobile number is required"],
         trim: true,
         unique: true,
+    },
+    branch: {
+        type: String,
+        required: [true, "Please select your branch"],
+        enum: ['Computer Science & Engineering', 'Electrical & Electronics Engineering', 'Mechanical Engineering', 'Civil Engineering', 'Artificial Intelligence', 'Civil with Computer Applications'],
+        trim: true,
     },
     password: {
         type: String,
         required: [true, "Please set a Password"],
         select: false
-    }
+    },
+    role: {
+        type: String,
+        enum: ['student', 'teacher', 'admin'],
+        default: 'student',
+    },
+
 }, { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } });
 
 

@@ -1,5 +1,6 @@
 "use client"
 
+import { SessionProvider } from "next-auth/react";
 import { useEffect } from "react";
 
 const Providers = ({ children }) => {
@@ -29,28 +30,28 @@ const Providers = ({ children }) => {
             requestAnimationFrame(animate);
         }
 
-
         animate();
 
         document.addEventListener('mousemove', (event) => {
-            mouseX = event.pageX;
-            mouseY = event.pageY;
+            mouseX = event.clientX;
+            mouseY = event.clientY;
         })
 
         return () =>
             document.removeEventListener('mousemove', (event) => {
-                mouseX = event.pageX;
-                mouseY = event.pageY;
+                mouseX = event.clientX;
+                mouseY = event.clientY;
             });
     }, []);
 
     return (
-        <>
+
+        <SessionProvider>
             <main id='overlayScreen'>
                 <div className='cursor' />
                 {children}
             </main>
-        </>
+        </SessionProvider>
     )
 }
 

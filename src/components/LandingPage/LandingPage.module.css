@@ -31,14 +31,19 @@
 }
 
 .content>h1 {
-  @apply opacity-70 cursor-default;
+  @apply cursor-default text-stone-400;
   @apply my-8 mx-4 text-7xl z-30 font-extrabold relative;
   @apply text-7xl xs:text-5xl;
 }
 
 .content>h1:hover {
-  @apply opacity-100;
+  @apply opacity-100 text-primary-light;
 }
+
+/* .content>h1:hover::after,
+.content>h1:hover::before {
+  @apply bg-accent;
+} */
 
 .content>h1::before,
 .content>h1::after {

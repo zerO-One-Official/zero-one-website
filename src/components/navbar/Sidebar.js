@@ -1,10 +1,12 @@
+"use client"
 import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { CgClose } from 'react-icons/cg';
 import Link from 'next/link';
 import styles from './Hamburger.module.css';
-import Button from '../button/Button';
 import Logo from '../logo/Logo';
+import LoginBtn from '../button/LoginBtn';
+import { useSession } from 'next-auth/react';
 
 const SpanStyle = {
   zIndex: 1,
@@ -15,6 +17,9 @@ const SpanStyle = {
 function Sidebar({ isMounted, unmount }) {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const documentWidthRef = useRef(null);
+
+
+  const { data } = useSession();
 
   useEffect(() => {
     let timeoutId;
@@ -65,24 +70,34 @@ function Sidebar({ isMounted, unmount }) {
         </div>
       </div>
 
+
       <div id="navList" className={styles.navItems}>
+        {
+          data && data.user ?
+            <>
+              {
+                data.user.role === 'admin' ?
+                  <Link href="/admin" className={styles.navLink} onClick={unmount}>
+                    Manage
+                  </Link>
+                  :
+                  null
+              }
+              <Link href="/contest" className={styles.navLink} onClick={unmount}>
+                Contest
+              </Link>
+              <Link href="/resources" className={styles.navLink} onClick={unmount}>
+                Resources
+              </Link>
+            </>
+            :
+            null
+
+        }
         <Link href="/events" className={styles.navLink} onClick={unmount}>
           Events
         </Link>
-        <Link href="/contest" className={styles.navLink} onClick={unmount}>
-          Contest
-        </Link>
-        <Link href="/resources" className={styles.navLink} onClick={unmount}>
-          Resources
-        </Link>
-        <Link href={'/signup'} className='mt-10' onClick={unmount}>
-          <Button
-            style={{ border: 'none' }}
-            className="bg-primary-light text-primary hover:text-primary-light xs:!py-3"
-          >
-            <span style={SpanStyle}>Join Us</span>
-          </Button>
-        </Link>
+        <LoginBtn />
       </div>
     </section>,
     document.getElementById('overlay'),

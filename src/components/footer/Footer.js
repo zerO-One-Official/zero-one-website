@@ -1,11 +1,12 @@
 import Link from 'next/link';
 import BottomGlitter from '../StyledText/BottomGlitter';
 import Styles from './Footer.module.css';
+import Logo from '../logo/Logo';
 
 function Footer() {
   return (
-    <footer className={`${Styles.footer} container-70`}>
-      <div className="py-12 mt-20 sm:mt-4 md:mt-12">
+    <footer className={`${Styles.footer} container-70 `}>
+      <div className="">
         <BottomGlitter text="Get In Touch" />
       </div>
 
@@ -60,6 +61,9 @@ function Footer() {
             Contact Us
           </Link>
         </div>
+      </div>
+      <div className="">
+        <Logo />
       </div>
     </footer >
   );
