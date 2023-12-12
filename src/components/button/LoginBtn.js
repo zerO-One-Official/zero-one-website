@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react'
 
 
-const LoginBtn = () => {
+const LoginBtn = ({ unmount = () => { } }) => {
     const SpanStyle = {
         zIndex: 1,
         color: 'inherit',
@@ -22,7 +22,7 @@ const LoginBtn = () => {
             :
             data && data.user ?
                 <button
-                    onClick={signOut}
+                    onClick={() => { signOut(); unmount(); }}
                     className="flex rounded-full"
                 >
                     <Button
@@ -36,6 +36,7 @@ const LoginBtn = () => {
                 <Link
                     href="/login"
                     className="flex rounded-full"
+                    onClick={unmount}
                 >
                     <Button
                         style={{ border: 'none' }}

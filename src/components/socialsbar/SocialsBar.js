@@ -1,9 +1,15 @@
+"use client"
 import { FaInstagram, FaGithub, FaLinkedin, FaDiscord } from 'react-icons/fa';
 import Styles from './SocialsBar.module.css';
+import { usePathname } from 'next/navigation';
 
 const ICON_SIZE = 30;
 function SocialsBar() {
+
+  const pathname = usePathname();
+
   return (
+    pathname !== '/login' || pathname.includes('/admin') &&
     <section className={Styles.socialsBar}>
       <a href="#" target="_blank" rel="noreferrer">
         <FaDiscord className={Styles.socialsBarIcons} size={ICON_SIZE} />
