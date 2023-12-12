@@ -18,7 +18,7 @@
 }
 
 .body {
-  @apply py-3 pr-1 pl-0 hidden border-none;
+  @apply py-3 pr-1 pl-0 border-none;
   @apply sm:py-2;
 }
 

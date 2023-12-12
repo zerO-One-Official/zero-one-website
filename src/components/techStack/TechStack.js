@@ -6,9 +6,9 @@ function TechStack() {
   return (
     <section className={`${Styles.techStack}`}>
       <div className="container-70">
-        <Design />
-        <Development />
+        <Create />
         <Code />
+        <Conquer />
       </div>
     </section>
   );
@@ -16,7 +16,7 @@ function TechStack() {
 
 export default TechStack;
 
-function Design() {
+function Create() {
   const ref = useRef();
 
   useEffect(() => {
@@ -36,9 +36,9 @@ function Design() {
   }, []);
 
   return (
-    <div ref={ref} className={`${Styles.row} mt-40 fadeonscroll`} id='design'>
+    <div ref={ref} className={`${Styles.row} mt-40 fadeonscroll`} id='create'>
       <div className={`${Styles.col} ${Styles.col40}`}>
-        <h2 className={Styles.header}>Design.</h2>
+        <h2 className={Styles.header}>Create.</h2>
       </div>
       <div className={`${Styles.col} ${Styles.col60}`}>
         <div className={Styles.headDescription}>
@@ -85,7 +85,7 @@ function Design() {
   );
 }
 
-function Development() {
+function Conquer() {
   const ref = useRef();
 
   useEffect(() => {
@@ -105,9 +105,9 @@ function Development() {
   }, []);
 
   return (
-    <div ref={ref} className={`${Styles.row} mt-40 fadeonscroll sm:mt-4`} id='develop'>
+    <div ref={ref} className={`${Styles.row} mt-40 fadeonscroll sm:mt-4`} id='code'>
       <div className={`${Styles.col} ${Styles.col40}`}>
-        <h2 className={Styles.header}>Develop.</h2>
+        <h2 className={Styles.header}>Conquer.</h2>
       </div>
       <div className={`${Styles.col} ${Styles.col60}`}>
         <div className={Styles.headDescription}>
@@ -173,7 +173,7 @@ function Code() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
   return (
-    <div ref={ref} className={`${Styles.row} mt-40 fadeonscroll sm:mt-4`} id='code'>
+    <div ref={ref} className={`${Styles.row} mt-40 fadeonscroll sm:mt-4`} id='conquer'>
       <div className={`${Styles.col} ${Styles.col40}`}>
         <h2 className={Styles.header}>Code.</h2>
       </div>
