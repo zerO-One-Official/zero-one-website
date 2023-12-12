@@ -55,18 +55,7 @@ const SignupPage = ({ params }) => {
             if (res.status === 409) router.push('/login');
             if (res.status === 200) {
 
-                signIn('credentials', {
-                    emailOrRoll: signupForm.roll,
-                    password: signupForm.password,
-                    redirect: false
-                })
-                    .then(({ ok, error }) => {
-                        if (ok) {
-                            router.push("/");
-                        } else {
-                            toast.error(error);
-                        };
-                    })
+                router.push("/login");
             };
 
             toast(data.message);

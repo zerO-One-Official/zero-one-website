@@ -33,11 +33,15 @@ const AdminPage = () => {
                 const link = `${window.location.origin}/signup/${data.code}`;
                 setLink(link);
             }
-            if (res.status === 409) {
+            else if (res.status === 409) {
                 toast.error(data.message);
                 const link = `${window.location.origin}/signup/${data.code}`;
                 setLink(link);
             }
+            else if (res.status === 401) {
+                toast.error(data.message);
+            }
+            else toast(data.message);
 
         } catch (error) {
             toast.error(error.message);

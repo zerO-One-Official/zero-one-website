@@ -1,5 +1,7 @@
 import Code from "@/models/Code";
+import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
+import { options } from "../auth/[...nextauth]/options";
 
 function generateAccessCode() {
     // Define the character set for alphanumeric code
@@ -18,6 +20,16 @@ function generateAccessCode() {
 }
 
 export async function POST(req) {
+    const session = await getServerSession(options);
+
+    if (!session || session.role !== 'admin') {
+
+        return NextResponse.json(
+            { message: "Unauthorized Access", type: "error", success: false },
+            { status: 401 }
+        )
+    }
+
     try {
         const reqBody = await req.json();
 

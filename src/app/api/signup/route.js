@@ -49,7 +49,7 @@ export async function POST(req) {
         // ============= Inserting the User =============
 
         return NextResponse.json(
-            { message: "Welcome to Zero One", type: "success", success: true },
+            { message: "Registered Succesfully, Please Login", type: "success", success: true },
             { status: 200 }
         )
 
