@@ -11,10 +11,12 @@
   "dependencies": {
     "bcrypt": "^5.1.1",
     "crypto": "^1.0.1",
+    "fs": "^0.0.1-security",
     "jose": "^4.14.6",
     "mongoose": "^7.5.3",
     "next": "latest",
     "next-auth": "^4.24.5",
+    "nodemailer": "^6.9.7",
     "react": "latest",
     "react-dom": "latest",
     "react-hot-toast": "^2.4.1",
