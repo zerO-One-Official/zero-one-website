@@ -12,12 +12,16 @@ export default async function middleware(req, event) {
         return NextResponse.redirect(new URL('/', req.url));
     }
 
-    if (pathname.includes('admin') && isAuthenticated && token.role !== 'admin') {
+    if (!publicUrl.includes(pathname) && !isAuthenticated) {
+        return NextResponse.redirect(new URL('/login', req.url));
+    }
+
+    if (pathname.includes('/admin') && token?.role !== 'admin') {
         return NextResponse.redirect(new URL('/', req.url));
     }
 
 }
 export const config = {
-    matcher: ["/login", '/signup', '/admin/:path*'],
+    matcher: ["/login", '/signup/:path*', '/admin/:path*'],
 };
 
