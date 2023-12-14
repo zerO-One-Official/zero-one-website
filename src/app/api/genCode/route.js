@@ -1,4 +1,4 @@
-import { emailTemplate } from "@/lib/emailTemplate";
+import { JoiningEmailTemplate } from "@/lib/emailTemplates";
 import { sendMail } from "@/lib/sendMail";
 import Code from "@/models/Code";
 import { NextResponse } from "next/server";
@@ -18,7 +18,7 @@ function generateAccessCode() {
 
     return code;
 }
-export async function POST(req, { host }) {
+export async function POST(req) {
 
     try {
         const reqBody = await req.json();
@@ -41,11 +41,30 @@ export async function POST(req, { host }) {
 
         const alreadyExist = await Code.findOne({ roll });
 
+        const to = email;
+        const subject = 'Congratulations! You have been selected to join the Zero One Coding Club.';
+        let joiningLink;
+        let html;
+
         if (alreadyExist) {
-            return NextResponse.json(
-                { message: "Code is already generated for this roll no.", type: "info", success: false, code: alreadyExist.code },
-                { status: 409 }
-            )
+
+            joiningLink = `${process.env.NEXTAUTH_URL}/signup/${alreadyExist.code}`;
+            html = JoiningEmailTemplate(joiningLink);
+            const messageId = await sendMail(to, subject, html);
+
+
+            if (messageId) {
+                return NextResponse.json(
+                    { message: "Joining mail has been sent successfully", code: alreadyExist.code, type: "success", success: true },
+                    { status: 200 }
+                )
+            }
+            else {
+                return NextResponse.json(
+                    { message: "Failed to send mail. please try again", type: "error", success: true },
+                    { status: 500 }
+                )
+            }
         }
 
         let code = generateAccessCode();
@@ -58,18 +77,24 @@ export async function POST(req, { host }) {
 
         await Code.create({ roll, code });
 
-        const joiningLink = `${process.env.NEXTAUTH_URL}/signup/${code}`;
-
-        const to = email;
-        const subject = 'Congratulations! You have been selected to join the Zero One Coding Club.';
-        const html = emailTemplate(joiningLink);
+        joiningLink = `${process.env.NEXTAUTH_URL}/signup/${code}`;
+        html = JoiningEmailTemplate(joiningLink);
 
         const messageId = await sendMail(to, subject, html);
 
-        return NextResponse.json(
-            { message: "Code has been sent successfully messageId:" + messageId, code, type: "success", success: true },
-            { status: 200 }
-        )
+
+        if (messageId) {
+            return NextResponse.json(
+                { message: "Joining mail has been sent successfully", code, type: "success", success: true },
+                { status: 200 }
+            )
+        }
+        else {
+            return NextResponse.json(
+                { message: "Failed to send mail", type: "error", success: true },
+                { status: 500 }
+            )
+        }
 
 
     } catch (error) {
