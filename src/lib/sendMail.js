@@ -1,33 +1,31 @@
-import nodemailer from 'nodemailer'
-import { emailTemplate } from './emailTemplate';
-
+import nodemailer from 'nodemailer';
 
 export const sendMail = async (to, subject, html) => {
+    try {
+        // Create a transporter using Gmail SMTP
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: process.env.EMAIL, // your Gmail email address
+                pass: process.env.APP_PASSWORD // your Gmail password or an App Password if using 2-step verification
+            }
+        });
 
-    // Create a transporter using Gmail SMTP
-    const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user: process.env.EMAIL, // your Gmail email address
-            pass: process.env.APP_PASSWORD // your Gmail password or an App Password if using 2-step verification
-        }
-    });
+        // Email content
+        const mailOptions = {
+            from: process.env.EMAIL, // sender address
+            to: to, // list of receivers
+            subject: subject,
+            html: html
+        };
 
-    // Email content
-    const mailOptions = {
-        from: process.env.EMAIL, // sender address
-        to: to, // list of receivers
-        subject: subject,
-        html: html
-    };
-
-    // Send email
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            throw error;
-        }
+        // Send email
+        const info = await transporter.sendMail(mailOptions);
+        console.log(info);
         return info.messageId;
-    });
 
-
-}
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+};

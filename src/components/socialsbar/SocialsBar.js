@@ -9,7 +9,7 @@ function SocialsBar() {
   const pathname = usePathname();
 
   return (
-    pathname !== '/login' || pathname.includes('/admin') &&
+    // pathname !== '/login' || !pathname.includes('/admin') &&
     <section className={Styles.socialsBar}>
       <a href="#" target="_blank" rel="noreferrer">
         <FaDiscord className={Styles.socialsBarIcons} size={ICON_SIZE} />
