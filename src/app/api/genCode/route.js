@@ -1,4 +1,4 @@
-import { JoiningEmailTemplate } from "@/lib/emailTemplates";
+import { joiningEmail } from "@/lib/emailTemplates";
 import { sendMail } from "@/lib/sendMail";
 import Code from "@/models/Code";
 import { NextResponse } from "next/server";
@@ -43,13 +43,13 @@ export async function POST(req) {
 
         const to = email;
         const subject = 'Congratulations! You have been selected to join the Zero One Coding Club.';
-        let joiningLink;
+        // let joiningLink;
         let html;
 
         if (alreadyExist) {
 
-            joiningLink = `${process.env.NEXTAUTH_URL}/signup/${alreadyExist.code}`;
-            html = JoiningEmailTemplate(joiningLink);
+            // joiningLink = `${process.env.NEXTAUTH_URL}/signup/${alreadyExist.code}`;
+            html = joiningEmail(alreadyExist.code, process.env.NEXTAUTH_URL);
             const messageId = await sendMail(to, subject, html);
 
 
@@ -77,8 +77,8 @@ export async function POST(req) {
 
         await Code.create({ roll, code });
 
-        joiningLink = `${process.env.NEXTAUTH_URL}/signup/${code}`;
-        html = JoiningEmailTemplate(joiningLink);
+        // joiningLink = `${process.env.NEXTAUTH_URL}/signup/${code}`;
+        html = joiningEmail(code, process.env.NEXTAUTH_URL);
 
         const messageId = await sendMail(to, subject, html);
 
