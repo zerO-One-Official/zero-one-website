@@ -40,7 +40,7 @@ const LoginPage = () => {
                     if (ok) {
                         router.push("/");
                     } else {
-                        toast.error(error);
+                        toast.error(error.message);
                     };
                 })
 

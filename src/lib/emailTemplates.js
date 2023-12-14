@@ -1,4 +1,4 @@
-export const joiningEmail = (code) => {
+export const joiningEmail = (code, baseUrl) => {
 
     return `
     <!DOCTYPE html>
@@ -172,9 +172,9 @@ export const joiningEmail = (code) => {
                                                                     <div align="center" class="alignment"
                                                                         style="line-height:10px">
                                                                         <div style="max-width: 175px;"><a
-                                                                                href="${process.env.NEXTAUTH_URL}/"
+                                                                                href="${baseUrl}/"
                                                                                 style="outline:none" tabindex="-1"
-                                                                                target="_blank"><img src="${process.env.NEXTAUTH_URL}/fullLogo.png"
+                                                                                target="_blank"><img src="${baseUrl}/fullLogo.png"
                                                                                     style="display: block; height: auto; border: 0; width: 100%;"
                                                                                     width="175" /></a></div>
                                                                     </div>
@@ -270,7 +270,7 @@ export const joiningEmail = (code) => {
                                                             <tr>
                                                                 <td class="pad">
                                                                     <div align="center" class="alignment">
-                                                                        <a href="${process.env.NEXTAUTH_URL}/signup/${code}"
+                                                                        <a href="${baseUrl}/signup/${code}"
                                                                             style="text-decoration:none;display:inline-block;color:#000000;background-color:#ffffff;border-radius:20px;width:auto;border-top:0px solid transparent;font-weight:400;border-right:0px solid transparent;border-bottom:0px solid transparent;border-left:0px solid transparent;padding-top:5px;padding-bottom:5px;font-family:'Poppins', Arial, Helvetica, sans-serif;font-size:16px;text-align:center;mso-border-alt:none;word-break:keep-all;">
                                                                             <span
                                                                                 style="padding-left:20px;padding-right:20px;font-size:16px;display:inline-block;letter-spacing:normal;"><span
@@ -349,9 +349,9 @@ export const joiningEmail = (code) => {
                                                                     <div align="left" class="alignment"
                                                                         style="line-height:10px">
                                                                         <div style="max-width: 144px;"><a
-                                                                                href="${process.env.NEXTAUTH_URL}/"
+                                                                                href="${baseUrl}/"
                                                                                 style="outline:none" tabindex="-1"
-                                                                                target="_blank"><img src="${process.env.NEXTAUTH_URL}/fullLogo.png"
+                                                                                target="_blank"><img src="${baseUrl}/fullLogo.png"
                                                                                     style="display: block; height: auto; border: 0; width: 100%;"
                                                                                     width="144" /></a></div>
                                                                     </div>
@@ -459,7 +459,7 @@ export const joiningEmail = (code) => {
                                                                     <div
                                                                         style="color:#ffffff;direction:ltr;font-family:'Poppins', Arial, Helvetica, sans-serif;font-size:14px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:center;mso-line-height-alt:16.8px;">
                                                                         <p style="margin: 0;"><a
-                                                                                href="${process.env.NEXTAUTH_URL}/about"
+                                                                                href="${baseUrl}/about"
                                                                                 rel="noopener"
                                                                                 style="text-decoration: none; color: #ffffff;"
                                                                                 target="_blank">About Us</a></p>
@@ -516,7 +516,7 @@ export const joiningEmail = (code) => {
                                                                     <div
                                                                         style="color:#ffffff;direction:ltr;font-family:'Poppins', Arial, Helvetica, sans-serif;font-size:14px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:center;mso-line-height-alt:16.8px;">
                                                                         <p style="margin: 0;"><a
-                                                                                href="${process.env.NEXTAUTH_URL}/events"
+                                                                                href="${baseUrl}/events"
                                                                                 rel="noopener"
                                                                                 style="text-decoration: none; color: #ffffff;"
                                                                                 target="_blank">Events</a></p>
@@ -545,7 +545,7 @@ export const joiningEmail = (code) => {
                                                                                         href="https://github.com/zerO-One-Official"
                                                                                         target="_blank"><img alt="Github"
                                                                                             height="32"
-                                                                                            src="${process.env.NEXTAUTH_URL}/githubLogo.png"
+                                                                                            src="${baseUrl}/githubLogo.png"
                                                                                             style="display: block; height: auto; border: 0;"
                                                                                             title="GitHub" width="32" /></a>
                                                                                 </td>
@@ -553,7 +553,7 @@ export const joiningEmail = (code) => {
                                                                                         href="https://www.twitter.com/"
                                                                                         target="_blank"><img alt="Twitter"
                                                                                             height="32"
-                                                                                            src="${process.env.NEXTAUTH_URL}/twitter2x.png"
+                                                                                            src="${baseUrl}/twitter2x.png"
                                                                                             style="display: block; height: auto; border: 0;"
                                                                                             title="twitter"
                                                                                             width="32" /></a>
@@ -562,7 +562,7 @@ export const joiningEmail = (code) => {
                                                                                         href="https://www.linkedin.com/company/zero-one-coding-club-mce/"
                                                                                         target="_blank"><img alt="Linkedin"
                                                                                             height="32"
-                                                                                            src="${process.env.NEXTAUTH_URL}/linkedinLogo.png"
+                                                                                            src="${baseUrl}/linkedinLogo.png"
                                                                                             style="display: block; height: auto; border: 0;"
                                                                                             title="Linkedin"
                                                                                             width="32" /></a>
@@ -571,7 +571,7 @@ export const joiningEmail = (code) => {
                                                                                         href="https://www.instagram.com/"
                                                                                         target="_blank"><img alt="Instagram"
                                                                                             height="32"
-                                                                                            src="${process.env.NEXTAUTH_URL}/instagram2x.png"
+                                                                                            src="${baseUrl}/instagram2x.png"
                                                                                             style="display: block; height: auto; border: 0;"
                                                                                             title="instagram"
                                                                                             width="32" /></a>

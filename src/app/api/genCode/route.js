@@ -49,7 +49,7 @@ export async function POST(req) {
         if (alreadyExist) {
 
             // joiningLink = `${process.env.NEXTAUTH_URL}/signup/${alreadyExist.code}`;
-            html = joiningEmail(alreadyExist.code);
+            html = joiningEmail(alreadyExist.code, process.env.NEXTAUTH_URL);
             const messageId = await sendMail(to, subject, html);
 
 
@@ -78,7 +78,7 @@ export async function POST(req) {
         await Code.create({ roll, code });
 
         // joiningLink = `${process.env.NEXTAUTH_URL}/signup/${code}`;
-        html = joiningEmail(code);
+        html = joiningEmail(code, process.env.NEXTAUTH_URL);
 
         const messageId = await sendMail(to, subject, html);
 
