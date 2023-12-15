@@ -38,7 +38,7 @@ const LoginPage = () => {
             })
                 .then(({ ok, error }) => {
                     if (ok) {
-                        router.push("/");
+                        router.push("/profile");
                     } else {
                         toast.error(error.message);
                     };
@@ -90,15 +90,7 @@ const LoginPage = () => {
                                 loading ?
                                     <LoadingText />
                                     :
-                                    <span
-                                        style={{
-                                            color: 'inherit',
-                                            transition: 'all 300ms ease-in-out',
-                                        }}
-                                        className="z-10"
-                                    >
-                                        Login
-                                    </span>
+                                    'Login'
                             }
                         </Button>
                     </button>

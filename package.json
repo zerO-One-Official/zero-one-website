@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@uploadthing/react": "^6.0.2",
     "bcrypt": "^5.1.1",
     "crypto": "^1.0.1",
     "fs": "^0.0.1-security",
@@ -22,6 +23,8 @@
     "react-hot-toast": "^2.4.1",
     "react-icons": "^4.11.0",
     "sharp": "^0.32.6",
+    "swr": "^2.2.4",
+    "uploadthing": "^6.1.0",
     "validator": "^13.11.0"
   },
   "devDependencies": {

@@ -11,9 +11,17 @@
 }
 
 .input {
-  @apply text-xl p-2 outline-none border-none;
+  @apply text-xl p-2 outline-none border-none w-full;
   background-color: transparent;
   border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.input:disabled {
+  opacity: .7;
+}
+
+.input:disabled+label {
+  opacity: .5;
 }
 
 .transform {

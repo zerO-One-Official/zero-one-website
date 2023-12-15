@@ -34,12 +34,11 @@ function Navbar() {
       const height = navbar.offsetHeight;
 
       const currentScrollPos = window.scrollY;
-      if (currentScrollPos > height + 60) {
+      if (currentScrollPos > height + 10) {
         navbar.style.borderBottom = '1px solid rgba(255, 255, 255, 0.1)';
         navbar.style.backgroundColor = 'var(--background)';
       } else {
         navbar.style.border = 'none';
-        navbar.style.backgroundColor = 'transparent';
       }
 
       // if (prevScroll < currentScrollPos) {
@@ -63,6 +62,9 @@ function Navbar() {
     <header id="navbar" className={`${styles.navbar}`}>
       <Logo />
       <nav id="navList" className={styles.navbarList}>
+        <Link href="/events" className={styles.navLink}>
+          Events
+        </Link>
         {
           data && data.user ?
             <>
@@ -80,14 +82,14 @@ function Navbar() {
               <Link href="/resources" className={styles.navLink}>
                 Resources
               </Link>
+              <Link href="/profile" className={styles.navLink}>
+                Profile
+              </Link>
             </>
             :
             null
 
         }
-        <Link href="/events" className={styles.navLink}>
-          Events
-        </Link>
         <LoginBtn />
       </nav>
       <div

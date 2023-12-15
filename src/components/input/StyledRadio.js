@@ -31,7 +31,7 @@ const StyledRadio = ({ label, radioGroup, name, onChange, required }) => {
                 {
                     radioGroup.map((radio, index) => {
                         return (
-                            <label htmlFor={radio.id} className={`flex gap-1 items-center p-1 px-2 rounded-xl cursor-pointer transition-all ${selected === radio.label ? 'bg-primary-light text-primary fill-primary' : 'fill-primary-light'}`} key={index} tabIndex={0} onKeyUp={e => (e.code === "Enter" || e.code === "Space") && handleSelect(radio.label)}>
+                            <label htmlFor={radio.id} className={`text-xl flex gap-1 items-center p-1 px-2 rounded-xl cursor-pointer transition-all ${selected === radio.label ? 'bg-primary-light text-primary fill-primary' : 'fill-primary-light'}`} key={index} tabIndex={0} onKeyUp={e => (e.code === "Enter" || e.code === "Space") && handleSelect(radio.label)}>
                                 {radio.icon}
                                 <p className='text-inherit'>
                                     {radio.label}

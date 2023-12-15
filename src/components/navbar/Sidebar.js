@@ -72,6 +72,9 @@ function Sidebar({ isMounted, unmount }) {
 
 
       <div id="navList" className={styles.navItems}>
+        <Link href="/events" className={styles.navLink} onClick={unmount}>
+          Events
+        </Link>
         {
           data && data.user ?
             <>
@@ -89,14 +92,14 @@ function Sidebar({ isMounted, unmount }) {
               <Link href="/resources" className={styles.navLink} onClick={unmount}>
                 Resources
               </Link>
+              <Link href="/profile" className={styles.navLink} onClick={unmount}>
+                Profile
+              </Link>
             </>
             :
             null
 
         }
-        <Link href="/events" className={styles.navLink} onClick={unmount}>
-          Events
-        </Link>
         <LoginBtn unmount={unmount} />
       </div>
     </section>,
