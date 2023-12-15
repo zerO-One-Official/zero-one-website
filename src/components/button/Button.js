@@ -23,7 +23,15 @@ function Button({ className, color, children, ...otherProps }) {
       className={`${Styles.rippleButton} ${className}`}
       {...otherProps}
     >
-      {children}
+      <span
+        style={{
+          color: 'inherit',
+          transition: 'all 300ms ease-in-out',
+        }}
+        className="z-10"
+      >
+        {children}
+      </span>
     </div>
   );
 }

@@ -1,4 +1,5 @@
-export const joiningEmail = (code, baseUrl) => {
+export const joiningEmail = (token, baseUrl) => {
+    console.log('token =>', token);
 
     return `
     <!DOCTYPE html>
@@ -270,7 +271,7 @@ export const joiningEmail = (code, baseUrl) => {
                                                             <tr>
                                                                 <td class="pad">
                                                                     <div align="center" class="alignment">
-                                                                        <a href="${baseUrl}/signup/${code}"
+                                                                        <a href="${baseUrl}/activateAccount?token=${token}"
                                                                             style="text-decoration:none;display:inline-block;color:#000000;background-color:#ffffff;border-radius:20px;width:auto;border-top:0px solid transparent;font-weight:400;border-right:0px solid transparent;border-bottom:0px solid transparent;border-left:0px solid transparent;padding-top:5px;padding-bottom:5px;font-family:'Poppins', Arial, Helvetica, sans-serif;font-size:16px;text-align:center;mso-border-alt:none;word-break:keep-all;">
                                                                             <span
                                                                                 style="padding-left:20px;padding-right:20px;font-size:16px;display:inline-block;letter-spacing:normal;"><span

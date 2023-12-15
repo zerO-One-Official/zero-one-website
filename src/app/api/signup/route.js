@@ -2,54 +2,157 @@
 import { NextResponse } from "next/server";
 import dbConnect from '@/lib/dbConnect'
 import User from "@/models/Users";
-import Code from "@/models/Code";
+import { generateAccessCode } from "@/utils/helper";
+import { joiningEmail } from "@/lib/emailTemplates";
+import { sendMail } from "@/lib/sendMail";
+import { getServerSession } from "next-auth";
+import { options } from "../auth/[...nextauth]/options";
 
 dbConnect()
 
 export async function POST(req) {
 
-
     try {
 
-        const reqBody = await req.json();
-        const { firstName, branch, gender, roll, code, lastName, email, phone, password } = reqBody;
+        const session = await getServerSession(options);
+        const id = session?.user?._id;
 
-        const isAllowed = await Code.findOne({ $and: [{ roll }, { code }] });
-        console.log(roll, code);
-
-        if (!isAllowed) {
+        if (!session || !id)
             return NextResponse.json(
-                { message: "You don't have a valid joining code.", type: "error", success: false },
+                { message: "Session Expired", type: "error", success: true },
+                { status: 440 }
+            )
+
+        const admin = await User.findById(id);
+
+        if (!admin || admin.role !== 'admin')
+            return NextResponse.json(
+                { message: "You are not allowed to perform this action", type: "error", success: true },
                 { status: 403 }
             )
-        }
 
+        const reqBody = await req.json();
+        const { firstName, branch, gender, roll, lastName, email, phone, profilePic } = reqBody;
+        const password = process.env.DEFAULT_PASSWORD;
 
-        // ============= Check if User Exist =============
-        const user = await User.findOne({ '$or': [{ email }, { roll }, { phone }] });
+        const to = email;
+        const subject = 'Congratulations! You have been selected to join the Zero One Coding Club.';
+        let html;
 
+        const user = await User.findOne({ $or: [{ roll }, { email }] });
+
+        // // ============= Check if User Exist =============
         if (user) {
-            await Code.deleteOne({ code });
+            let token = user.token;
+            if (token === '') {
+                token = generateAccessCode();
+                user.token = token;
+            }
+            if (user.firstName !== firstName)
+                user.firstName = firstName;
+            if (user.lastName !== lastName)
+                user.lastName = lastName;
+            if (user.profilePic !== profilePic)
+                user.profilePic = profilePic;
+            if (user.email !== email)
+                user.email = email;
+            if (user.roll !== roll)
+                user.roll = roll;
+            if (user.branch !== branch)
+                user.branch = branch;
+            if (user.gender !== gender)
+                user.gender = gender;
+            if (user.phone !== phone)
+                user.phone = phone;
+
+            html = joiningEmail(token, process.env.NEXTAUTH_URL);
+            const messageId = await sendMail(to, subject, html);
+
+            await user.save();
+
+            if (messageId) {
+                return NextResponse.json(
+                    { message: "Joining mail has been sent (Duplicate).", type: "success", success: false },
+                    { status: 200 }
+                )
+            }
+            else {
+                return NextResponse.json(
+                    { message: "Failed to send mail. please try again", type: "error", success: true },
+                    { status: 500 }
+                )
+            }
+        }
+        // ============= Check if User Exist =============
+
+
+
+        // ============= Generate the Code =============
+        const token = generateAccessCode();
+        // ============= Generate the Code =============
+
+
+        // ============= Creating Username =============
+        const username = `${firstName}_${roll}`;
+        // ============= Creating Username =============
+
+
+        // ============= Inserting the User =============
+        await User.create({ firstName, lastName, roll, email, branch, gender, phone, username, profilePic, password, token })
+        // ============= Inserting the User =============
+
+
+        // ============= Sending the Mail =============
+        html = joiningEmail(token, process.env.NEXTAUTH_URL);
+        const messageId = await sendMail(to, subject, html);
+        // ============= Sending the Mail =============
+
+        if (messageId) {
             return NextResponse.json(
-                { message: "You are already registered please Login", type: "info", success: false },
-                { status: 409 }
+                { message: "Joining mail has been sent.", type: "success", success: false },
+                { status: 200 }
             )
         }
-        // ============= Check if User Exist =============
+        else {
+            return NextResponse.json(
+                { message: "Failed to send mail. please try again", type: "error", success: true },
+                { status: 500 }
+            )
+        }
+
+    } catch (error) {
+        console.log(error)
+        return NextResponse.json(
+            { message: error.message, type: "error", success: false },
+            { status: 500 }
+        )
+    }
+}
 
 
+export async function PUT(req) {
+    try {
+        const reqBody = await req.json();
 
-        // ============= Inserting the User =============
-        User
-            .create({ firstName, lastName, roll, email, branch, gender, phone, password })
-            .then(async () => {
-                await Code.deleteOne({ code });
-            })
+        console.log(reqBody);
+        const { token, password } = reqBody;
 
-        // ============= Inserting the User =============
+        const user = await User.findOne({ token });
+
+        if (!user)
+            return NextResponse.json(
+                { message: 'Invalid Token', type: "error", success: false },
+                { status: 403 }
+            )
+
+        user.password = password;
+        user.token = '';
+        user.active = true;
+
+        await user.save();
 
         return NextResponse.json(
-            { message: "Registered Succesfully, Please Login", type: "success", success: true },
+            { message: 'Account Activated. Please Login', type: "success", success: false },
             { status: 200 }
         )
 
