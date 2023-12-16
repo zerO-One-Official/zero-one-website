@@ -40,7 +40,7 @@ const SignupPage = () => {
 
         try {
             setLoading(true);
-            const res = await fetch('/api/signup', {
+            const res = await fetch('/api/resetPassword', {
                 method: 'PUT',
                 body: JSON.stringify({ token, password: user.password })
             })

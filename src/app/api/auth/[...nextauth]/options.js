@@ -13,16 +13,17 @@ export const options = {
                 let user = null;
 
                 if (isNaN(parseInt(emailOrRoll))) {
-                    user = await User.findOne({ email: emailOrRoll }).select(['password', 'firstName', 'roll', 'role'])
+                    user = await User.findOne({ email: emailOrRoll }).select(['password', 'firstName', 'roll', 'role', 'active',])
                 }
                 else {
-                    user = await User.findOne({ roll: emailOrRoll }).select(['password', 'firstName', 'roll', 'role'])
+                    user = await User.findOne({ roll: emailOrRoll }).select(['password', 'firstName', 'roll', 'role', 'active',])
                 }
 
 
                 if (!user) {
                     throw new Error('You are not a member.');
                 }
+                if (!user.active) throw new Error('Your Account is not Active.');
 
                 const passwordMatched = await bcrypt.compare(password, user.password);
 
