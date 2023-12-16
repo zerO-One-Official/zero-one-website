@@ -90,9 +90,6 @@ function Navbar() {
               <Link href="/resources" className={styles.navLink}>
                 Resources
               </Link>
-              <Link href="/profile" className={styles.navLink}>
-                Profile
-              </Link>
             </>
             :
             null
