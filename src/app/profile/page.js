@@ -1,6 +1,4 @@
 "use client"
-
-import useSWR from 'swr'
 import { useUploadThing, utapi } from "@/utils/uploadthing";
 import toast from 'react-hot-toast'
 import ProfilePhoto from "@/components/ProfilePhoto";
@@ -11,14 +9,17 @@ import StyledInput from "@/components/input/StyledInput";
 import { BiEdit, BiLoader } from 'react-icons/bi';
 import { useRouter } from 'next/navigation';
 import BottomGlitter from '@/components/StyledText/BottomGlitter';
+import useSWR from 'swr';
 
 export default function ProfileForm() {
 
-    const fetcher = url => fetch(url).then(r => r.json())
+    const fetcher = url => fetch(url).then(r => r.json());
+
     const { data, error, isLoading } = useSWR('/api/profile', fetcher);
     const [loading, setLoading] = useState(false);
 
     const [userProfile, setUserProfile] = useState(null);
+
     const [password, setPassword] = useState({
         oldPass: '',
         newPass: '',
