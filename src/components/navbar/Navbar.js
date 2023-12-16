@@ -8,6 +8,7 @@ import Logo from '../logo/Logo';
 import Sidebar from './Sidebar';
 import LoginBtn from '../button/LoginBtn';
 import { useSession } from 'next-auth/react';
+import { usePathname } from 'next/navigation';
 
 
 function Navbar() {
@@ -15,6 +16,8 @@ function Navbar() {
 
   const [isOpen, setIsOpen] = useState(false);
   const { data } = useSession();
+
+  const pathname = usePathname();
 
   useEffect(() => {
     // Creating a dynamic parent div for the sidebar to act as portal's root
@@ -62,9 +65,14 @@ function Navbar() {
     <header id="navbar" className={`${styles.navbar}`}>
       <Logo />
       <nav id="navList" className={styles.navbarList}>
-        <Link href="/events" className={styles.navLink}>
-          Events
-        </Link>
+        {
+          pathname === '/login' ?
+            null
+            :
+            <Link href="/events" className={styles.navLink}>
+              Events
+            </Link>
+        }
         {
           data && data.user ?
             <>

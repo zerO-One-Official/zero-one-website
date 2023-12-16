@@ -140,6 +140,9 @@ export default function ProfileForm() {
             })
 
             const data = await res.json();
+            if (data.success) {
+                setPassword({ oldPass: '', newPass: '', confirmPass: '' })
+            }
 
             toast[data.type](data.message);
 
