@@ -144,8 +144,6 @@ export async function PUT(req) {
     try {
         const reqBody = await req.json();
 
-        const url = req.url;
-
         const { token, password } = reqBody;
 
         const user = await User.findOne({ token });
@@ -160,11 +158,9 @@ export async function PUT(req) {
         user.password = password;
         user.token = '';
 
-        if (url.split('/')[url.split('/').length - 1] === 'activateAccount') {
-            message = 'Account Activated. Please Login'
-            user.active = true;
-        }
-        message = 'Password updated successfully. Please Login'
+        message = 'Account Activated. Please Login'
+        user.active = true;
+
         await user.save();
 
         return NextResponse.json(

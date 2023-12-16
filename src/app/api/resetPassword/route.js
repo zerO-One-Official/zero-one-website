@@ -93,12 +93,11 @@ export async function PUT(req) {
 
         user.password = password;
         user.token = '';
-        user.active = true;
 
         await user.save();
 
         return NextResponse.json(
-            { message: 'Account Activated. Please Login', type: "success", success: false },
+            { message: 'Password Updated. Please Login', type: "success", success: false },
             { status: 200 }
         )
 
