@@ -47,6 +47,18 @@ const AdminPage = () => {
                     })
 
                     const data = await resp.json();
+                    if (data.success) {
+                        setUser({
+                            profilePic: '',
+                            firstName: '',
+                            lastName: '',
+                            gender: '',
+                            email: '',
+                            phone: '',
+                            branch: '',
+                            roll: '',
+                        })
+                    }
                     toast[data.type](data.message);
                 } catch (error) {
 

@@ -7,6 +7,7 @@ import React, { useState } from 'react'
 import toast from 'react-hot-toast'
 import { signIn, useSession } from 'next-auth/react'
 import { redirect, useRouter } from 'next/navigation'
+import BottomGlitter from '@/components/StyledText/BottomGlitter'
 
 const LoginPage = () => {
 
@@ -38,7 +39,7 @@ const LoginPage = () => {
             })
                 .then(({ ok, error }) => {
                     if (ok) {
-                        router.push("/profile");
+                        router.push("/");
                     } else {
                         toast.error(error);
                     };
@@ -56,7 +57,8 @@ const LoginPage = () => {
     return (
         <section className='container-70 text-lg'>
             <div className="mt-16">
-                <form method='POST' onSubmit={logIn} className='flex flex-col gap-4' autoComplete='false'>
+                <BottomGlitter text={'Login'} />
+                <form method='POST' onSubmit={logIn} className='flex flex-col gap-4 mt-8' autoComplete='false'>
                     <StyledInput
                         id="emailOrRoll"
                         value={loginForm.emailOrRoll}

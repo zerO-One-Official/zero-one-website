@@ -16,7 +16,7 @@ const SignupPage = () => {
 
     if (!token) redirect('/login');
 
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     const fetcher = url => fetch(url).then(r => r.json())
     const { data, error, isLoading } = useSWR(`/api/profile/${token}`, fetcher);
