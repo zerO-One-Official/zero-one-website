@@ -30,6 +30,8 @@ export const options = {
                     throw new Error('incorrect Credentials');
                 }
 
+                user.activeSessions = 1;
+                await user.save();
 
                 return user;
             }

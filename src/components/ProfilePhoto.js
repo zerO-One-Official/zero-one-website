@@ -4,10 +4,10 @@ import Image from 'next/image'
 import { useDropzone } from "@uploadthing/react/hooks";
 import { generateClientDropzoneAccept } from "uploadthing/client";
 import { useCallback, useState } from "react";
-import { BiCamera } from 'react-icons/bi';
+import { BiCamera, BiEdit, BiLoader, BiLock } from 'react-icons/bi';
 import toast from 'react-hot-toast'
 
-const ProfilePhoto = ({ permittedFileInfo, setImage, disabled, profilePic }) => {
+const ProfilePhoto = ({ permittedFileInfo, setImage, disabled, profilePic, startUpload, loading }) => {
 
     const [imageUrl, setImageUrl] = useState(profilePic);
 
@@ -34,11 +34,13 @@ const ProfilePhoto = ({ permittedFileInfo, setImage, disabled, profilePic }) => 
         const blob = new Blob([file], { type: file.type });
         const objectURL = URL.createObjectURL(blob);
         setImageUrl(objectURL);
+
+        startUpload && startUpload([file]);
     }
 
     return (
         <div
-            className="bg-transparent w-32 h-32 rounded-full overflow-hidden border border-white/25 relative cursor-pointer"
+            className={`select-none bg-transparent w-32 h-32 rounded-full overflow-hidden border border-white/25 relative ${disabled ? '' : 'cursor-pointer'}`}
             {...getRootProps()}
         >
             {
@@ -60,6 +62,7 @@ const ProfilePhoto = ({ permittedFileInfo, setImage, disabled, profilePic }) => 
             {
                 imageUrl ?
                     <Image className="w-full h-full object-cover rounded-full"
+                        style={{ userDrag: 'none' }}
                         width={150}
                         height={150}
                         src={imageUrl}
@@ -67,6 +70,20 @@ const ProfilePhoto = ({ permittedFileInfo, setImage, disabled, profilePic }) => 
                     />
                     :
                     null
+            }
+            {
+                <div className={`z-50 absolute w-full h-full ${(!disabled || loading) ? 'bg-primary/70' : ''} top-0 left-0 flex items-center justify-center`}>
+                    {
+
+                        loading ?
+                            <BiLoader size={25} className='animate-spin' />
+                            :
+                            !disabled ?
+                                <BiEdit size={25} />
+                                :
+                                null
+                    }
+                </div>
             }
         </div>
     )

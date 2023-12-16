@@ -40,7 +40,7 @@ const LoginPage = () => {
                     if (ok) {
                         router.push("/profile");
                     } else {
-                        toast.error(error.message);
+                        toast.error(error);
                     };
                 })
 
@@ -76,11 +76,11 @@ const LoginPage = () => {
                         className="w-full"
                         type="password"
                     />
-                    <Link href="/recover" className='text-accent hover:underline ml-auto'>forgot password?</Link>
-                    <div className="flex gap-2 items-center">
+                    <Link href="/recoverPassword" className='text-accent hover:underline ml-auto'>forgot password?</Link>
+                    {/* <div className="flex gap-2 items-center">
                         <input type="checkbox" name="rememberMe" id="remember-me" className='w-4 h-4' />
                         <label htmlFor="remember-me">Remember me</label>
-                    </div>
+                    </div> */}
                     {/* <p className='text-base'>Not a registered member ? <Link href="/signup" className='text-accent hover:underline'>Create Account</Link></p> */}
                     <button type="submit" className="flex rounded-full">
                         <Button
