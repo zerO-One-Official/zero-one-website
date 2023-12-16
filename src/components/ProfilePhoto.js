@@ -27,8 +27,8 @@ const ProfilePhoto = ({ permittedFileInfo, setImage, disabled, profilePic, start
     const handleImageSelect = async (e) => {
         const file = e.target.files?.[0];
         if (!file) return;
-        else if (file.size > 1024 * 512) {
-            return toast.error('Image must be less than 256KB')
+        else if (file.size > 1024 * 1024) {
+            return toast.error('Image must be less than 1MB')
         }
         setImage([file]);
         const blob = new Blob([file], { type: file.type });
