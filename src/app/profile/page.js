@@ -10,6 +10,7 @@ import { BiEdit, BiLoader } from 'react-icons/bi';
 import { useRouter } from 'next/navigation';
 import BottomGlitter from '@/components/StyledText/BottomGlitter';
 import useSWR from 'swr';
+import { signOut } from "next-auth/react";
 
 export default function ProfileForm() {
 
@@ -234,6 +235,11 @@ export default function ProfileForm() {
                         </Button>
                     </button>
                 </form>
+                <button onClick={signOut}>
+                    <Button>
+                        Log Out
+                    </Button>
+                </button>
             </div>
     );
 }
