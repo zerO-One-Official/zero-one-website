@@ -60,7 +60,7 @@ export async function POST(req) {
             if (user.lastName !== lastName)
                 user.lastName = lastName;
             if (user.profilePic !== profilePic) {
-                deleteFile(profilePic);
+                deleteFile(user.profilePic);
                 user.profilePic = profilePic;
             }
             if (user.email !== email)
