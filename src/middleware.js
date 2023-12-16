@@ -6,7 +6,7 @@ export default async function middleware(req, event) {
     const isAuthenticated = !!token;
 
     const { pathname } = req.nextUrl;
-    const publicUrl = ['/login', '/signup'];
+    const publicUrl = ['/login', '/signup', '/recoverPassword', '/setPassword'];
 
     // Simplify first condition to avoid redundancy
     if (publicUrl.includes(pathname) && isAuthenticated) {
@@ -34,5 +34,5 @@ export default async function middleware(req, event) {
 }
 
 export const config = {
-    matcher: ["/login", '/activateAccount', '/admin/:path*', '/profile'],
+    matcher: ["/login", '/activateAccount', '/admin/:path*', '/profile', '/recoverPassword', '/setPassword'],
 };

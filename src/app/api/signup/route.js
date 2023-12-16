@@ -7,6 +7,7 @@ import { joiningEmail } from "@/lib/emailTemplates";
 import { sendMail } from "@/lib/sendMail";
 import { getServerSession } from "next-auth";
 import { options } from "../auth/[...nextauth]/options";
+import { deleteFile } from "@/utils/server";
 
 dbConnect()
 
@@ -17,22 +18,28 @@ export async function POST(req) {
         const session = await getServerSession(options);
         const id = session?.user?._id;
 
-        if (!session || !id)
+        const reqBody = await req.json();
+        const { firstName, branch, gender, roll, lastName, email, phone, profilePic } = reqBody;
+
+        if (!session || !id) {
+
+            deleteFile(profilePic);
             return NextResponse.json(
                 { message: "Session Expired", type: "error", success: true },
                 { status: 440 }
-            )
+            );
+        }
 
         const admin = await User.findById(id);
 
-        if (!admin || admin.role !== 'admin')
+        if (!admin || admin.role !== 'admin') {
+            deleteFile(profilePic);
             return NextResponse.json(
                 { message: "You are not allowed to perform this action", type: "error", success: true },
                 { status: 403 }
             )
+        }
 
-        const reqBody = await req.json();
-        const { firstName, branch, gender, roll, lastName, email, phone, profilePic } = reqBody;
         const password = process.env.DEFAULT_PASSWORD;
 
         const to = email;
@@ -52,8 +59,10 @@ export async function POST(req) {
                 user.firstName = firstName;
             if (user.lastName !== lastName)
                 user.lastName = lastName;
-            if (user.profilePic !== profilePic)
+            if (user.profilePic !== profilePic) {
+                deleteFile(profilePic);
                 user.profilePic = profilePic;
+            }
             if (user.email !== email)
                 user.email = email;
             if (user.roll !== roll)
@@ -121,7 +130,8 @@ export async function POST(req) {
         }
 
     } catch (error) {
-        console.log(error)
+        console.log(error);
+        deleteFile(profilePic);
         return NextResponse.json(
             { message: error.message, type: "error", success: false },
             { status: 500 }
@@ -134,10 +144,12 @@ export async function PUT(req) {
     try {
         const reqBody = await req.json();
 
-        console.log(reqBody);
+        const url = req.url;
+
         const { token, password } = reqBody;
 
         const user = await User.findOne({ token });
+        let message = '';
 
         if (!user)
             return NextResponse.json(
@@ -147,12 +159,16 @@ export async function PUT(req) {
 
         user.password = password;
         user.token = '';
-        user.active = true;
 
+        if (url.split('/')[url.split('/').length - 1] === 'activateAccount') {
+            message = 'Account Activated. Please Login'
+            user.active = true;
+        }
+        message = 'Password updated successfully. Please Login'
         await user.save();
 
         return NextResponse.json(
-            { message: 'Account Activated. Please Login', type: "success", success: false },
+            { message, type: "success", success: false },
             { status: 200 }
         )
 

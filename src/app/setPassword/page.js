@@ -16,25 +16,25 @@ const SignupPage = () => {
 
     const [loading, setLoading] = useState(false);
 
-    const [signupForm, setSignupForm] = useState({
+    const [user, setUser] = useState({
         password: '',
         confirmPassword: '',
     })
 
     const handleChange = (e) => {
-        setSignupForm(prev => ({
+        setUser(prev => ({
             ...prev,
             [e.target.name]: e.target.value
         }));
     }
 
 
-    const signup = async (e) => {
+    const updatePassword = async (e) => {
         e.preventDefault();
 
         if (loading || !token) return;
 
-        if (signupForm.password !== signupForm.confirmPassword)
+        if (user.password !== user.confirmPassword)
             return toast.error('Password does not matched.')
 
 
@@ -42,7 +42,7 @@ const SignupPage = () => {
             setLoading(true);
             const res = await fetch('/api/signup', {
                 method: 'PUT',
-                body: JSON.stringify({ token, password: signupForm.password })
+                body: JSON.stringify({ token, password: user.password })
             })
 
             const data = await res.json();
@@ -68,21 +68,21 @@ const SignupPage = () => {
             <div className="mt-16">
                 <BottomGlitter text={'Set a Password'} />
 
-                <form method='POST' onSubmit={signup} className='flex flex-col gap-4 w-11/12 mx-auto'>
+                <form method='POST' onSubmit={updatePassword} className='flex flex-col gap-4 w-11/12 mx-auto'>
                     <div className="flex gap-4 md:gap-2 justify-between items-center flex-wrap xl:flex-col xl:justify-start xl:items-start">
                         <StyledInput
                             id="password"
-                            value={signupForm.password}
+                            value={user.password}
                             onChange={handleChange}
                             name="password"
-                            label="Create Password"
+                            label="Create a new Password"
                             required
                             className="w-full"
                             type="password"
                         />
                         <StyledInput
                             id="confirmPassword"
-                            value={signupForm.confirmPassword}
+                            value={user.confirmPassword}
                             onChange={handleChange}
                             name="confirmPassword"
                             label="Re-enter Password"
@@ -90,20 +90,19 @@ const SignupPage = () => {
                             className="w-full"
                             type="password"
                         />
+
                     </div>
-
                     {/* <p className='text-base'>Already a member ? <Link href="/login" className='text-accent hover:underline'>Login</Link></p> */}
-
-                    <button type="submit" className="flex rounded-full">
+                    <button type="submit" className="flex rounded-full ">
                         <Button
                             style={{ border: 'none' }}
-                            className="bg-primary-light text-primary hover:text-primary-light ml-auto sm:w-full "
+                            className="bg-primary-light text-primary hover:text-primary-light ml-auto sm:w-full group"
                         >
                             {
                                 loading ?
                                     <LoadingText />
                                     :
-                                    "Activate Account"
+                                    "Set Password"
                             }
                         </Button>
                     </button>
