@@ -5,12 +5,12 @@ import Image from 'next/image'
 import { useState } from 'react'
 import StyledInput from '@/components/input/StyledInput'
 import { RiBaseStationLine } from "react-icons/ri";
+import Link from 'next/link'
 
 const UserList = ({ users }) => {
 
     const [userList, setUserList] = useState(users);
     const [filter, setFilter] = useState({
-        inactive: '',
         active: '',
         batch: '',
         search: ''
@@ -25,13 +25,18 @@ const UserList = ({ users }) => {
                 </div>
                 <div className="flex gap-2">
                     <div className="">
-                        <input type="radio" name="status" id="active" checked={filter.active} onChange={(e) => { setFilter(prev => ({ ...prev, active: e.target.checked })) }} />
+                        <input type="radio" name="active" id="active" checked={filter.active} onChange={(e) => { setFilter(prev => ({ ...prev, active: true })) }} />
                         <label htmlFor="active">Active</label>
                     </div>
                     <div className="">
-                        <input type="radio" name="status" id="inactive" checked={filter.inactive} onChange={(e) => { setFilter(prev => ({ ...prev, inactive: e.target.checked })) }} />
+                        <input type="radio" name="active" id="inactive" checked={filter.active === false} onChange={(e) => { setFilter(prev => ({ ...prev, active: false })) }} />
                         <label htmlFor="inactive">Inactive</label>
                     </div>
+                    <div className="">
+                        <input type="radio" name="active" id="all" checked={filter.active === ''} onChange={(e) => { setFilter(prev => ({ ...prev, active: '' })) }} />
+                        <label htmlFor="all">All</label>
+                    </div>
+
                     <div className="">
                         <input type="radio" name="batch" id="2020" checked={filter.batch === 20} onChange={(e) => { setFilter(prev => ({ ...prev, batch: e.target.checked ? parseInt(20) : '' })) }} />
                         <label htmlFor="2020">2020</label>
@@ -51,8 +56,9 @@ const UserList = ({ users }) => {
                     <div className="">
                         <button onClick={() =>
                             setFilter({
-                                active: false,
-                                batch: ''
+                                active: '',
+                                batch: '',
+                                search: ''
                             })
                         }>Clear Filter</button>
                     </div>
@@ -63,16 +69,18 @@ const UserList = ({ users }) => {
 
                 {
                     userList.filter(user => {
+                        const condition1 = filter.active === '' || user.active === filter.active;
+                        const condition2 = filter.batch === '' || Math.floor(user.roll / 1000) === filter.batch;
+                        const condition3 = filter.search === '' || user.firstName.includes(filter.search);
 
-                        if (filter.inactive) return !user.active;
-                        if (filter.active) return user.active;
-                        if (filter.batch) return Math.floor(user.roll / 1000) == filter.batch
-                        if (filter.search) return user.firstName.includes(filter.search)
-                        else return user;
+                        if (condition1 && condition2 && condition3) {
+                            return true;
+                        }
+                        return false;
 
                     }).map(user => {
                         return (
-                            <div key={user._id}
+                            <Link href={`/user/${user._id}`} key={user._id}
                                 className={`flex gap-2 items-center justify-between bg-slate-50/5 p-3 rounded-lg border ${user.role === 'admin' ? 'border-yellow-300' : 'border-white/25'}`}
                             >
                                 <div className="flex items-center gap-4">
@@ -97,9 +105,25 @@ const UserList = ({ users }) => {
                                             <RxCrossCircled size={20} />
                                         </button>
                                 }
-                            </div>
+                            </Link>
                         )
                     })
+                }
+                {
+                    userList.filter(user => {
+                        const condition1 = filter.active === '' || user.active === filter.active;
+                        const condition2 = filter.batch === '' || Math.floor(user.roll / 1000) === filter.batch;
+                        const condition3 = filter.search === '' || user.firstName.includes(filter.search);
+
+                        if (condition1 && condition2 && condition3) {
+                            return true;
+                        }
+                        return false;
+
+                    }).length === 0 ?
+                        <h2>No Result Found</h2>
+                        :
+                        null
                 }
             </div>
         </>

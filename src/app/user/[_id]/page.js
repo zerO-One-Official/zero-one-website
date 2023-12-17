@@ -11,21 +11,18 @@ import { useRouter } from 'next/navigation';
 import BottomGlitter from '@/components/StyledText/BottomGlitter';
 import useSWR from 'swr';
 
-export default function ProfileForm() {
+export default function UserProfile({ params }) {
+
+    const { _id } = params;
+
 
     const fetcher = url => fetch(url).then(r => r.json());
 
-    const { data, error, isLoading } = useSWR('/api/profile', fetcher);
+    const { data, error, isLoading } = useSWR(`/api/users/${_id}`, fetcher);
     const [loading, setLoading] = useState(false);
 
     const [userProfile, setUserProfile] = useState(null);
 
-    const [password, setPassword] = useState({
-        oldPass: '',
-        newPass: '',
-        confirmPass: '',
-        loading: false
-    });
     const router = useRouter();
 
     useEffect(() => {
@@ -33,6 +30,7 @@ export default function ProfileForm() {
             setUserProfile(data.user);
         }
     }, [data])
+
 
     if (error) {
         toast.error(error.message);
@@ -55,7 +53,7 @@ export default function ProfileForm() {
                 try {
                     const { email, phone, username } = userProfile;
                     setLoading(true);
-                    const resp = await fetch('/api/profile', {
+                    const resp = await fetch(`/api/users/${_id}`, {
                         method: "PUT",
                         body: JSON.stringify({ email, phone, profilePic, username })
                     })
@@ -99,13 +97,13 @@ export default function ProfileForm() {
         setLoading(true);
 
         if (image.length) {
-            await startUpload(image);
+            // await startUpload(image);
         }
         else
             try {
                 const { email, phone, profilePic, username } = userProfile;
 
-                const res = await fetch('/api/profile', {
+                const res = await fetch(`/api/users/${_id}`, {
                     method: "PUT",
                     body: JSON.stringify({ email, phone, profilePic, username })
                 })
@@ -126,23 +124,20 @@ export default function ProfileForm() {
 
     }
 
-    const updatePassword = async (e) => {
+    const deleteUser = async (e) => {
         e.preventDefault();
+
+        setLoading(true);
+
         try {
-            setPassword(prev => ({ ...prev, loading: true }))
-            const { oldPass, newPass, confirmPass } = password;
 
-            if (newPass !== confirmPass) return toast.error('Passwords not Matched.')
-
-            const res = await fetch('/api/profile/updatePassword', {
-                method: "PUT",
-                body: JSON.stringify({ oldPass, newPass, })
+            const res = await fetch(`/api/users/${_id}`, {
+                method: "DELETE"
             })
 
             const data = await res.json();
-            if (data.success) {
-                setPassword({ oldPass: '', newPass: '', confirmPass: '' })
-            }
+
+            if (data.success) router.back();
 
             toast[data.type](data.message);
 
@@ -151,8 +146,10 @@ export default function ProfileForm() {
             toast.error(error.message);
         }
         finally {
-            setPassword(prev => ({ ...prev, loading: false }))
+            setLoading(false);
+            setEdit(false);
         }
+
     }
 
     const handleChange = (e) => {
@@ -169,7 +166,7 @@ export default function ProfileForm() {
             </div>
 
             :
-            <div className='w-full flex flex-col'>
+            <div className='container-70 w-full flex flex-col'>
                 <form onSubmit={submitForm} className='flex flex-col'>
                     <div className="flex items-center justify-center mb-12">
                         <ProfilePhoto permittedFileInfo={permittedFileInfo} setImage={setImage} disabled={!edit} profilePic={userProfile.profilePic} startUpload={startUpload} loading={loading} />
@@ -185,54 +182,45 @@ export default function ProfileForm() {
                             <StyledInput value={userProfile?.username} name='username' label='Username' onChange={handleChange} disabled={!edit} />
                         </div>
                         <div className="flex flex-row lg:flex-col gap-2 items-center justify-center w-full">
-                            <StyledInput value={userProfile?.firstName} name='firstName' label='First Name' className='capitalize' onChange={handleChange} disabled={true} />
-                            <StyledInput value={userProfile?.lastName} name='lastName' label='Last Name' className='capitalize' onChange={handleChange} disabled={true} />
+                            <StyledInput value={userProfile?.firstName} name='firstName' label='First Name' className='capitalize' onChange={handleChange} disabled={!edit} />
+                            <StyledInput value={userProfile?.lastName} name='lastName' label='Last Name' className='capitalize' onChange={handleChange} disabled={!edit} />
                         </div>
                         <div className="flex flex-row lg:flex-col gap-2 items-center justify-center w-full">
                             <StyledInput type="email" value={userProfile?.email} name='email' label='Email' onChange={handleChange} disabled={!edit} />
                             <StyledInput type="number" value={userProfile?.phone} name='phone' label='Phone' onChange={handleChange} disabled={!edit} />
                         </div>
                         <div className="flex flex-row lg:flex-col gap-2 items-center justify-center w-full">
-                            <StyledInput value={userProfile?.branch} name='branch' label='Branch' onChange={handleChange} disabled={true} />
-                            <StyledInput value={userProfile?.roll} name='roll' label='Roll no.' onChange={handleChange} disabled={true} />
+                            <StyledInput value={userProfile?.branch} name='branch' label='Branch' onChange={handleChange} disabled={!edit} />
+                            <StyledInput value={userProfile?.roll} name='roll' label='Roll no.' onChange={handleChange} disabled={!edit} />
                         </div>
-                        {
-                            (data.user.email !== userProfile.email || data.user.phone !== userProfile.phone || data.user.username !== userProfile.username)
-                                ?
-                                <button type="submit" className='ml-auto'>
+                        <div className="">
+
+
+                            <button type="button" className='' onClick={deleteUser} >
+                                <Button>
+                                    {
+                                        loading ?
+                                            <LoadingText />
+                                            :
+                                            "Delete User"
+                                    }
+                                </Button>
+                            </button>
+
+                            {
+                                <button type="submit" className='' >
                                     <Button>
                                         {
                                             loading ?
                                                 <LoadingText />
                                                 :
-                                                "Update Profile"
+                                                "Update User Profile"
                                         }
                                     </Button>
                                 </button>
-                                :
-                                null
-                        }
-                    </div>
-                </form>
-                <form className="mt-12 flex flex-col" onSubmit={updatePassword}>
-                    <BottomGlitter text="Update Password" />
-                    <div className="flex flex-row lg:flex-col gap-2 items-center justify-center w-full mt-10">
-                        <StyledInput type="password" value={password?.oldPass} name='oldPass' label='Old Password' onChange={(e) => { setPassword(prev => ({ ...prev, [e.target.name]: e.target.value })) }} />
-                    </div>
-                    <div className="flex flex-row lg:flex-col gap-2 items-center justify-center w-full">
-                        <StyledInput type="password" value={password?.newPass} name='newPass' label='Set Password' onChange={(e) => { setPassword(prev => ({ ...prev, [e.target.name]: e.target.value })) }} />
-                        <StyledInput type="password" value={password?.confirmPass} name='confirmPass' label='Confirm Password' onChange={(e) => { setPassword(prev => ({ ...prev, [e.target.name]: e.target.value })) }} />
-                    </div>
-                    <button type="submit" className='ml-auto'>
-                        <Button>
-                            {
-                                password.loading ?
-                                    <LoadingText />
-                                    :
-                                    "Update Password"
                             }
-                        </Button>
-                    </button>
+                        </div>
+                    </div>
                 </form>
             </div>
     );

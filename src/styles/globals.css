@@ -203,3 +203,11 @@ a {
 input[type="number"]::-webkit-inner-spin-button {
   appearance: none;
 }
+
+svg {
+  fill: inherit,
+}
+
+img {
+  -webkit-user-drag: none;
+}

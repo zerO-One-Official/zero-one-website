@@ -1,5 +1,5 @@
 .navbar {
-  @apply sticky top-0 left-0 right-0 w-full md:py-4 py-3 px-20 flex justify-between items-center overflow-hidden z-[100] bg-primary;
+  @apply sticky top-0 left-0 right-0 w-full md:py-4 py-3 px-20 flex justify-between items-center z-[100] bg-primary;
   @apply 2xl:px-10;
   @apply xl:px-8;
   @apply sm:px-6;
