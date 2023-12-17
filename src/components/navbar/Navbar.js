@@ -66,14 +66,6 @@ function Navbar() {
       <Logo />
       <nav id="navList" className={styles.navbarList}>
         {
-          pathname === '/login' ?
-            null
-            :
-            <Link href="/events" className={styles.navLink}>
-              Events
-            </Link>
-        }
-        {
           data && data.user ?
             <>
               {
@@ -84,17 +76,29 @@ function Navbar() {
                   :
                   null
               }
-              <Link href="/contest" className={styles.navLink}>
-                Contest
-              </Link>
-              <Link href="/resources" className={styles.navLink}>
-                Resources
-              </Link>
             </>
             :
             null
-
         }
+        {
+          <>
+
+            <Link href="/gallery" className={styles.navLink}>
+              Gallery
+            </Link>
+            {
+
+              data && data.user ?
+                <Link href="/events" className={styles.navLink}>
+                  Events
+                </Link> : null
+            }
+            <Link href="/resources" className={styles.navLink}>
+              Resources
+            </Link>
+          </>
+        }
+
         <LoginBtn />
       </nav>
       <div

@@ -11,7 +11,6 @@ const UserSchema = new mongoose.Schema({
     },
     profilePic: {
         type: String,
-        lowercase: true,
         trim: true
     }
     ,

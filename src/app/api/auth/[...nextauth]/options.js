@@ -13,10 +13,10 @@ export const options = {
                 let user = null;
 
                 if (isNaN(parseInt(emailOrRoll))) {
-                    user = await User.findOne({ email: emailOrRoll }).select(['password', 'firstName', 'roll', 'role', 'active', 'profilePic',])
+                    user = await User.findOne({ email: emailOrRoll }).select(['password', 'email', 'firstName', 'roll', 'role', 'active', 'profilePic',])
                 }
                 else {
-                    user = await User.findOne({ roll: emailOrRoll }).select(['password', 'firstName', 'roll', 'role', 'active', 'profilePic',])
+                    user = await User.findOne({ roll: emailOrRoll }).select(['password', 'email', 'firstName', 'roll', 'role', 'active', 'profilePic',])
                 }
 
 
@@ -47,6 +47,7 @@ export const options = {
                 token.roll = user.roll;
                 token.role = user.role;
                 token.profilePic = user.profilePic;
+                token.email = user.email;
             }
             return token;
         },

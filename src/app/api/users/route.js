@@ -10,25 +10,24 @@ dbConnect()
 export async function GET(req) {
 
     try {
-        // const session = await getServerSession(options);
-        // const id = session?.user?._id;
-        // if (!session || !id) {
-        //     return NextResponse.json(
-        //         { message: "Session Expired", type: "error", success: true },
-        //         { status: 440 }
-        //     );
-        // }
+        const session = await getServerSession(options);
+        const id = session?.user?._id;
 
-        // console.log(id);
+        if (!session || !id) {
+            return NextResponse.json(
+                { message: "Session Expired", type: "error", success: true },
+                { status: 440 }
+            );
+        }
 
-        // const admin = await User.findById(id);
+        const admin = await User.findById(id);
 
-        // if (!admin || admin.role !== 'admin') {
-        //     return NextResponse.json(
-        //         { message: "You are not allowed to perform this action", type: "error", success: true },
-        //         { status: 403 }
-        //     )
-        // }
+        if (!admin || admin.role !== 'admin') {
+            return NextResponse.json(
+                { message: "You are not allowed to perform this action", type: "error", success: true },
+                { status: 403 }
+            )
+        }
 
         const users = await User.find({}).sort({ firstName: 1 });
 
@@ -39,7 +38,6 @@ export async function GET(req) {
         )
 
     } catch (error) {
-        console.log(error)
         return NextResponse.json(
             { message: error.message, type: "error", success: false },
             { status: 500 }

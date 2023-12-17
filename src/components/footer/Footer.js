@@ -19,8 +19,8 @@ function Footer() {
           <div className="mb-3 flex flex-col">
             <h3 className="text-2xl">Write</h3>
             <h4 className="text-lg font-extralight">
-              <a href="mailto:zerooneofficial.mcegmail.com">
-                zerooneofficial.mce@gmail.com
+              <a href="mailto:info@zeroonemce.com">
+                info@zeroonemce.com
               </a>
             </h4>
           </div>
