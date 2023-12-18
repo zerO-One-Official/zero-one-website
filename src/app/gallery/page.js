@@ -10,9 +10,9 @@ const GalleryPage = () => {
                 <div className="flex flex-col justify-between h-[calc(100vh-100px-3rem)] items-center sm:h-[calc(90vh-100px-1rem)]">
                     <BottomGlitter text="Our Gallery" />
                     <AnimatedScrollButton
-                        onClick={() =>
-                            document.getElementById('scrolled-to').scrollIntoView()
-                        }
+                    // onClick={() =>
+                    //     document.getElementById('scrolled-to').scrollIntoView()
+                    // }
                     />
                 </div>
             </div>

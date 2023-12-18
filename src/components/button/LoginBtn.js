@@ -5,15 +5,9 @@ import { usePathname } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react';
+import { MdLogin } from 'react-icons/md'
 
 const LoginBtn = ({ unmount = () => { } }) => {
-
-    const SpanStyle = {
-        zIndex: 1,
-        color: 'inherit',
-        transition: 'all 300ms ease-in-out',
-    };
-
     const [active, setActive] = useState(false);
 
     const path = usePathname();
@@ -52,9 +46,9 @@ const LoginBtn = ({ unmount = () => { } }) => {
                                 </div>
                                 <h2 className='capitalize text-lg font-bold'>Hi, {data.user.name}</h2>
                             </div>
-                            <div className="flex gap-2 w-full">
-                                <Link href={'/profile'} onClick={() => setActive(false)} className='flex-1 bg-white/10 p-2 flex justify-center rounded-l-xl hover:bg-white/20 transition-all items-center'>Profile</Link>
-                                <button onClick={signOut} className='flex-1 bg-red-500 p-2 flex justify-center rounded-r-xl hover:bg-red-400 transition-all items-center'>Logout</button>
+                            <div className="flex xs:flex-col gap-1 w-full">
+                                <Link href={'/profile'} onClick={() => setActive(false)} className='flex-1 bg-white/5 p-2 py-3 flex justify-center rounded-l-md xs:rounded-md hover:bg-white/10 transition-all items-center'>Profile</Link>
+                                <button onClick={signOut} className='flex-1 bg-red-500 p-2 py-3 flex justify-center rounded-r-md xs:rounded-md hover:bg-red-600 transition-all items-center'>Logout</button>
                             </div>
                         </div>
                     }
@@ -65,11 +59,9 @@ const LoginBtn = ({ unmount = () => { } }) => {
                     className="flex rounded-full"
                     onClick={unmount}
                 >
-                    <Button
-                        style={{ border: 'none' }}
-                        className="bg-primary-light text-primary hover:text-primary-light"
-                    >
-                        <span style={SpanStyle}>Login</span>
+                    <Button varrient={'filled'}>
+                        <MdLogin className='fill-inherit' />
+                        Login
                     </Button>
                 </Link>
     )

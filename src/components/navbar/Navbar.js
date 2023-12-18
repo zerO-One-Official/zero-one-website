@@ -65,39 +65,20 @@ function Navbar() {
     <header id="navbar" className={`${styles.navbar}`}>
       <Logo />
       <nav id="navList" className={styles.navbarList}>
+
+        <Link href="/gallery" className={styles.navLink}>
+          Gallery
+        </Link>
         {
+
           data && data.user ?
-            <>
-              {
-                data.user.role === 'admin' ?
-                  <Link href="/admin" className={styles.navLink}>
-                    Manage
-                  </Link>
-                  :
-                  null
-              }
-            </>
-            :
-            null
+            <Link href="/events" className={styles.navLink}>
+              Events
+            </Link> : null
         }
-        {
-          <>
-
-            <Link href="/gallery" className={styles.navLink}>
-              Gallery
-            </Link>
-            {
-
-              data && data.user ?
-                <Link href="/events" className={styles.navLink}>
-                  Events
-                </Link> : null
-            }
-            <Link href="/resources" className={styles.navLink}>
-              Resources
-            </Link>
-          </>
-        }
+        <Link href="/resources" className={styles.navLink}>
+          Resources
+        </Link>
 
         <LoginBtn />
       </nav>

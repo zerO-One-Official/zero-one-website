@@ -1,6 +1,3 @@
-import { getServerSession } from "next-auth";
-import { options } from "../api/auth/[...nextauth]/options"
-import { redirect } from 'next/navigation'
 
 export const metadata = {
     title: 'ZERO ONE | Resources',
@@ -9,15 +6,8 @@ export const metadata = {
 
 
 const layout = async ({ children }) => {
-    const session = await getServerSession(options);
-    console.log(session);
-
-    if (!session) {
-        redirect('/login?callbackUrl=/')
-    }
-    else
-        return (
-            children
-        )
+    return (
+        children
+    )
 }
 export default layout

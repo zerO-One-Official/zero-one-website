@@ -21,6 +21,7 @@
 }
 
 .col {
+  @apply sm:mt-10 mt-0;
   padding: 0 45px;
   box-sizing: border-box;
   --col-size: 100%;

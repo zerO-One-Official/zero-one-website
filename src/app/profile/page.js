@@ -10,6 +10,7 @@ import { BiEdit, BiLoader } from 'react-icons/bi';
 import { useRouter } from 'next/navigation';
 import BottomGlitter from '@/components/StyledText/BottomGlitter';
 import useSWR from 'swr';
+import Spinner from "@/components/loader/Spinner";
 
 export default function ProfileForm() {
 
@@ -164,9 +165,7 @@ export default function ProfileForm() {
     return (
         (isLoading || !userProfile)
             ?
-            <div>
-                <BiLoader className='animate-spin' />
-            </div>
+            <Spinner />
 
             :
             <div className='w-full flex flex-col'>

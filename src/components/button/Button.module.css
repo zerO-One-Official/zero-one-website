@@ -1,10 +1,4 @@
-.rippleButton {
-  @apply text-lg inline-block overflow-hidden relative rounded-full px-6 py-[10px] cursor-pointer font-semibold;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  transition: border-color 0.4s;
-}
-
-.rippleButton::before {
+.button::before {
   content: '';
   position: absolute;
   top: var(--y);
@@ -18,16 +12,7 @@
   transition: width 0.5s, height 0.5s;
 }
 
-.rippleButton:hover {
-  border-color: transparent;
-}
-
-.rippleButton:hover::before {
-  height: 400px;
-  width: 400px;
-}
-
-.rippleButton>span {
-  z-index: 1;
-  position: relative;
+.button:hover::before {
+  height: 600px;
+  width: 600px;
 }
