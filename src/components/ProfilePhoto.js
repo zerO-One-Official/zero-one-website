@@ -72,6 +72,9 @@ const ProfilePhoto = ({ permittedFileInfo, setImage, disabled, profilePic, start
                     null
             }
             {
+                console.log(loading)
+            }
+            {
                 <div className={`z-50 absolute w-full h-full ${(!disabled || loading) ? 'bg-primary/70' : ''} top-0 left-0 flex items-center justify-center`}>
                     {
 

@@ -1,5 +1,6 @@
-export const joiningEmail = (token, baseUrl) => {
-    console.log('token =>', token);
+const baseUrl = 'https://zeroonemce.com'
+
+export const joiningEmail = (token) => {
 
     return `
     <!DOCTYPE html>
@@ -425,9 +426,7 @@ export const joiningEmail = (token, baseUrl) => {
     `
 }
 
-export const resetEmail = (token, baseUrl) => {
-    console.log('token =>', token);
-
+export const resetEmail = (token) => {
     return `
     <!DOCTYPE html>
 

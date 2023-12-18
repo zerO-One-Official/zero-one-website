@@ -4,9 +4,8 @@ import toast from 'react-hot-toast'
 import ProfilePhoto from "@/components/ProfilePhoto";
 import { useEffect, useState } from "react";
 import Button from "@/components/button/Button";
-import LoadingText from "@/components/loader/LoadingText";
 import StyledInput from "@/components/input/StyledInput";
-import { BiEdit, BiLoader } from 'react-icons/bi';
+import { BiEdit } from 'react-icons/bi';
 import { useRouter } from 'next/navigation';
 import BottomGlitter from '@/components/StyledText/BottomGlitter';
 import useSWR from 'swr';
@@ -61,10 +60,15 @@ export default function ProfileForm() {
                         body: JSON.stringify({ email, phone, profilePic, username })
                     })
 
-                    const data = await resp.json();
-                    if (data.success) router.refresh();
+                    const respData = await resp.json();
 
-                    toast[data.type](data.message);
+                    if (respData.success) router.refresh();
+
+                    if (respData.status === 409) {
+                        setUserProfile(prev => ({ ...prev, username: data.username }));
+                    }
+
+                    toast[respData.type](respData.message);
 
                 } catch (error) {
                     // console.log(error);
@@ -104,17 +108,23 @@ export default function ProfileForm() {
         }
         else
             try {
-                const { email, phone, profilePic, username } = userProfile;
 
-                const res = await fetch('/api/profile', {
+                setLoading(true);
+                const { email, phone, username } = userProfile;
+                const resp = await fetch('/api/profile', {
                     method: "PUT",
-                    body: JSON.stringify({ email, phone, profilePic, username })
+                    body: JSON.stringify({ email, phone, username })
                 })
 
-                const data = await res.json();
-                if (data.success) router.refresh();
+                const respData = await resp.json();
 
-                toast[data.type](data.message);
+                if (respData.success) router.refresh();
+
+                if (respData.status === 409) {
+                    setUserProfile(prev => ({ ...prev, username: data.username }));
+                }
+
+                toast[respData.type](respData.message);
 
             } catch (error) {
                 // console.log(error);
@@ -198,16 +208,10 @@ export default function ProfileForm() {
                         {
                             (data.user.email !== userProfile.email || data.user.phone !== userProfile.phone || data.user.username !== userProfile.username)
                                 ?
-                                <button type="submit" className='ml-auto'>
-                                    <Button>
-                                        {
-                                            loading ?
-                                                <LoadingText />
-                                                :
-                                                "Update Profile"
-                                        }
-                                    </Button>
-                                </button>
+                                <Button type="submit" className='ml-auto' loading={loading}>
+                                    Update Profile
+
+                                </Button>
                                 :
                                 null
                         }
@@ -222,16 +226,15 @@ export default function ProfileForm() {
                         <StyledInput type="password" value={password?.newPass} name='newPass' label='Set Password' onChange={(e) => { setPassword(prev => ({ ...prev, [e.target.name]: e.target.value })) }} />
                         <StyledInput type="password" value={password?.confirmPass} name='confirmPass' label='Confirm Password' onChange={(e) => { setPassword(prev => ({ ...prev, [e.target.name]: e.target.value })) }} />
                     </div>
-                    <button type="submit" className='ml-auto'>
-                        <Button>
-                            {
-                                password.loading ?
-                                    <LoadingText />
-                                    :
-                                    "Update Password"
-                            }
-                        </Button>
-                    </button>
+                    {
+                        (password.oldPass && password.newPass && password.confirmPass)
+                            ?
+                            <Button type="submit" className='ml-auto' loading={password.loading}>
+                                Update Password
+                            </Button>
+                            :
+                            null
+                    }
                 </form>
             </div>
     );

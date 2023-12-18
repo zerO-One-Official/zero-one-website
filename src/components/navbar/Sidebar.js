@@ -10,6 +10,7 @@ import Button from '../button/Button';
 import Image from 'next/image'
 import { MdLogin } from 'react-icons/md';
 import { usePathname } from 'next/navigation';
+import { FaCircleUser } from 'react-icons/fa6';
 
 
 function Sidebar({ isMounted, unmount }) {
@@ -99,7 +100,13 @@ function Sidebar({ isMounted, unmount }) {
                   <h3 className='font-semibold'>{data.user.email}</h3>
                   <div className="flex flex-col items-center mx-auto gap-2">
                     <div className='w-24 h-24  border border-white/10 rounded-full'>
-                      <Image src={data.user.profilePic} width={80} height={80} alt={data.user.name} className="rounded-full w-full h-full object-cover object-center" />
+                      {
+                        data.user.profilePic ?
+                          <Image src={data.user.profilePic} width={80} height={80} alt={data.user.name} className="rounded-full w-full h-full object-cover object-center" />
+
+                          :
+                          <FaCircleUser size={100} />
+                      }
                     </div>
                     <h2 className='capitalize text-lg font-bold'>Hi, {data.user.name}</h2>
                   </div>

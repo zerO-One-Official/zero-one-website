@@ -93,19 +93,9 @@ const SignupPage = () => {
 
                     </div>
                     {/* <p className='text-base'>Already a member ? <Link href="/login" className='text-accent hover:underline'>Login</Link></p> */}
-                    <button type="submit" className="flex rounded-full ">
-                        <Button
-                            style={{ border: 'none' }}
-                            className="bg-primary-light text-primary hover:text-primary-light ml-auto sm:w-full group"
-                        >
-                            {
-                                loading ?
-                                    <LoadingText />
-                                    :
-                                    "Set Password"
-                            }
-                        </Button>
-                    </button>
+                    <Button type="submit" className="flex rounded-full ml-auto" loading={loading}>
+                        Set Password
+                    </Button>
                 </form>
             </div>
         </section >

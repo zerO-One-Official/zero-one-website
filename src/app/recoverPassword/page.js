@@ -37,6 +37,7 @@ const SignupPage = () => {
                 router.push("/login");
             };
 
+            console.log(data);
             toast[data.type](data.message);
 
         } catch (error) {

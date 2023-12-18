@@ -19,7 +19,7 @@ function StyledInput({ label, name = '', className = '', value = '', ...otherPro
         onBlur={(e) => e.target.value === '' && setTransform(false)}
         className={`${Styles.input} ${className} rounded-sm`}
         name={name}
-        onScroll={e => e.preventDefault()}
+        onWheel={(e) => e.target.blur()}
         {...otherProps}
       />
       <label
