@@ -6,6 +6,7 @@ import LoadingText from '@/components/loader/LoadingText'
 import { redirect, useRouter, useSearchParams } from 'next/navigation'
 import React, { useState } from 'react'
 import toast from 'react-hot-toast'
+import { MdSend } from 'react-icons/md'
 
 const SignupPage = () => {
 
@@ -67,19 +68,11 @@ const SignupPage = () => {
                         />
                     </div>
                     {/* <p className='text-base'>Already a member ? <Link href="/login" className='text-accent hover:underline'>Login</Link></p> */}
-                    <button type="submit" className="flex rounded-full">
-                        <Button
-                            style={{ border: 'none' }}
-                            className="bg-primary-light text-primary hover:text-primary-light ml-auto sm:w-full "
-                        >
-                            {
-                                loading ?
-                                    <LoadingText />
-                                    :
-                                    "Send Reset Link"
-                            }
-                        </Button>
-                    </button>
+
+                    <Button varrient={'filled'} type="submit" className={'ml-auto'} loading={loading}>
+                        Send Reset Link
+                        <MdSend className='fill-inherit' />
+                    </Button>
                 </form>
             </div>
         </section >

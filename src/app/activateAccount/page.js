@@ -6,6 +6,7 @@ import LoadingText from '@/components/loader/LoadingText'
 import { redirect, useRouter, useSearchParams } from 'next/navigation'
 import React, { Suspense, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
+import { MdOutlineCloudDone } from 'react-icons/md'
 import useSWR from 'swr'
 
 const SignupPage = () => {
@@ -87,49 +88,42 @@ const SignupPage = () => {
                 }
                 {
 
-                    data?.user?.firstName ?
-                        <form method='POST' onSubmit={signup} className='flex flex-col gap-4 w-11/12 mx-auto'>
-                            <div className="flex gap-4 md:gap-2 justify-between items-center flex-wrap xl:flex-col xl:justify-start xl:items-start">
-                                <StyledInput
-                                    id="password"
-                                    value={signupForm.password}
-                                    onChange={handleChange}
-                                    name="password"
-                                    label="Create Password"
-                                    required
-                                    className="w-full"
-                                    type="password"
-                                />
-                                <StyledInput
-                                    id="confirmPassword"
-                                    value={signupForm.confirmPassword}
-                                    onChange={handleChange}
-                                    name="confirmPassword"
-                                    label="Re-enter Password"
-                                    required
-                                    className="w-full"
-                                    type="password"
-                                />
-                            </div>
+                    // data?.user?.firstName ?
+                    <form method='POST' onSubmit={signup} className='flex flex-col gap-4 w-11/12 mx-auto'>
+                        <div className="flex gap-4 md:gap-2 justify-between items-center flex-wrap xl:flex-col xl:justify-start xl:items-start">
+                            <StyledInput
+                                id="password"
+                                value={signupForm.password}
+                                onChange={handleChange}
+                                name="password"
+                                label="Create Password"
+                                required
+                                className="w-full"
+                                type="password"
+                            />
+                            <StyledInput
+                                id="confirmPassword"
+                                value={signupForm.confirmPassword}
+                                onChange={handleChange}
+                                name="confirmPassword"
+                                label="Re-enter Password"
+                                required
+                                className="w-full"
+                                type="password"
+                            />
+                        </div>
 
-                            {/* <p className='text-base'>Already a member ? <Link href="/login" className='text-accent hover:underline'>Login</Link></p> */}
+                        {/* <p className='text-base'>Already a member ? <Link href="/login" className='text-accent hover:underline'>Login</Link></p> */}
 
-                            <button type="submit" className="flex rounded-full">
-                                <Button
-                                    style={{ border: 'none' }}
-                                    className="bg-primary-light text-primary hover:text-primary-light ml-auto sm:w-full "
-                                >
-                                    {
-                                        loading ?
-                                            <LoadingText />
-                                            :
-                                            "Activate Account"
-                                    }
-                                </Button>
-                            </button>
-                        </form>
-                        :
-                        null
+
+                        <Button varrient={'filled'} type="submit" className={'ml-auto'} loading={loading}>
+                            <MdOutlineCloudDone className='fill-inherit' />
+                            Activate Account
+                        </Button>
+
+                    </form>
+                    // :
+                    // null
                 }
 
             </div>

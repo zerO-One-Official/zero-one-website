@@ -5,16 +5,15 @@ import { CgClose } from 'react-icons/cg';
 import Link from 'next/link';
 import styles from './Hamburger.module.css';
 import Logo from '../logo/Logo';
-import LoginBtn from '../button/LoginBtn';
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
+import Button from '../button/Button';
+import Image from 'next/image'
+import { MdLogin } from 'react-icons/md';
+import { usePathname } from 'next/navigation';
 
-const SpanStyle = {
-  zIndex: 1,
-  color: 'inherit',
-  transition: 'all 300ms ease-in-out',
-};
 
 function Sidebar({ isMounted, unmount }) {
+  const path = usePathname();
   const [isTransitioning, setIsTransitioning] = useState(false);
   const documentWidthRef = useRef(null);
 
@@ -72,37 +71,58 @@ function Sidebar({ isMounted, unmount }) {
 
 
       <div id="navList" className={styles.navItems}>
-        <Link href="/events" className={styles.navLink} onClick={unmount}>
-          Events
+
+        <Link href="/gallery" className={styles.navLink} onClick={unmount}>
+          Gallery
         </Link>
         {
           data && data.user ?
-            <>
-              {
-                data.user.role === 'admin' ?
-                  <Link href="/admin" className={styles.navLink} onClick={unmount}>
-                    Manage
-                  </Link>
-                  :
-                  null
-              }
-              <Link href="/contest" className={styles.navLink} onClick={unmount}>
-                Contest
-              </Link>
-              <Link href="/resources" className={styles.navLink} onClick={unmount}>
-                Resources
-              </Link>
-              <Link href="/profile" className={styles.navLink} onClick={unmount}>
-                Profile
-              </Link>
-            </>
-            :
-            null
-
+            <Link href="/events" className={styles.navLink} onClick={unmount}>
+              Events
+            </Link> : null
         }
-        <LoginBtn unmount={unmount} />
+        <Link href="/resources" className={styles.navLink} onClick={unmount}>
+          Resources
+        </Link>
+
+        {/* <LoginBtn unmount={unmount} /> */}
+        {
+
+          path === '/login'
+            ?
+            null
+            :
+            data && data.user ?
+              <div className="xs:w-screen w-96 p-2">
+
+                <div className="w-full bg-primary border border-white/10 z-[100] rounded-2xl flex flex-col gap-4 items-center p-4">
+                  <h3 className='font-semibold'>{data.user.email}</h3>
+                  <div className="flex flex-col items-center mx-auto gap-2">
+                    <div className='w-24 h-24  border border-white/10 rounded-full'>
+                      <Image src={data.user.profilePic} width={80} height={80} alt={data.user.name} className="rounded-full w-full h-full object-cover object-center" />
+                    </div>
+                    <h2 className='capitalize text-lg font-bold'>Hi, {data.user.name}</h2>
+                  </div>
+                  <div className="flex xs:flex-col gap-1 w-full">
+                    <Link href={'/profile'} onClick={unmount} className='flex-1 bg-white/5 p-2 py-3 flex justify-center rounded-l-md xs:rounded-md hover:bg-white/10 transition-all items-center'>Profile</Link>
+                    <button onClick={signOut} className='flex-1 bg-red-500 p-2 py-3 flex justify-center rounded-r-md xs:rounded-md hover:bg-red-600 transition-all items-center'>Logout</button>
+                  </div>
+                </div>
+              </div>
+              :
+              <Link
+                href="/login"
+                className="flex rounded-full"
+                onClick={unmount}
+              >
+                <Button varrient={'filled'}>
+                  <MdLogin className='fill-inherit' />
+                  Login
+                </Button>
+              </Link>
+        }
       </div>
-    </section>,
+    </section >,
     document.getElementById('overlay'),
   );
 }

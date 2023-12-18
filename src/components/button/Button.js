@@ -1,38 +1,44 @@
+"use client"
 import { useEffect, useRef } from 'react';
-import Styles from './Button.module.css';
+import Styles from './Button.module.css'
+import { BiLoader } from 'react-icons/bi';
 
-function Button({ className, color, children, ...otherProps }) {
+function Button({ className, loading, varrient, children, ...otherProps }) {
   const ref = useRef();
+
   useEffect(() => {
     ref.current.style.setProperty('--x', `50%`);
     ref.current.style.setProperty('--y', `50%`);
   }, []);
+
   const handleRipple = (e) => {
     const x = e.clientX - ref.current.getBoundingClientRect().left;
     const y = e.clientY - ref.current.getBoundingClientRect().top;
-    // const x = e.nativeEvent.offsetX;
-    // const y = e.nativeEvent.offsetY;
 
     ref.current.style.setProperty('--x', `${x}px`);
     ref.current.style.setProperty('--y', `${y}px`);
   };
+
   return (
-    <div
+    <button
       ref={ref}
       onMouseMove={(e) => handleRipple(e)}
-      className={`${Styles.rippleButton} ${className}`}
+      className={`text-lg inline-block overflow-hidden relative rounded-full px-6 py-[10px] cursor-pointer font-semibold ${Styles.button} ${className} ${varrient === 'filled' ? 'bg-primary-light text-primary stroke-primary fill-primary hover:text-primary-light hover:stroke-primary-light hover:fill-primary-light' : 'text-primary-light stroke-primary-light fill-primary-light border border-white/25'} `}
       {...otherProps}
     >
-      <span
-        style={{
-          color: 'inherit',
-          transition: 'all 300ms ease-in-out',
-        }}
-        className="z-10"
-      >
-        {children}
-      </span>
-    </div>
+      <div className='z-10 relative text-inherit fill-inherit stroke-inherit flex items-center justify-center gap-2'>
+        {
+          loading ?
+            <span className='flex gap-1 items-center text-inherit'>
+              <BiLoader className='animate-spin fill-inherit stroke-inherit' size={20} />
+              Please wait...
+            </span>
+            :
+
+            children
+        }
+      </div>
+    </button >
   );
 }
 

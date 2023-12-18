@@ -14,6 +14,19 @@ function StyledSelect({ label, name = '', className = '', options, onChange, ...
         setTransform(selected >= 0)
     }, [selected])
 
+    const selectBoxRef = useRef(null);
+
+    useEffect(() => {
+        const handleOutClick = (e) => {
+            if (!selectBoxRef?.current?.contains(e.target)) {
+                setShowOption(false);
+            }
+        }
+
+        document.addEventListener('click', handleOutClick);
+        return () => document.removeEventListener('click', handleOutClick);
+    })
+
     const handleSelect = (index) => {
         setSelected(index);
         setShowOption(false);
@@ -48,7 +61,7 @@ function StyledSelect({ label, name = '', className = '', options, onChange, ...
                     onClick={() => setShowOption(prev => !prev)}
                     {...otherProps}
                 />
-                <div className={`flex flex-col  p-1 absolute w-full bg-transparent backdrop-blur-md border translate-y-2 border-stone-50/25 z-50 rounded-sm ${showOption ? 'visible' : 'hidden'} max-h-80`}>
+                <div ref={selectBoxRef} className={`flex flex-col  p-1 absolute w-full bg-transparent backdrop-blur-md border translate-y-2 border-stone-50/25 z-50 rounded-sm ${showOption ? 'visible' : 'hidden'} max-h-80`}>
                     {
                         options.map((option, index) => {
                             return <li

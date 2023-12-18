@@ -3,7 +3,7 @@
 }
 
 .label {
-  @apply absolute text-2xl font-extralight;
+  @apply absolute text-2xl xs:text-xl font-extralight;
   top: 0;
   left: 1%;
   transition: all 300ms ease-in-out;
