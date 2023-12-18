@@ -34,6 +34,12 @@ export async function POST(req) {
                 { status: 404 }
             )
         }
+
+        if (!user.active)
+            return NextResponse.json(
+                { message: "Your Account is not Active.", type: "error", success: false },
+                { status: 403 }
+            )
         // ============= Check if User Exist =============
 
 
@@ -49,19 +55,19 @@ export async function POST(req) {
 
 
         // ============= Sending the Mail =============
-        html = resetEmail(token, process.env.NEXTAUTH_URL);
+        html = resetEmail(token);
         const messageId = await sendMail(to, subject, html);
         // ============= Sending the Mail =============
 
         if (messageId) {
             return NextResponse.json(
-                { message: "Reset Link has been sent.", type: "success", success: false },
+                { message: "Reset Link has been sent.", type: "success", success: true },
                 { status: 200 }
             )
         }
         else {
             return NextResponse.json(
-                { message: "Failed to send Reset Link. please try again", type: "error", success: true },
+                { message: "Failed to send Reset Link. please try again", type: "error", success: false },
                 { status: 500 }
             )
         }
@@ -97,7 +103,7 @@ export async function PUT(req) {
         await user.save();
 
         return NextResponse.json(
-            { message: 'Password Updated. Please Login', type: "success", success: false },
+            { message: 'Password Updated. Please Login', type: "success", success: true },
             { status: 200 }
         )
 

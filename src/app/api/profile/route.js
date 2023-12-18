@@ -29,8 +29,8 @@ export async function GET(req) {
 
 
         return NextResponse.json(
-            { user, type: "error", success: true },
-            { status: 401 }
+            { user, type: "success", success: true },
+            { status: 200 }
         )
 
     } catch (error) {
@@ -53,7 +53,7 @@ export async function PUT(req) {
 
         if (!session || !id) {
             return NextResponse.json(
-                { message: "You are not allowed for this action", type: "error", success: true },
+                { message: "You are not allowed for this action", type: "error", success: false },
                 { status: 401 }
             )
         }
@@ -62,7 +62,7 @@ export async function PUT(req) {
 
         if (!user) {
             return NextResponse.json(
-                { message: "You don't have an account", type: "error", success: true },
+                { message: "You don't have an account", type: "error", success: false },
                 { status: 404 }
             )
         }
@@ -75,7 +75,16 @@ export async function PUT(req) {
 
         user.email = email;
         user.phone = phone;
-        user.username = username;
+
+        if (username !== user.username) {
+            const duplicateUsername = await User.findOne({ username }).select(['username']);
+            if (duplicateUsername)
+                return NextResponse.json(
+                    { message: "Username is already taken", type: "error", success: false },
+                    { status: 409 }
+                )
+            user.username = username;
+        }
 
         await user.save();
 

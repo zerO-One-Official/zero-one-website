@@ -46,7 +46,7 @@ export async function PUT(req, { params }) {
         const { _id } = params;
         if (!_id || !isValidMongooseId(_id)) {
             return NextResponse.json(
-                { message: "Invalid UserId", type: "error", success: true },
+                { message: "Invalid UserId", type: "error", success: false },
                 { status: 400 }
             )
         }
@@ -55,7 +55,7 @@ export async function PUT(req, { params }) {
 
         if (!user)
             return NextResponse.json(
-                { message: "User Not Found", type: "error", success: true },
+                { message: "User Not Found", type: "error", success: false },
                 { status: 404 }
             )
 

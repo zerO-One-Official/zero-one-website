@@ -15,7 +15,7 @@ export async function GET(req) {
 
         if (!session || !id) {
             return NextResponse.json(
-                { message: "Session Expired", type: "error", success: true },
+                { message: "Session Expired", type: "error", success: false },
                 { status: 440 }
             );
         }
@@ -24,7 +24,7 @@ export async function GET(req) {
 
         if (!admin || admin.role !== 'admin') {
             return NextResponse.json(
-                { message: "You are not allowed to perform this action", type: "error", success: true },
+                { message: "You are not allowed to perform this action", type: "error", success: false },
                 { status: 403 }
             )
         }
