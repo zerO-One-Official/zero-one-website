@@ -42,11 +42,11 @@
 }
 
 .socials>a:hover>svg {
-  fill: #51bcff;
+  fill: var(--accent);
 }
 
 .postHead {
-  @apply text-5xl mb-14 mt-16 font-extrabold md:text-center md:pl-0 sm:mt-12;
+  @apply text-6xl mb-14 mt-16 font-semibold md:text-center md:pl-0 sm:mt-12;
 }
 
 @keyframes animate {

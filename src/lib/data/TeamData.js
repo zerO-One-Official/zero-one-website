@@ -1,160 +1,42 @@
-export const TeamData2kyx = [
+export const TeamData = [
   {
-    name: 'MCIAN',
-    title: 'MCIAN',
+    name: 'Chandan Kumar Singh',
+    title: 'Club Lead',
     socials: {
-      gb: '#',
-      linkedin: '#',
-      email: '#',
+      gitHub: '',
+      linkedIn: 'csde',
+      email: 'cs.sde07@gmail.com',
     },
-    imageSrc: 'person',
+    imageSrc: '/teams/chandan.PNG',
   },
   {
-    name: 'MCIAN',
-    title: 'MCIAN',
+    name: 'Utsav Raj',
+    title: 'Club Lead',
     socials: {
-      gb: '#',
-      linkedin: '#',
-      email: '#',
+      gitHub: '',
+      linkedIn: 'ur-dev6',
+      email: 'ur.dev6@gmail.com',
     },
-    imageSrc: 'person',
+    imageSrc: '/teams/utsav.jpg',
   },
   {
-    name: 'MCIAN',
-    title: 'MCIAN',
+    name: 'Rahul Kumar',
+    title: 'Club Lead',
     socials: {
-      gb: '#',
-      linkedin: '#',
-      email: '#',
+      gitHub: 'rahulkumar703',
+      linkedIn: 'rahulkumar703',
+      email: 'rahulkumar703@outlook.com',
     },
-    imageSrc: 'person',
-  },
-];
-
-export const TeamData2kyy = [
-  {
-    name: 'MCIAN',
-    title: 'MCIAN',
-    socials: {
-      gb: '#',
-      linkedin: '#',
-      email: '#',
-    },
-    imageSrc: 'person',
+    imageSrc: '/teams/rahul.png',
   },
   {
-    name: 'MCIAN',
-    title: 'MCIAN',
+    name: 'Yash Bhushan',
+    title: 'Club Lead',
     socials: {
-      gb: '#',
-      linkedin: '#',
-      email: '#',
+      gitHub: 'k-y-o-u-m-a',
+      linkedIn: 'yash-bhushan',
+      email: 'yashsjs18@gmail.com',
     },
-    imageSrc: 'person',
-  },
-  {
-    name: 'MCIAN',
-    title: 'MCIAN',
-    socials: {
-      gb: '#',
-      linkedin: '#',
-      email: '#',
-    },
-    imageSrc: 'person',
-  },
-
-  {
-    name: 'MCIAN',
-    title: 'MCIAN',
-    socials: {
-      gb: '#',
-      linkedin: '#',
-      email: '#',
-    },
-    imageSrc: 'person',
-  },
-  {
-    name: 'MCIAN',
-    title: 'MCIAN',
-    socials: {
-      gb: '#',
-      linkedin: '#',
-      email: '#',
-    },
-    imageSrc: 'person',
-  },
-  {
-    name: 'MCIAN',
-    title: 'MCIAN',
-    socials: {
-      gb: '#',
-      linkedin: '#',
-      email: '#',
-    },
-    imageSrc: 'person',
-  },
-
-  {
-    name: 'MCIAN',
-    title: 'MCIAN',
-    socials: {
-      gb: '#',
-      linkedin: '#',
-      email: '#',
-    },
-    imageSrc: 'person',
-  },
-  {
-    name: 'MCIAN',
-    title: 'MCIAN',
-    socials: {
-      gb: '#',
-      linkedin: '#',
-      email: '#',
-    },
-    imageSrc: 'person',
-  },
-  {
-    name: 'MCIAN',
-    title: 'MCIAN',
-    socials: {
-      gb: '#',
-      linkedin: '#',
-      email: '#',
-    },
-    imageSrc: 'person',
-  },
-];
-
-export const TeamData2kyz = [
-  {
-    name: 'MCIAN',
-    title: 'MCIAN',
-    socials: {
-      gb: '#',
-      linkedin: '#',
-      email: '#',
-    },
-    imageSrc: 'person',
-  },
-  {
-    nname: 'MCIAN',
-    title: 'MCIAN',
-    socials: {
-      gb: '#',
-      linkedin: '#',
-      email: '#',
-    },
-    imageSrc: 'person',
-  },
-  {
-    name: 'MCIAN',
-    title: 'MCIAN',
-    socials: {
-      gb: '#',
-      linkedin: '#',
-      email: '#',
-    },
-    imageSrc: 'person',
+    imageSrc: '/teams/yash.png',
   },
 ];

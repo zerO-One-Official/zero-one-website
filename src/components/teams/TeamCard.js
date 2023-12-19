@@ -1,5 +1,6 @@
 import Image from 'next/image';
-import { FaEnvelope, FaGithub, FaLinkedin } from 'react-icons/fa';
+import { CiLinkedin, CiMail } from 'react-icons/ci';
+import { PiGithubLogoLight } from 'react-icons/pi';
 import Style from './Team.module.css';
 
 const ICON_SIZE = 28;
@@ -26,25 +27,26 @@ function TeamCard({ name, title, company, socials, imageSrc, lazyImageSrc }) {
         <h2>{company}</h2>
       </div>
       <div className={Style.socials}>
-        {socials.gb || socials.email || socials.linkedin ? (
+        {socials.gitHub || socials.email || socials.linkedIn ? (
           <>
-            {socials.gb && (
+            {socials.gitHub && (
               <a
                 target="_blank"
                 rel="noopener noreferrer"
-                href={`https://github.com/${socials.gb}/`}
+                href={`https://github.com/${socials.gitHub}/`}
+                className='border-[1.6px] border-white rounded-full p-[.5px] hover:border-accent'
               >
-                <FaGithub size={ICON_SIZE} width={ICON_SIZE} />
+                <PiGithubLogoLight size={ICON_SIZE} width={ICON_SIZE} />
               </a>
             )}
 
-            {socials.linkedin && (
+            {socials.linkedIn && (
               <a
                 target="_blank"
                 rel="noopener noreferrer"
-                href={`https://www.linkedin.com/in/${socials.linkedin}/`}
+                href={`https://www.linkedIn.com/in/${socials.linkedIn}/`}
               >
-                <FaLinkedin size={ICON_SIZE} />
+                <CiLinkedin size={ICON_SIZE + 5} />
               </a>
             )}
             {socials.email && (
@@ -53,7 +55,7 @@ function TeamCard({ name, title, company, socials, imageSrc, lazyImageSrc }) {
                 rel="noopener noreferrer"
                 href={`mailto:${socials.email}`}
               >
-                <FaEnvelope size={ICON_SIZE} />
+                <CiMail size={ICON_SIZE + 3} />
               </a>
             )}
           </>
