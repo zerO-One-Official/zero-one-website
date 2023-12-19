@@ -1,8 +1,8 @@
 "use client"
 import BottomGlitter from '@/components/StyledText/BottomGlitter';
-import TeamCard from '@/components/teams/TeamCard';
 import Styles from '@/components/teams/Team.module.css';
-import { TeamData2kyx, TeamData2kyy, TeamData2kyz } from '@/lib/data/TeamData';
+import TeamCard from '@/components/teams/TeamsCard';
+import { TeamData } from '@/lib/data/TeamData';
 
 function Teams() {
     return (
@@ -15,80 +15,16 @@ function Teams() {
                     <br />- Phil Jackson
                 </h3>
             </div>
-            <h2 className={Styles.postHead}>Board Of Directors</h2>
+            <h2 className={Styles.postHead}>2023</h2>
             <div className={Styles.cardContainer}>
-                {TeamData2kyx.slice(0, 3).map((item, index) => {
+                {TeamData.map((item, index) => {
                     return (
                         <TeamCard
                             key={`${String(index)}-team`}
                             name={item.name}
                             title={item.title}
-                            imageSrc={`/teams/2kyx/${item.imageSrc}.JPG`}
-                            lazyImageSrc={`/teams/2kyx/lazy/${item.imageSrc}-min.jpg`}
-                            socials={item.socials}
-                        />
-                    );
-                })}
-            </div>
-
-            <h2 className={Styles.postHead}>Post Bearers</h2>
-            <div className={Styles.cardContainer}>
-                {TeamData2kyy.slice(0, 3).map((item, index) => {
-                    return (
-                        <TeamCard
-                            key={`${String(index)}-team`}
-                            name={item.name}
-                            title={item.title}
-                            imageSrc={`/teams/2kyy/${item.imageSrc}.jpg`}
-                            lazyImageSrc={`/teams/2kyy/lazy/${item.imageSrc}-min.jpg`}
-                            socials={item.socials}
-                        />
-                    );
-                })}
-            </div>
-
-            <h2 className={Styles.postHead}>Technical Head</h2>
-            <div className={`${Styles.cardContainer}`}>
-                {TeamData2kyy.slice(4, 7).map((item, index) => {
-                    return (
-                        <TeamCard
-                            key={`${String(index)}-team`}
-                            name={item.name}
-                            title={item.title}
-                            imageSrc={`/teams/2kyy/${item.imageSrc}.jpg`}
-                            lazyImageSrc={`/teams/2kyy/lazy/${item.imageSrc}-min.jpg`}
-                            socials={item.socials}
-                        />
-                    );
-                })}
-            </div>
-
-            <h2 className={Styles.postHead}>Event Manager</h2>
-            <div className={`${Styles.cardContainer}`}>
-                {TeamData2kyy.slice(6, 9).map((item, index) => {
-                    return (
-                        <TeamCard
-                            key={`${String(index)}-team`}
-                            name={item.name}
-                            title={item.title}
-                            imageSrc={`/teams/2kyy/${item.imageSrc}.jpg`}
-                            lazyImageSrc={`/teams/2kyy/lazy/${item.imageSrc}-min.jpg`}
-                            socials={item.socials}
-                        />
-                    );
-                })}
-            </div>
-
-            <h2 className={Styles.postHead}>Our 2kyz Members</h2>
-            <div className={`${Styles.cardContainer}`}>
-                {TeamData2kyz.slice(0, 3).map((item, index) => {
-                    return (
-                        <TeamCard
-                            key={`${String(index)}-team`}
-                            name={item.name}
-                            title={item.title}
-                            imageSrc={`/teams/2kyz/${item.imageSrc}.jpg`}
-                            lazyImageSrc={`/teams/2kyz/lazy/${item.imageSrc}-min.jpg`}
+                            imageSrc={`${item.imageSrc}`}
+                            lazyImageSrc={`${item.imageSrc}`}
                             socials={item.socials}
                         />
                     );

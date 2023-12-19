@@ -14,8 +14,8 @@ export default withUt({
     extend: {
       colors: {
         accent: {
-          DEFAULT: 'var(--accent)',
-          light: 'var(--accent-light)'
+          DEFAULT: '#FF3333',
+          light: '#FF3366'
         },
         primary: {
           DEFAULT: "#000",
