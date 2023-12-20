@@ -66,6 +66,16 @@ function Navbar() {
       <Logo />
       <nav id="navList" className={styles.navbarList}>
 
+        {
+          data && data.user && data.user.role === 'admin' ?
+
+            <a href="https://admin.zeroonemce.com" className={styles.navLink}>
+              Admin
+            </a>
+            :
+            null
+        }
+
         <Link href="/gallery" className={styles.navLink}>
           Gallery
         </Link>

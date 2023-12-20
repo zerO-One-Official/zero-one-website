@@ -73,6 +73,16 @@ function Sidebar({ isMounted, unmount }) {
 
       <div id="navList" className={styles.navItems}>
 
+        {
+          data && data.user && data.user.role === 'admin' ?
+
+            <a href="https://admin.zeroonemce.com" className={styles.navLink}>
+              Admin
+            </a>
+            :
+            null
+        }
+
         <Link href="/gallery" className={styles.navLink} onClick={unmount}>
           Gallery
         </Link>

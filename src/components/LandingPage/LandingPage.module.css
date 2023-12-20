@@ -31,7 +31,7 @@
 }
 
 .content>h1 {
-  @apply cursor-default text-stone-400;
+  @apply cursor-default text-primary-light/60;
   @apply my-8 mx-4 text-7xl z-30 font-extrabold relative;
   @apply text-7xl xs:text-5xl;
 }

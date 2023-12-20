@@ -2,17 +2,43 @@
 import { FaInstagram, FaGithub, FaLinkedin, FaDiscord } from 'react-icons/fa';
 import Styles from './SocialsBar.module.css';
 import { usePathname } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
 
 const ICON_SIZE = 30;
 function SocialsBar() {
 
   const pathname = usePathname();
 
+  const socialRef = useRef();
+
+  const [prevScrollY, setPrevScrollY] = useState(0);
+
+  useEffect(() => setPrevScrollY(window.scrollY), [])
+
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrolledDown = window.scrollY > prevScrollY;
+      const scrolledUp = window.scrollY < prevScrollY;
+
+      if (Math.abs(window.scrollY - prevScrollY) > 100) {
+        setPrevScrollY(window.scrollY);
+
+        if (scrolledDown || scrolledUp) {
+          socialRef.current.style.right = scrolledDown ? '-300px' : '0';
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [prevScrollY]);
+
   return (
     (pathname === '/login' || pathname === '/recoverPassword' || pathname.startsWith('/setPassword')) ?
       null
       :
-      <section className={Styles.socialsBar}>
+      <section ref={socialRef} className={Styles.socialsBar}>
         <a href="#" target="_blank" rel="noreferrer">
           <FaDiscord className={Styles.socialsBarIcons} size={ICON_SIZE} />
         </a>
