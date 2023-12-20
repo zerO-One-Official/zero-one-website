@@ -29,7 +29,7 @@ const ResourcesPage = () => {
                                 :
                                 data?.resources?.map(resource => {
                                     return (
-                                        <Link href='/' className="flex flex-col items-center bg-primary hover:scale-110 transition-all ease-in-out" key={resource._id}
+                                        <Link href='/' className="flex flex-col items-center bg-primary hover:scale-110 transition-all ease-in-out duration-300" key={resource._id}
                                         >
                                             <div className="p-5 py-10">
                                                 <Image src={resource.image} width={200} height={200} alt={resource.domain} className="w-32 h-auto transition-all"
