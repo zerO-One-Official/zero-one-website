@@ -3,18 +3,22 @@ import nodemailer from 'nodemailer';
 export const sendMail = async (to, subject, html) => {
     try {
 
-        //GoDaddy SMTP
-        var transporter = nodemailer.createTransport({
-            service: 'Godaddy',
+        const transporter = nodemailer.createTransport({
             host: "smtpout.secureserver.net",
-            secureConnection: true,
+            secure: true,
+            secureConnection: false, // TLS requires secureConnection to be false
+            tls: {
+                ciphers: 'SSLv3'
+            },
+            requireTLS: true,
             port: 465,
-
+            debug: true,
             auth: {
                 user: process.env.EMAIL,
                 pass: process.env.EMAIL_PASSWORD
             }
         });
+
 
         // Email content
         const mailOptions = {
@@ -24,11 +28,13 @@ export const sendMail = async (to, subject, html) => {
             html: html
         };
 
+
         // Send email
         const info = await transporter.sendMail(mailOptions);
         return info.messageId;
 
     } catch (error) {
+        console.log(error);
         throw new Error(error)
     }
 };
