@@ -23,6 +23,8 @@ function Teams() {
         return result;
     }, {});
 
+    console.log(groupedData);
+
 
 
     return (
@@ -44,24 +46,25 @@ function Teams() {
                 </div>
 
 
-                <div className={Styles.cardContainer}>
+                <div className={`flex flex-col gap-14`}>
                     {groupedData && Object.keys(groupedData).map(group => (
                         <div key={group}>
                             <h2 className={Styles.postHead}>{group}</h2>
                             <div className={Styles.cardContainer}>
-                                {groupedData[group].map(team => (
-                                    <TeamCard
-                                        key={team._id}
-                                        name={`${team.user.firstName} ${team.user.lastName}`}
-                                        position={team.position}
-                                        imageSrc={`${team.user.profilePic}`}
-                                        lazyImageSrc={`${team.user.profilePic}`}
-                                        gitHub={team.user.gitHub}
-                                        linkedIn={team.user.linkedIn}
-                                        email={team.user.email}
-                                        otherLinks={team.user.otherLinks}
-                                    />
-                                ))}
+                                {
+                                    groupedData[group].map(team => (
+                                        <TeamCard
+                                            key={team._id}
+                                            name={`${team.user.firstName} ${team.user.lastName}`}
+                                            position={team.position}
+                                            imageSrc={`${team.user.profilePic}`}
+                                            lazyImageSrc={`${team.user.profilePic}`}
+                                            gitHub={team.user.gitHub}
+                                            linkedIn={team.user.linkedIn}
+                                            email={team.user.email}
+                                            otherLinks={team.user.otherLinks}
+                                        />
+                                    ))}
                             </div>
                         </div>
                     ))}

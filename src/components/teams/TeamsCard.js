@@ -40,7 +40,7 @@ function TeamCard({ name, position, gitHub, linkedIn, email, imageSrc, lazyImage
                             <a
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                href={`https://github.com/${gitHub}`}
+                                href={gitHub}
                                 className='p-[.5px] group '
                                 title='GitHub'
                             >
@@ -52,7 +52,7 @@ function TeamCard({ name, position, gitHub, linkedIn, email, imageSrc, lazyImage
                             <a
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                href={`https://www.linkedIn.com/in/${linkedIn}`}
+                                href={linkedIn}
                                 className='group'
                                 title='LinkedIn'
                             >
