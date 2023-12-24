@@ -46,7 +46,7 @@
 }
 
 .postHead {
-  @apply text-6xl mb-14 mt-16 font-semibold md:text-center md:pl-0 sm:mt-12;
+  @apply text-6xl mb-14 mt-16 font-semibold md:text-center md:pl-0 sm:mt-12 capitalize;
 }
 
 @keyframes animate {

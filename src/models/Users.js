@@ -84,9 +84,16 @@ const UserSchema = new mongoose.Schema({
     activeSessions: {
         type: Number,
         default: 0
-    }
-    ,
-    socialLinks: [
+    },
+    gitHub: {
+        type: String,
+        trim: true
+    },
+    linkedIn: {
+        type: String,
+        trim: true
+    },
+    otherLinks: [
         {
             platform: {
                 type: String

@@ -26,7 +26,6 @@ export default function ProfileForm() {
         confirmPass: '',
         loading: false
     });
-    const router = useRouter();
 
     useEffect(() => {
         if (data && data.user) {
@@ -57,7 +56,7 @@ export default function ProfileForm() {
                     setLoading(true);
                     const resp = await fetch('/api/profile', {
                         method: "PUT",
-                        body: JSON.stringify({ email, phone, profilePic, username })
+                        body: JSON.stringify({ email, phone, profilePic, gitHub, linkedIn, username })
                     })
 
                     const respData = await resp.json();
@@ -89,10 +88,12 @@ export default function ProfileForm() {
             },
             onUploadBegin: () => {
 
-                const { email, phone, profilePic, username } = userProfile;
+                const { email, phone, profilePic, linkedIn, gitHub, username } = userProfile;
 
                 if (data.user.email === email &&
                     data.user.phone === phone &&
+                    data.user.linkedIn === linkedIn &&
+                    data.user.gitHub === gitHub &&
                     data.user.profilePic === profilePic &&
                     data.user.username === username) return;
 
@@ -113,10 +114,10 @@ export default function ProfileForm() {
             try {
 
                 setLoading(true);
-                const { email, phone, username } = userProfile;
+                const { email, phone, username, gitHub, linkedIn } = userProfile;
                 const resp = await fetch('/api/profile', {
                     method: "PUT",
-                    body: JSON.stringify({ email, phone, username })
+                    body: JSON.stringify({ email, phone, username, gitHub, linkedIn })
                 })
 
                 const respData = await resp.json();
@@ -133,7 +134,7 @@ export default function ProfileForm() {
                 toast[respData.type](respData.message);
 
             } catch (error) {
-                // console.log(error);
+                console.log(error);
                 toast.error(error.message);
             }
             finally {
@@ -211,8 +212,12 @@ export default function ProfileForm() {
                             <StyledInput value={userProfile?.branch} name='branch' label='Branch' onChange={handleChange} disabled={true} />
                             <StyledInput value={userProfile?.roll} name='roll' label='Roll no.' onChange={handleChange} disabled={true} />
                         </div>
+                        <div className="flex flex-row lg:flex-col gap-2 items-center justify-center w-full">
+                            <StyledInput value={userProfile?.gitHub} name='gitHub' label='GitHub Link' onChange={handleChange} disabled={!edit} />
+                            <StyledInput value={userProfile?.linkedIn} name='linkedIn' label='LinkedIn Link' onChange={handleChange} disabled={!edit} />
+                        </div>
                         {
-                            (data.user.email !== userProfile.email || data.user.phone !== userProfile.phone || data.user.username !== userProfile.username)
+                            (data?.user?.email !== userProfile?.email || data?.user?.phone !== userProfile?.phone || data?.user?.gitHub !== userProfile?.gitHub || data?.user?.linkedIn !== userProfile?.linkedIn || data?.user?.username !== userProfile?.username)
                                 ?
                                 <Button type="submit" className='ml-auto' loading={loading}>
                                     Update Profile

@@ -1,30 +1,10 @@
 import mongoose from "mongoose";
-import validator from 'validator'
 
 const TeamSchema = new mongoose.Schema({
-    roll: {
-        type: Number,
-        required: [true, "Rollno is required"],
-        min: [20100, "Enter a roll no. after 2019 batch."],
-        max: [(new Date().getFullYear() % 100) * 1000 + 700, `Enter a roll no. before ${new Date().getFullYear()} batch.`],
-        trim: true,
-        unique: true,
-    },
-    profilePic: {
-        type: String,
-        trim: true
-    }
-    ,
-    firstName: {
-        type: String,
-        required: [true, "First name can't be empty"],
-        trim: true,
-        lowercase: true
-    },
-    lastName: {
-        type: String,
-        trim: true,
-        lowercase: true
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'user',
+        unique: true
     },
     position: {
         type: String,
@@ -32,40 +12,11 @@ const TeamSchema = new mongoose.Schema({
         trim: true,
         lowercase: true
     },
-    email: {
-        type: String,
-        required: [true, "Email is required"],
-        trim: true,
-        lowercase: true,
-        unique: true,
-        validate(value) {
-            if (!validator.isEmail(value)) {
-                throw new Error('Please enter a valid email');
-            }
-        },
-    },
-    gitHub: {
+    group: {
         type: String,
         trim: true,
-        unique: true,
-    },
-    linkedIn: {
-        type: String,
-        trim: true,
-        unique: true,
-    },
-    otherLinks: [
-        {
-            platform: {
-                type: String,
-                trim: true,
-            },
-            link: {
-                type: String,
-                trim: true,
-            }
-        }
-    ]
+        lowercase: true
+    }
 
 }, { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } });
 

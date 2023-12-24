@@ -13,7 +13,7 @@ const ContestSchema = new mongoose.Schema({
         unique: true,
         required: [true, 'Date of Contest is Required.']
     },
-    venu: {
+    venue: {
         type: String,
         required: [true, 'venue is required']
     },
