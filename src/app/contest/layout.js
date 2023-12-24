@@ -10,7 +10,6 @@ export const metadata = {
 
 const layout = async ({ children }) => {
     const session = await getServerSession(options);
-    console.log(session);
 
     if (!session) {
         redirect('/login?callbackUrl=/')

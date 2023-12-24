@@ -27,7 +27,7 @@ const options = [
     title: <>What qualities are required at Zero-one?</>,
     body: (
       <>
-        To join HnCC you have to:-
+        To join Zero One you have to:-
         <ul className="pl-8">
           <li>
             Prove that you understand Computer Science and the IT industry
@@ -49,7 +49,7 @@ const options = [
           <li>Think objectively. We will set up multiple hurdles for you.</li>
           <li>
             Have a Hacker mentality. Hacker mentality means that you have to
-            possess a thought process to solve problems you haven’t heard about
+            possess a thought process to solve problems you haven&apos;t heard about
             or have experienced before.
           </li>
         </ul>

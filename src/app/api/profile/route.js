@@ -4,7 +4,7 @@ import dbConnect from '@/lib/dbConnect'
 import User from "@/models/Users";
 import { getServerSession } from "next-auth";
 import { options } from "../auth/[...nextauth]/options";
-import { deleteFile } from "@/utils/server";
+import { checkDuplicateUser, deleteFile } from "@/utils/server";
 
 dbConnect()
 
@@ -67,14 +67,26 @@ export async function PUT(req) {
             )
         }
 
-        if (profilePic !== user.profilePic) {
-            console.log('asdasd-->', user.profilePic);
+        if (profilePic && profilePic !== user.profilePic) {
             deleteFile(user.profilePic);
             user.profilePic = profilePic;
         }
 
-        user.email = email;
+        if (email && email !== user.email && await checkDuplicateUser('email', email)) {
+            return NextResponse.json(
+                { message: 'Email used in another account!', type: "error", success: false },
+                { status: 409 }
+            );
+        }
+        if (phone && phone !== user.phone && await checkDuplicateUser('phone', phone)) {
+            return NextResponse.json(
+                { message: 'Phone no. is used in another account!', type: "error", success: false },
+                { status: 409 }
+            );
+        }
+
         user.phone = phone;
+        user.email = email;
 
         if (username !== user.username) {
             const duplicateUsername = await User.findOne({ username }).select(['username']);
@@ -86,11 +98,11 @@ export async function PUT(req) {
             user.username = username;
         }
 
-        await user.save();
+        const newProfile = await user.save();
 
 
         return NextResponse.json(
-            { message: "Profile Updated Successfully", type: "success", success: true },
+            { profile: newProfile, message: "Profile Updated Successfully", type: "success", success: true },
             { status: 200 }
         )
 
