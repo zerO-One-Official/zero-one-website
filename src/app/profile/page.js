@@ -15,10 +15,10 @@ export default function ProfileForm() {
 
     const fetcher = url => fetch(url).then(r => r.json());
 
-    const { data, error, isLoading } = useSWR('/api/profile', fetcher);
+    const { data, error, isLoading, mutate } = useSWR('/api/profile', fetcher);
     const [loading, setLoading] = useState(false);
 
-    const [userProfile, setUserProfile] = useState(null);
+    const [userProfile, setUserProfile] = useState(data);
 
     const [password, setPassword] = useState({
         oldPass: '',
@@ -62,7 +62,10 @@ export default function ProfileForm() {
 
                     const respData = await resp.json();
 
-                    if (respData.success) router.refresh();
+                    if (respData.success) {
+                        mutate({ ...data, ...respData.profile });
+                    }
+                    else mutate({ ...data })
 
                     if (respData.status === 409) {
                         setUserProfile(prev => ({ ...prev, username: data.username }));
@@ -118,7 +121,10 @@ export default function ProfileForm() {
 
                 const respData = await resp.json();
 
-                if (respData.success) router.refresh();
+                if (respData.success) {
+                    mutate({ ...data, ...respData.profile });
+                }
+                else mutate({ ...data })
 
                 if (respData.status === 409) {
                     setUserProfile(prev => ({ ...prev, username: data.username }));

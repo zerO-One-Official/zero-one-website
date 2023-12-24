@@ -14,3 +14,32 @@ export function generateAccessCode() {
 
     return code;
 }
+
+
+export const getMonthName = (date) => {
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return months[date.getMonth()];
+}
+
+export function getTime(date) {
+    // Extract hours and minutes from the input string
+    // const [hours, minutes] = time24.split(':');
+
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+
+    // Convert hours to a number
+    let hours12 = parseInt(hours, 10);
+
+    // Determine AM or PM
+    const meridiem = hours12 >= 12 ? 'PM' : 'AM';
+
+    // Convert to 12-hour format
+    hours12 = hours12 % 12 || 12;
+
+    // Add leading zero to minutes if necessary
+    const minutesWithLeadingZero = minutes.toString().padStart(2, '0');
+
+    // Return the formatted time
+    return `${hours12}:${minutesWithLeadingZero} ${meridiem}`;
+}
