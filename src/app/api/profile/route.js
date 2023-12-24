@@ -49,7 +49,7 @@ export async function PUT(req) {
         const id = session?.user?._id;
 
         const reqBody = await req.json();
-        const { email, phone, profilePic, username } = reqBody;
+        const { email, phone, profilePic, username, gitHub, linkedIn } = reqBody;
 
         if (!session || !id) {
             return NextResponse.json(
@@ -84,9 +84,23 @@ export async function PUT(req) {
                 { status: 409 }
             );
         }
+        if (gitHub && gitHub !== user.gitHub && await checkDuplicateUser('gitHub', gitHub)) {
+            return NextResponse.json(
+                { message: 'GitHub Link is used in another account!', type: "error", success: false },
+                { status: 409 }
+            );
+        }
+        if (linkedIn && linkedIn !== user.linkedIn && await checkDuplicateUser('linkedIn', linkedIn)) {
+            return NextResponse.json(
+                { message: 'LinkedIn Link is used in another account!', type: "error", success: false },
+                { status: 409 }
+            );
+        }
 
         user.phone = phone;
         user.email = email;
+        user.gitHub = gitHub;
+        user.linkedIn = linkedIn;
 
         if (username !== user.username) {
             const duplicateUsername = await User.findOne({ username }).select(['username']);

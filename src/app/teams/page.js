@@ -15,6 +15,16 @@ function Teams() {
 
     if (error) toast.error(error.message);
 
+    const groupedData = data?.teams.reduce((result, current) => {
+        if (!result[current.group]) {
+            result[current.group] = [];
+        }
+        result[current.group].push(current);
+        return result;
+    }, {});
+
+
+
     return (
 
         isLoading ?
@@ -33,26 +43,29 @@ function Teams() {
                     </h3>
                 </div>
 
-                <h2 className={Styles.postHead}>2023</h2>
 
                 <div className={Styles.cardContainer}>
+                    {groupedData && Object.keys(groupedData).map(group => (
+                        <div key={group}>
+                            <h2 className={Styles.postHead}>{group}</h2>
+                            <div className={Styles.cardContainer}>
+                                {groupedData[group].map(team => (
+                                    <TeamCard
+                                        key={team._id}
+                                        name={`${team.user.firstName} ${team.user.lastName}`}
+                                        position={team.position}
+                                        imageSrc={`${team.user.profilePic}`}
+                                        lazyImageSrc={`${team.user.profilePic}`}
+                                        gitHub={team.user.gitHub}
+                                        linkedIn={team.user.linkedIn}
+                                        email={team.user.email}
+                                        otherLinks={team.user.otherLinks}
+                                    />
+                                ))}
+                            </div>
+                        </div>
+                    ))}
 
-                    {data && data?.teams?.map((item, index) => {
-                        console.log(item);
-                        return (
-                            <TeamCard
-                                key={`${String(index)}-team`}
-                                name={`${item.firstName} ${item.lastName}`}
-                                position={item.position}
-                                imageSrc={`${item.profilePic}`}
-                                lazyImageSrc={`${item.profilePic}`}
-                                gitHub={item.gitHub}
-                                linkedIn={item.linkedIn}
-                                email={item.email}
-                                otherLinks={item.otherLinks}
-                            />
-                        );
-                    })}
                 </div>
 
             </section>
