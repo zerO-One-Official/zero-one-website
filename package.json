@@ -26,6 +26,7 @@
     "validator": "^13.11.0"
   },
   "devDependencies": {
+    "@babel/plugin-transform-react-jsx": "^7.23.4",
     "autoprefixer": "latest",
     "eslint": "latest",
     "eslint-config-next": "latest",
