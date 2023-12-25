@@ -27,7 +27,7 @@ export const GET = async () => {
 export const POST = async (req) => {
     try {
         const reqBody = await req.json();
-        const { name, date, link, questions, difficulty, duration, participants = [], type = "contest" } = reqBody;
+        const { name, date, link, questions, difficulty, duration, venue, participants = [], type = "contest" } = reqBody;
 
         if (type === 'contest') {
             // Check if a contest with the same name already exists
@@ -65,7 +65,7 @@ export const POST = async (req) => {
             }
 
             // If all checks pass, create the contest
-            const newContest = await Contest.create({ name, date, link, questions, difficulty, duration, participants });
+            const newContest = await Contest.create({ name, date, link, questions, difficulty, duration, venue, participants });
 
             return NextResponse.json(
                 { contest: newContest, type: "success", success: true },

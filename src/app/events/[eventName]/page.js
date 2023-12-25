@@ -11,6 +11,8 @@ import { TbCircleDashedNumber1, TbCircleDashedNumber2, TbCircleDashedNumber3 } f
 import { BsFillEyeSlashFill } from 'react-icons/bs';
 import { AiOutlineInfoCircle, AiOutlineQuestionCircle } from 'react-icons/ai';
 import { HiOutlineUserGroup } from 'react-icons/hi';
+import { FaCircleUser } from 'react-icons/fa6';
+import { Medal } from '@/components/Medal';
 
 const EventPage = ({ params }) => {
 
@@ -73,27 +75,33 @@ const EventPage = ({ params }) => {
                                     </div>
                                     :
                                     activeTab === 'participants' ?
-                                        <ol className="flex flex-col w-full gap-4 list-decimal">
+                                        <ol className="flex flex-col w-full gap-4">
 
                                             {
-                                                data?.event?.participants
-                                                    .sort((a, b) => {
-                                                        // Check if both participants have a rank
-                                                        if (a.rank !== undefined && b.rank !== undefined) {
-                                                            return a.rank - b.rank; // Sort by rank if both have ranks
-                                                        } else if (a.rank === undefined && b.rank !== undefined) {
-                                                            return 1; // Put participants without a rank at the end
-                                                        } else if (a.rank !== undefined && b.rank === undefined) {
-                                                            return -1; // Put participants without a rank at the end
-                                                        } else {
-                                                            return 0; // Both participants have no rank, maintain the order
-                                                        }
-                                                    })
-                                                    .map(participant => {
-                                                        return (
-                                                            <Participant participant={participant.user} rank={participant.rank} key={participant._id} />
-                                                        )
-                                                    })
+                                                data?.event?.participants.length
+                                                    ?
+                                                    data?.event?.participants
+                                                        .sort((a, b) => {
+                                                            // Check if both participants have a rank
+                                                            if (a.rank !== undefined && b.rank !== undefined) {
+                                                                return a.rank - b.rank; // Sort by rank if both have ranks
+                                                            } else if (a.rank === undefined && b.rank !== undefined) {
+                                                                return 1; // Put participants without a rank at the end
+                                                            } else if (a.rank !== undefined && b.rank === undefined) {
+                                                                return -1; // Put participants without a rank at the end
+                                                            } else {
+                                                                return 0; // Both participants have no rank, maintain the order
+                                                            }
+                                                        })
+                                                        .map(participant => {
+                                                            return (
+                                                                <Participant participant={participant?.user} rank={participant?.rank} key={participant?._id} />
+                                                            )
+                                                        })
+                                                    :
+                                                    <div className="flex-1">
+                                                        <p className='text-red-500 text-xl text-center'>Participant List Not Available</p>
+                                                    </div>
                                             }
                                         </ol>
                                         :
@@ -113,7 +121,6 @@ const EventPage = ({ params }) => {
 }
 
 const InfoTab = ({ event }) => {
-    console.log(event);
 
     const date = new Date(event?.date);
     const day = date.getDate();
@@ -122,7 +129,7 @@ const InfoTab = ({ event }) => {
     const time = getTime(date);
 
     return (
-        <div className="flex flex-col w-full gap-4">
+        <div className="flex flex-col w-full gap-4 bg-white/10 p-2 rounded-sm">
             <a href={event.link} className='hover:underline text-accent'>
                 <h1 className='text-4xl font-semibold text-center w-full text-accent'>{event.name}</h1>
             </a>
@@ -133,6 +140,9 @@ const InfoTab = ({ event }) => {
                 <span>
                     {`${time}`}
                 </span>
+            </div>
+            <div className="flex gap-4 justify-center text-xl">
+                Venue: {event.venue}
             </div>
             {
                 event.gallery.length ?
@@ -205,23 +215,23 @@ const Question = ({ question, eventEndDate }) => {
                 </div>
 
                 <div className="bg-white/5 p-2 rounded-sm">
-                    <h4 className='font-medium'>Problem Statement:</h4>
+                    <h4 className='font-medium underline mb-2 text-lg'>Problem Statement:</h4>
                     <p className='text-primary-light/80'>{question.desc}</p>
                 </div>
                 <div className="bg-white/5 p-2 rounded-sm">
-                    <h4 className='font-medium'>Input Format:</h4>
+                    <h4 className='font-medium underline mb-2 text-lg'>Input Format:</h4>
                     {question.inputFormat.split(',').map((ip, index) => {
                         return <p key={index} className='text-primary-light/80'>{ip}</p>;
                     })}
                 </div>
                 <div className="bg-white/5 p-2 rounded-sm">
-                    <h4 className='font-medium'>Output Format:</h4>
+                    <h4 className='font-medium underline mb-2 text-lg'>Output Format:</h4>
                     {question.outputFormat.split(',').map((of, index) => {
                         return <p key={index} className='text-primary-light/80'>{of}</p>;
                     })}
                 </div>
                 <div className="bg-white/5 p-2 rounded-sm">
-                    <h4 className='font-medium'>Constraints:</h4>
+                    <h4 className='font-medium underline mb-2 text-lg'>Constraints:</h4>
                     {question.constraints.split(',').map((cons, index) => {
                         return <p key={index} className='text-primary-light/80'>{cons}</p>;
                     })}
@@ -229,19 +239,37 @@ const Question = ({ question, eventEndDate }) => {
                 {
                     question.testCases.map((testCase, index) => {
                         return (
-                            <div key={testCase._id} className={`bg-white/5 rounded-sm ${currentDate < eventEndDate ? 'h-8 overflow-hidden p-1 px-2' : 'p-4'}`}>
+                            <div key={testCase._id} className={`bg-white/5 rounded-sm p-2`}>
                                 <div className="flex justify-between items-center">
-                                    <h4 className='font-medium'>TestCase {index}:</h4>
+                                    <h4 className='font-medium underline mb-2 text-lg'>TestCase {index}:</h4>
                                     {testCase.isPublic ? null : <BsFillEyeSlashFill />}
                                 </div>
-                                <div className="font-medium text-primary-light/70 text-blue-300" >Input</div>
-                                {testCase.input.split(',').map((inp, index) => {
-                                    return <p key={index} className='text-primary-light/80'>{inp}</p>;
-                                })}
-                                <div className="font-medium text-primary-light/70 text-green-300">Output</div>
-                                {testCase.output.split(',').map((op, index) => {
-                                    return <p key={index} className='text-primary-light/80'>{op}</p>;
-                                })}
+                                {
+                                    testCase.isPublic ?
+                                        <>
+                                            <div className="font-medium text-primary-light/70 text-blue-400" >Input</div>
+                                            {testCase.input.split(',').map((inp, index) => {
+                                                return <p key={index} className='text-primary-light/80'>{inp}</p>;
+                                            })}
+                                            <div className="font-medium text-primary-light/70 text-green-400">Output</div>
+                                            {testCase.output.split(',').map((op, index) => {
+                                                return <p key={index} className='text-primary-light/80'>{op}</p>;
+                                            })}
+                                        </>
+                                        :
+                                        currentDate > eventEndDate ?
+                                            <>
+                                                <div className="font-medium text-primary-light/70 text-blue-400" >Input</div>
+                                                {testCase.input.split(',').map((inp, index) => {
+                                                    return <p key={index} className='text-primary-light/80'>{inp}</p>;
+                                                })}
+                                                <div className="font-medium text-primary-light/70 text-green-400">Output</div>
+                                                {testCase.output.split(',').map((op, index) => {
+                                                    return <p key={index} className='text-primary-light/80'>{op}</p>;
+                                                })}
+                                            </>
+                                            : null
+                                }
                             </div>
                         )
                     })
@@ -254,27 +282,24 @@ const Question = ({ question, eventEndDate }) => {
 
 const Participant = ({ participant, rank }) => {
 
-    const rankIcon = () => {
-        switch (rank) {
-            case 1: return <TbCircleDashedNumber1 className='stroke-yellow-400 sm:scale-150 scale-[2]' />
-            case 2: return <TbCircleDashedNumber2 className='stroke-slate-300 sm:scale-150 scale-[2]' />
-            case 3: return <TbCircleDashedNumber3 className='stroke-amber-700 sm:scale-150 scale-[2]' />
-            default: return;
-        }
-    }
-
     return (
         <li className="flex items-center gap-6 sm:gap-4 bg-white/10 p-4 rounded">
             <p className='text-2xl sm:text-lg font-bold scale-110 text-primary-light/30'>{rank}</p>
-            <Image src={participant.profilePic} width={56} height={56} alt={participant.firstName} className='w-14 h-14 rounded-full object-cover' />
+            {
+
+                participant?.profilePic ?
+                    <Image src={participant?.profilePic} width={56} height={56} alt={participant?.firstName} className='w-14 h-14 rounded-full object-cover' />
+                    :
+                    <FaCircleUser size={50} />
+            }
             <div className="">
-                <h2 className='capitalize text-xl sm:text-base font-medium'>{participant.firstName} {participant.lastName}</h2>
-                <p className='capitalize text-xl sm:text-base font-medium text-primary-light/50'>{participant.roll} </p>
+                <h2 className='capitalize text-xl sm:text-base font-medium'>{participant?.firstName} {participant?.lastName}</h2>
+                <p className='capitalize text-xl sm:text-base font-medium text-primary-light/50'>{participant?.roll} </p>
             </div>
             <div className="ml-auto">
                 {
                     rank <= 3 ?
-                        rankIcon()
+                        <Medal className={`h-14 w-14 -translate-y-4 sm:-translate-y-[23px] sm:w-10 sm:h-10 ${rank === 1 ? 'fill-yellow-400 text-yellow-400' : rank === 2 ? 'fill-slate-300 text-slate-300' : 'fill-amber-700 text-amber-700'}`} />
                         :
                         null
                 }
