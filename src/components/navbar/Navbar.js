@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { HiMenuAlt4 } from 'react-icons/hi';
 import Link from 'next/link';
 import styles from './Navbar.module.css';
@@ -17,7 +17,31 @@ function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const { data } = useSession();
 
-  const pathname = usePathname();
+
+  const navRef = useRef();
+
+  const [prevScrollY, setPrevScrollY] = useState(0);
+
+  useEffect(() => setPrevScrollY(window.scrollY), [])
+
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrolledDown = window.scrollY > prevScrollY;
+      const scrolledUp = window.scrollY < prevScrollY;
+
+      if (Math.abs(window.scrollY - prevScrollY) > 300) {
+        setPrevScrollY(window.scrollY);
+
+        if (scrolledDown || scrolledUp) {
+          navRef.current.style.top = scrolledDown ? '-300px' : '0';
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [prevScrollY]);
 
   useEffect(() => {
     // Creating a dynamic parent div for the sidebar to act as portal's root
@@ -27,42 +51,42 @@ function Navbar() {
     return () => div.remove();
   }, []);
 
-  useEffect(() => {
-    let prevScroll = window.scrollY;
+  // useEffect(() => {
+  //   let prevScroll = window.scrollY;
 
-    const handleScroll = () => {
-      // const navList = document.getElementById('navList');
-      const navbar = document.getElementById('navbar');
-      // const title = document.getElementById('Title');
-      const height = navbar.offsetHeight;
+  //   const handleScroll = () => {
+  //     // const navList = document.getElementById('navList');
+  //     const navbar = document.getElementById('navbar');
+  //     // const title = document.getElementById('Title');
+  //     const height = navbar.offsetHeight;
 
-      const currentScrollPos = window.scrollY;
-      if (currentScrollPos > height + 10) {
-        navbar.style.borderBottom = '1px solid rgba(255, 255, 255, 0.1)';
-        navbar.style.backgroundColor = 'var(--background)';
-      } else {
-        navbar.style.border = 'none';
-      }
+  //     const currentScrollPos = window.scrollY;
+  //     if (currentScrollPos > height + 10) {
+  //       navbar.style.borderBottom = '1px solid rgba(255, 255, 255, 0.1)';
+  //       navbar.style.backgroundColor = 'var(--background)';
+  //     } else {
+  //       navbar.style.border = 'none';
+  //     }
 
-      // if (prevScroll < currentScrollPos) {
-      //   // navList.classList.add('fade-up');
-      //   // title.classList.add('fade-up');
-      //   navbar.style.borderBottom = '1px solid rgba(255, 255, 255, 0.2)';
-      //   navbar.style.backgroundColor = 'rgba(24, 30, 35, 0.45)';
-      // } else {
-      //   navList.classList.remove('fade-up');
-      //   title.classList.remove('fade-up');
-      // }
+  //     // if (prevScroll < currentScrollPos) {
+  //     //   // navList.classList.add('fade-up');
+  //     //   // title.classList.add('fade-up');
+  //     //   navbar.style.borderBottom = '1px solid rgba(255, 255, 255, 0.2)';
+  //     //   navbar.style.backgroundColor = 'rgba(24, 30, 35, 0.45)';
+  //     // } else {
+  //     //   navList.classList.remove('fade-up');
+  //     //   title.classList.remove('fade-up');
+  //     // }
 
-      prevScroll = currentScrollPos;
-    };
-    document.addEventListener('scroll', handleScroll);
+  //     prevScroll = currentScrollPos;
+  //   };
+  //   document.addEventListener('scroll', handleScroll);
 
-    return () => document.removeEventListener('scroll', handleScroll);
-  }, []);
+  //   return () => document.removeEventListener('scroll', handleScroll);
+  // }, []);
 
   return (
-    <header id="navbar" className={`${styles.navbar}`}>
+    <header ref={navRef} id="navbar" className={`${styles.navbar} transition-all`}>
       <Logo />
       <nav id="navList" className={styles.navbarList}>
 

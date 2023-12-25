@@ -52,7 +52,7 @@ export default function ProfileForm() {
                 const profilePic = res[0].url;
 
                 try {
-                    const { email, phone, username } = userProfile;
+                    const { email, phone, gitHub, linkedIn, username } = userProfile;
                     setLoading(true);
                     const resp = await fetch('/api/profile', {
                         method: "PUT",

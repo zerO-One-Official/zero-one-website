@@ -21,7 +21,7 @@ function SocialsBar() {
       const scrolledDown = window.scrollY > prevScrollY;
       const scrolledUp = window.scrollY < prevScrollY;
 
-      if (Math.abs(window.scrollY - prevScrollY) > 100) {
+      if (Math.abs(window.scrollY - prevScrollY) > 300) {
         setPrevScrollY(window.scrollY);
 
         if (scrolledDown || scrolledUp) {

@@ -93,7 +93,7 @@ const OnGoingEvent = ({ events }) => {
     return () => {
       newTimers.forEach(timer => clearInterval(timer));
     };
-  }, [events]);
+  });
 
   const onGoingEvents = events && events.filter(event => {
     const eventStartDate = new Date(event.date);
@@ -103,29 +103,25 @@ const OnGoingEvent = ({ events }) => {
   });
 
   return (
-    <section ref={ref} className={`flex xl:flex-col flex-auto mt-40 sm:mt-20 fadeonscroll`}>
-      <div className={`mt-0 sm:mt-10 pr-11 box-border w-2/5 xl:w-full`}>
-        <h2 className={`sticky top-36 text-6xl sm:text-5xl font-semibold`}>Ongoing</h2>
-      </div>
+    onGoingEvents.length ?
+      <section ref={ref} className={`flex xl:flex-col flex-auto mt-40 sm:mt-20 fadeonscroll`}>
+        <div className={`mt-0 sm:mt-10 pr-11 box-border w-2/5 xl:w-full`}>
+          <h2 className={`sticky top-36 text-6xl sm:text-5xl font-semibold`}>Ongoing</h2>
+        </div>
 
-      {
-        onGoingEvents.length ?
-          <div className="text-2xl mb-10 sm:mb-7 xl:mt-16 sm:text-lg mt-0 sm:mt-10 pl-11 box-border w-3/5 xl:w-full xl:pl-0">
-            {
-              onGoingEvents.map((event, index) => (
-                <Link href={`/events/${event.name}?tab=info`} key={event._id} className="flex flex-1 justify-between items-center p-4 w-full gap-6 sm:gap-2 ">
-                  <h2 className=' text-accent font-semibold text-4xl sm:text-xl'>{event.name}</h2>
-                  <h2 className='flex gap-6 sm:gap-2'>{remainingTime[index].hours}:{remainingTime[index].minutes}:{remainingTime[index].seconds}</h2>
-                </Link>
-              ))
-            }
-          </div>
-          :
-          <div className="flex items-center justify-center w-3/5 xl:w-full xl:mt-16">
-            <h3 className='text-accent text-2xl font-light'>No Ongoing Events</h3>
-          </div>
-      }
-    </section>
+        <div className="text-2xl mb-10 sm:mb-7 xl:mt-16 sm:text-lg mt-0 sm:mt-10 pl-11 box-border w-3/5 xl:w-full xl:pl-0">
+          {
+            onGoingEvents.map((event, index) => (
+              <Link href={`/events/${event.name}?tab=info`} key={event._id} className="flex flex-1 justify-between items-center p-4 w-full gap-6 sm:gap-2 ">
+                <h2 className=' text-accent font-semibold text-4xl sm:text-xl'>{event.name}</h2>
+                <h2 className='flex gap-6 sm:gap-2'>{remainingTime[index].hours}:{remainingTime[index].minutes}:{remainingTime[index].seconds}</h2>
+              </Link>
+            ))
+          }
+        </div>
+      </section>
+      :
+      null
   );
 };
 
@@ -153,7 +149,7 @@ const Upcoming = ({ events }) => {
               upcomingEvents.map(event => {
                 const eventDate = new Date(event.date)
                 return (
-                  <Link href={`/events/${event.name}?tab=info`} key={event._id} className="group hover:bg-white/10 hover:scale-105 transition-all rounded flex flex-1 justify-between items-center p-4 w-full gap-6 sm:gap-2 ">
+                  <Link href={`/events/${event.name}?tab=info`} key={event._id} className="group bg-white/5 border border-white/10 hover:scale-105 transition-all rounded flex flex-1 justify-between items-center p-4 w-full gap-6 sm:gap-2 ">
                     <h2 className=' text-accent font-medium text-3xl sm:text-xl'>{event.name}</h2>
                     <h2 className='flex gap-6 sm:gap-2'>
                       <span>
@@ -205,7 +201,7 @@ const Past = ({ events }) => {
               pastEvents.map(event => {
                 const eventDate = new Date(event.date)
                 return (
-                  <Link href={`/events/${event.name}?tab=info`} key={event._id} className="group hover:bg-white/10 hover:scale-105 transition-all rounded flex flex-1 justify-between items-center p-4 w-full gap-6 sm:gap-2 ">
+                  <Link href={`/events/${event.name}?tab=info`} key={event._id} className="group bg-white/5 border border-white/10 hover:scale-105 transition-all rounded flex flex-1 justify-between items-center p-4 w-full gap-6 sm:gap-2 ">
                     <h2 className=' text-accent font-medium text-3xl sm:text-xl'>{event.name}</h2>
                     <h2 className='flex gap-6 sm:gap-2'>{`${eventDate.getDate()} ${getMonthName(eventDate)} ${eventDate.getFullYear()}`}</h2>
                   </Link>
