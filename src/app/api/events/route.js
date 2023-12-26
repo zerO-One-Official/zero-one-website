@@ -40,29 +40,6 @@ export const POST = async (req) => {
                 );
             }
 
-            // Manually check uniqueness within the questions array
-            const questionNames = new Set();
-            for (const question of questions) {
-                if (questionNames.has(question.name)) {
-                    return NextResponse.json(
-                        { message: 'Question with same name already exists.', type: "error", success: false },
-                        { status: 400 }
-                    );
-                }
-                questionNames.add(question.name);
-
-                // Manually check uniqueness within the testCases array for each question
-                const testCaseInputs = new Set();
-                for (const testCase of question.testCases) {
-                    if (testCaseInputs.has(testCase.input)) {
-                        return NextResponse.json(
-                            { message: 'One or More test case is repeating.', type: "error", success: false },
-                            { status: 400 }
-                        );
-                    }
-                    testCaseInputs.add(testCase.input);
-                }
-            }
 
             // If all checks pass, create the contest
             const newContest = await Contest.create({ name, date, link, questions, difficulty, duration, venue, participants });

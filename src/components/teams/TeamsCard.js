@@ -15,15 +15,14 @@ function TeamCard({ name, position, gitHub, linkedIn, email, imageSrc, lazyImage
                 {
                     imageSrc ?
                         <Image
-                            height={100}
-                            width={100}
-                            layout="responsive"
+                            height={240}
+                            width={240}
                             src={imageSrc}
                             alt={name}
                             quality={100}
                             placeholder="blur"
                             blurDataURL={lazyImageSrc}
-                            className="z-10 h-auto max-w-full object-cover object-top scale-100 group-hover:scale-125 transition-all duration-500"
+                            className="z-10 h-auto w-full object-cover object-top scale-100 group-hover:scale-125 transition-all duration-500"
                         />
                         :
                         <BiUserCircle size={25} className="z-10 w-full h-auto scale-[1.2] fill-primary" />

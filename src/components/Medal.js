@@ -4,7 +4,7 @@ export const Medal = ({ ...props }) => {
     return (
         <svg
             style={{
-                filter: 'drop-shadow(0 0 4px currentColor)'
+                filter: 'drop-shadow(0 0 10px #000)'
             }}
             viewBox="0 0 300 300"
             xmlns="http://www.w3.org/2000/svg"
