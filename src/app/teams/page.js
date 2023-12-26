@@ -23,8 +23,6 @@ function Teams() {
         return result;
     }, {});
 
-    console.log(groupedData);
-
 
 
     return (

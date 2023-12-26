@@ -61,7 +61,6 @@ const OnGoingEvent = ({ events }) => {
   ]);
 
   const currentDate = new Date();
-
   useEffect(() => {
     // Clear existing timers
     timers.forEach(timer => clearInterval(timer));
@@ -83,17 +82,16 @@ const OnGoingEvent = ({ events }) => {
           return updatedArray;
         })
       }, 1000);
-    });
+    })
 
     // Set the new timers in state
     setTimers(newTimers);
-
 
     // Clear the timers when the component unmounts
     return () => {
       newTimers.forEach(timer => clearInterval(timer));
     };
-  });
+  }, [events]);
 
   const onGoingEvents = events && events.filter(event => {
     const eventStartDate = new Date(event.date);

@@ -214,23 +214,23 @@ const Question = ({ question, eventEndDate }) => {
                     <p className='text-primary-light/80 font-medium'>{question.point} Point</p>
                 </div>
 
-                <div className="bg-white/5 p-2 rounded-sm">
+                <div className="bg-white/5 p-4 rounded-sm">
                     <h4 className='font-medium underline mb-2 text-lg'>Problem Statement:</h4>
                     <p className='text-primary-light/80'>{question.desc}</p>
                 </div>
-                <div className="bg-white/5 p-2 rounded-sm">
+                <div className="bg-white/5 p-4 rounded-sm">
                     <h4 className='font-medium underline mb-2 text-lg'>Input Format:</h4>
                     {question.inputFormat.split(',').map((ip, index) => {
                         return <p key={index} className='text-primary-light/80'>{ip}</p>;
                     })}
                 </div>
-                <div className="bg-white/5 p-2 rounded-sm">
+                <div className="bg-white/5 p-4 rounded-sm">
                     <h4 className='font-medium underline mb-2 text-lg'>Output Format:</h4>
                     {question.outputFormat.split(',').map((of, index) => {
                         return <p key={index} className='text-primary-light/80'>{of}</p>;
                     })}
                 </div>
-                <div className="bg-white/5 p-2 rounded-sm">
+                <div className="bg-white/5 p-4 rounded-sm">
                     <h4 className='font-medium underline mb-2 text-lg'>Constraints:</h4>
                     {question.constraints.split(',').map((cons, index) => {
                         return <p key={index} className='text-primary-light/80'>{cons}</p>;
@@ -239,7 +239,7 @@ const Question = ({ question, eventEndDate }) => {
                 {
                     question.testCases.map((testCase, index) => {
                         return (
-                            <div key={testCase._id} className={`bg-white/5 rounded-sm p-2`}>
+                            <div key={testCase._id} className={`bg-white/5 rounded-sm p-4`}>
                                 <div className="flex justify-between items-center">
                                     <h4 className='font-medium underline mb-2 text-lg'>TestCase {index}:</h4>
                                     {testCase.isPublic ? null : <BsFillEyeSlashFill />}
@@ -247,11 +247,11 @@ const Question = ({ question, eventEndDate }) => {
                                 {
                                     testCase.isPublic ?
                                         <>
-                                            <div className="font-medium text-primary-light/70 text-blue-400" >Input</div>
+                                            <div className="font-medium text-blue-400" >Input</div>
                                             {testCase.input.split(',').map((inp, index) => {
                                                 return <p key={index} className='text-primary-light/80'>{inp}</p>;
                                             })}
-                                            <div className="font-medium text-primary-light/70 text-green-400">Output</div>
+                                            <div className="font-medium text-green-400">Output</div>
                                             {testCase.output.split(',').map((op, index) => {
                                                 return <p key={index} className='text-primary-light/80'>{op}</p>;
                                             })}
@@ -259,11 +259,11 @@ const Question = ({ question, eventEndDate }) => {
                                         :
                                         currentDate > eventEndDate ?
                                             <>
-                                                <div className="font-medium text-primary-light/70 text-blue-400" >Input</div>
+                                                <div className="font-medium text-blue-400" >Input</div>
                                                 {testCase.input.split(',').map((inp, index) => {
                                                     return <p key={index} className='text-primary-light/80'>{inp}</p>;
                                                 })}
-                                                <div className="font-medium text-primary-light/70 text-green-400">Output</div>
+                                                <div className="font-medium text-green-400">Output</div>
                                                 {testCase.output.split(',').map((op, index) => {
                                                     return <p key={index} className='text-primary-light/80'>{op}</p>;
                                                 })}
