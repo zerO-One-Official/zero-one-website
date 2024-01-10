@@ -71,8 +71,8 @@ const ContactPage = () => {
             const data = await res.json();
 
             if (data.success) {
-                // window.scrollTo(0, 0);
-                // setShow(true);
+                window.scrollTo(0, 0);
+                setShow(true);
             }
             toast[data.type](data.message);
         } catch (error) {
