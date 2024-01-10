@@ -1,0 +1,135 @@
+.gallery div:nth-child(11n) {
+    grid-column: span 2;
+}
+
+.gallery div:nth-child(7n) {
+    grid-column: span 2;
+    grid-row: span 2;
+}
+
+.gallery div:nth-child(n+35) {
+    grid-column: span 1;
+    grid-row: span 1;
+}
+
+@media (min-width: 1501px) {
+    .gallery {
+        grid-auto-rows: 300px;
+    }
+
+    .gallery {
+        grid-auto-rows: 450px;
+        @apply grid-cols-4;
+    }
+
+    .gallery div:nth-child(18) {
+        grid-column: span 2;
+        grid-row: span 1;
+    }
+
+    .gallery div:nth-child(27) {
+        grid-column: span 2;
+        grid-row: span 1;
+    }
+
+    .gallery div:nth-child(33) {
+        grid-column: span 1;
+        grid-row: span 1;
+    }
+
+    .gallery div:nth-child(38) {
+        grid-column: span 2;
+        grid-row: span 1;
+    }
+
+}
+
+@media (max-width: 1500px) {
+    .gallery {
+        grid-auto-rows: 300px;
+    }
+
+    .gallery div:nth-child(11n) {
+        grid-column: span 2;
+        grid-row: span 2;
+    }
+
+    .gallery div:nth-child(7n) {
+        grid-column: span 1;
+        grid-row: span 2;
+    }
+
+
+    .gallery div:nth-child(6n) {
+        grid-column: span 2;
+        grid-row: span 1;
+    }
+
+    .gallery div:nth-child(33) {
+        grid-column: span 2;
+        grid-row: span 1;
+    }
+
+    .gallery div:nth-child(24n) {
+        grid-column: span 1;
+        grid-row: span 1;
+    }
+}
+
+@media (max-width: 1200px) {
+
+    .gallery {
+        grid-auto-rows: 250px;
+    }
+
+    .gallery div:nth-child(7n) {
+        grid-column: span 2;
+        grid-row: span 2;
+    }
+
+    .gallery div:nth-child(11n) {
+        grid-column: span 1;
+        grid-row: span 2;
+    }
+
+    .gallery div:nth-child(14n) {
+        grid-column: span 1;
+        grid-row: span 1;
+    }
+
+    .gallery div:nth-child(6n) {
+        grid-column: span 1;
+        grid-row: span 1;
+    }
+
+    .gallery div:nth-child(24n) {
+        grid-column: span 1;
+        grid-row: span 1;
+    }
+
+    .gallery div:nth-child(n+35) {
+        grid-column: span 1;
+        grid-row: span 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .gallery {
+        grid-column: 1fr 1fr;
+    }
+
+    .gallery {
+        grid-auto-rows: 150px;
+    }
+}
+
+@media (max-width: 450px) {
+    .gallery {
+        grid-column: 1fr 1fr;
+        gap: 4px;
+    }
+
+    .gallery {
+        grid-auto-rows: 100px;
+    }
+}

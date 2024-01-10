@@ -3,32 +3,41 @@
 }
 
 .label {
-  @apply absolute text-2xl xs:text-xl font-extralight;
+  @apply absolute text-2xl xs:text-xl font-extralight text-white pointer-events-none;
   top: 0;
   left: 1%;
   transition: all 300ms ease-in-out;
-  z-index: -1;
 }
 
-.input {
+
+.input,
+.textarea {
   @apply text-xl p-2 outline-none border-none w-full;
   background-color: transparent;
   border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  resize: none;
 }
 
-.input:disabled {
+.input:disabled,
+.textarea:disabled {
   opacity: .7;
 }
 
-.input:disabled+label {
+.input:disabled+label,
+.textarea:disabled+label {
   opacity: .5;
 }
 
 .transform {
-  @apply text-sm;
   top: -45%;
+  @apply text-sm;
   left: 0.5rem;
   opacity: .8;
+}
+
+
+.textarea+.transform {
+  top: -45%;
 }
 
 @media (max-width: 1200px) {

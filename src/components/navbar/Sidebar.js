@@ -112,7 +112,7 @@ function Sidebar({ isMounted, unmount }) {
                     <div className='w-24 h-24  border border-white/10 rounded-full'>
                       {
                         data.user.profilePic ?
-                          <Image src={data.user.profilePic} width={80} height={80} alt={data.user.name} className="rounded-full w-full h-full object-cover object-center" />
+                          <Image src={data.user.profilePic} width={80} height={80} quality={100} alt={data.user.name} className="rounded-full w-full h-full object-cover object-center" />
 
                           :
                           <FaCircleUser size={100} />

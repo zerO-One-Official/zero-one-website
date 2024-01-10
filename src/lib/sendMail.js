@@ -22,7 +22,7 @@ export const sendMail = async (to, subject, html) => {
 
         // Email content
         const mailOptions = {
-            from: process.env.EMAIL, // sender address
+            from: `ZERO ONE <${process.env.EMAIL}>`, // sender address
             to: to, // list of receivers
             subject: subject,
             html: html
