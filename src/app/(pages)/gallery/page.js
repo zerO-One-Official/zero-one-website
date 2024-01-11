@@ -6,14 +6,25 @@ import Image from 'next/image'
 import useSWR from 'swr'
 import Spinner from '@/components/loader/Spinner'
 import toast from 'react-hot-toast'
+import { useState } from 'react'
+import { BiLeftArrow, BiRightArrow, BiX } from 'react-icons/bi'
 
 const GalleryPage = () => {
 
     const fetcher = url => fetch(url).then(r => r.json());
 
     const { data, error, isLoading } = useSWR('/api/gallery', fetcher);
+    const [index, setIndex] = useState(null)
 
-    if (error) toast.error(error.message);
+    if (error) {
+        toast.error(error.message);
+        console.log(error);
+    }
+
+    const inlarger = (i) => {
+        setIndex(i);
+        document.documentElement.classList.add('scroll-lock');
+    }
 
     return (
         <div>
@@ -29,22 +40,41 @@ const GalleryPage = () => {
                 <div id='scrolled-to'>
                     {
                         isLoading ?
-                            <div className="mt-8">
+                            <div className="mt-16 p-8">
                                 <Spinner />
                             </div>
                             :
                             data &&
-                            <div className={`relative mt-8 grid 2xl:grid-cols-4 xl:grid-cols-3 md:grid-cols-2 gap-2 p-4 min-h-screen ${Styles.gallery}`}>
+                            <div className={`relative mt-16 grid 2xl:grid-cols-4 xl:grid-cols-3 md:grid-cols-2 gap-2 p-4 min-h-screen ${Styles.gallery}`}>
                                 {
-                                    data.gallery.map((e, i) => {
+                                    data.gallery.map((gall, i) => {
                                         return (
-                                            <div className="border border-white/15" key={i}>
-                                                <Image src="/logo.png" width={200} height={200} quality={80} className='w-full h-full object-cover object-center' alt="logo" />
+                                            <div className="border border-white/15 cursor-pointer" key={i} onClick={() => { inlarger(i) }}>
+                                                <Image src={gall.url} width={300} height={300} quality={100} className='w-full h-full object-cover object-center' alt={gall.eventName} />
                                             </div>
                                         )
                                     })
                                 }
-                                <div className="fixed"></div>
+                                <div className={`fixed w-screen h-screen flex items-center justify-center top-0 left-0 bg-black ${index !== null ? 'visible z-[1000]' : 'invisible z-0'}`}>
+                                    {
+                                        index !== null ? <Image src={data?.gallery[index].url} width={1920} height={1080} quality={100} className='w-full h-full object-contain object-center my-auto' alt={data?.gallery[index].eventName} />
+                                            : null
+                                    }
+                                    <BiX className=' p-1 fixed right-4 top-4 w-10 h-10 z-[1000] cursor-pointer bg-red-600 rounded-sm' onClick={() => {
+                                        setIndex(null);
+                                        document.documentElement.classList.remove('scroll-lock');
+                                    }} />
+                                    {/* <BiRightArrow className=' p-1 fixed right-4 top-1/2 -translate-y-[20%] w-8 h-8 z-[1000] cursor-pointer bg-black rounded-sm' onClick={() => {
+                                        setIndex(prev => {
+                                            if (prev < data.gallery.length - 2) return prev + 1
+                                        });
+                                    }} />
+                                    <BiLeftArrow className=' p-1 fixed left-4 top-1/2 -translate-y-[20%] w-8 h-8 z-[1000] cursor-pointer bg-black rounded-sm' onClick={() => {
+                                        setIndex(prev => {
+                                            if (prev > 0) return prev - 1;
+                                        });
+                                    }} /> */}
+                                </div>
                             </div>
                     }
                 </div>
