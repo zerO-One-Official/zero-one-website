@@ -1,25 +1,15 @@
 import connect from "@/lib/dbConnect";
-import { contactEmail } from "@/lib/emailTemplates";
-import { sendMail } from "@/lib/sendMail";
-import Contact from "@/models/Contact";
+import Gallery from "@/models/Gallery";
 import { NextResponse } from 'next/server'
 
-export const POST = async (req) => {
+export const GET = async () => {
     try {
         connect();
-        const reqBody = await req.json();
-        const { name, email, roll, message } = reqBody;
 
-        let formattedMessage = message.replace(/(?:\r\n|\r|\n)/g, '<br>');
-
-        const html = contactEmail({ name, email, roll, message: formattedMessage });
-
-        await sendMail(process.env.EMAIL, `${name} ${roll}`, html);
-        await Contact.create({ name, email, roll, message: formattedMessage });
-
+        const gallery = await Gallery.find({});
 
         return NextResponse.json(
-            { message: "Form submitted. One of Club Lead will contact you shortly.", type: "success", success: true },
+            { gallery, type: "success", success: true },
             { status: 200 }
         );
 
