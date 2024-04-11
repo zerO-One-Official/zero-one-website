@@ -1,25 +1,21 @@
-import mongoose from "mongoose"
+import mongoose from "mongoose";
 
-const connect = () => {
-    // Connection URL
-    const url = process.env.MONGO_URI;
+const { MONGO_URI } = process.env;
 
-    // Check the current connection state
-    if (mongoose.connection.readyState === 0) {
+if (!MONGO_URI) throw new Error("MONGO_URI is not defined.");
 
-        // Connect to MongoDB only if not already connected
-        mongoose.connect(
-            url,
-            { useNewUrlParser: true, useUnifiedTopology: true }
-        )
-            .then(() => {
-                console.log('Connected to MongoDB successfully');
-            })
-            .catch(error => {
-                console.error('Error connecting to MongoDB:', error);
-            });
-    }
+let cached = global.mongoose;
 
+if (!cached) {
+  cached = global.mongoose = { conn: null };
 }
 
-export default connect;
+const dbConnect = async () => {
+  if (cached.conn) return cached.conn;
+  console.log("db Connection established");
+  cached.conn = await mongoose.connect(MONGO_URI);
+
+  return cached.conn;
+};
+
+export default dbConnect;
