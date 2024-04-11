@@ -1,4 +1,3 @@
-// "use client"
 import BottomGlitter from "@/components/StyledText/BottomGlitter";
 import Styles from "@/components/teams/Team.module.css";
 import TeamCard from "@/components/teams/TeamsCard";
@@ -17,6 +16,7 @@ const getTeams = async () => {
 async function Teams() {
   const { teams } = (await getTeams()) || { teams: [] };
 
+  console.log(teams);
   const groupedData = teams.reduce((result, current) => {
     if (!result[current.group]) {
       result[current.group] = [];
