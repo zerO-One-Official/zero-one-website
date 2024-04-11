@@ -1,10 +1,13 @@
-import React from 'react';
-import styles from './index.module.css';
+"use client";
+import styles from "./index.module.css";
 
-function AnimatedScrollButton({ onClick }) {
+function AnimatedScrollButton({ scrollTo }) {
   return (
     <div className={styles.wrapper}>
-      <div className={styles.mouse} onClick={onClick}>
+      <div
+        className={styles.mouse}
+        onClick={() => document.getElementById(`${scrollTo}`).scrollIntoView()}
+      >
         <div className={styles.cursor} />
       </div>
       <p className="text-lg">scroll down</p>
