@@ -51,11 +51,10 @@ const SignupPage = () => {
 
 
     return (
-        <section className='container-70 text-lg' >
-            <div className="mt-16">
+        <section className='container-70 text-lg grid place-items-center h-[calc(100vh-88px)] ' >
+            <div className="w-4/5 md:w-full border border-white/5 shadow-cus shadow-black p-6 rounded-3xl">
                 <BottomGlitter text={'Forgot Password'} />
-
-                <form method='POST' onSubmit={sendPasswordResetLink} className='flex flex-col gap-4 w-11/12 mx-auto'>
+                <form method='POST' onSubmit={sendPasswordResetLink} className='flex flex-col gap-4 mt-8 '>
                     <div className="flex gap-4 md:gap-2 justify-between items-center flex-wrap xl:flex-col xl:justify-start xl:items-start">
                         <StyledInput
                             id="emailOrRoll"
@@ -70,7 +69,7 @@ const SignupPage = () => {
                     </div>
                     {/* <p className='text-base'>Already a member ? <Link href="/login" className='text-accent hover:underline'>Login</Link></p> */}
 
-                    <Button varrient={'filled'} type="submit" className={'ml-auto'} loading={loading}>
+                    <Button varrient={'filled'} type="submit" className={'w-auto md:w-full ml-auto'} loading={loading}>
                         Send Reset Link
                         <MdSend className='fill-inherit' />
                     </Button>

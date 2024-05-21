@@ -71,6 +71,7 @@
 
 :root {
   --background: #000000;
+  --background1: #0f0f0f;
   --accent: #FF3333;
   --accent-light: #FF3366;
 }
@@ -86,7 +87,7 @@
 }
 
 body {
-  background: var(--background);
+  background: linear-gradient(123deg, var(--background), var(--background1));
   accent-color: var(--accent);
 }
 

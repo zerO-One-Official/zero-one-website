@@ -49,9 +49,8 @@ const ProfilePhoto = ({
 
   return (
     <div
-      className={`select-none bg-transparent w-32 h-32 rounded-full overflow-hidden border border-white/25 relative ${
-        disabled ? "" : "cursor-pointer"
-      }`}
+      className={`select-none bg-transparent w-32 h-32 rounded-full overflow-hidden border border-white/25 relative ${disabled ? "" : "cursor-pointer"
+        }`}
       {...getRootProps()}
     >
       {!imageUrl ? (
@@ -79,9 +78,8 @@ const ProfilePhoto = ({
       ) : null}
       {
         <div
-          className={`z-50 absolute w-full h-full ${
-            !disabled || loading ? "bg-primary/70" : ""
-          } top-0 left-0 flex items-center justify-center`}
+          className={`z-50 absolute w-full h-full ${!disabled || loading ? "bg-primary/70" : ""
+            } top-0 left-0 flex items-center justify-center`}
         >
           {loading ? (
             <BiLoader size={25} className="animate-spin" />

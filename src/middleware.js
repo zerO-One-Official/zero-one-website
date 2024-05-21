@@ -5,16 +5,30 @@ export default async function middleware(req, event) {
     const token = await getToken({ req });
     const isAuthenticated = !!token;
 
-    const { pathname } = req.nextUrl;
-    const publicUrl = ['/login', '/signup', '/recoverPassword', '/setPassword'];
+
+    const { pathname, params } = req.nextUrl;
+    const publicUrl = ['/login', '/signup', '/recoverPassword', '/setPassword', '/user'];
+    // const publicUrl = ['/login', '/signup', '/recoverPassword', '/setPassword'];
 
     // Simplify first condition to avoid redundancy
-    if (publicUrl.includes(pathname) && isAuthenticated) {
+    if (publicUrl.includes(pathname) && isAuthenticated && !pathname.startsWith('/user')) {
         return NextResponse.redirect(new URL('/', req.url));
     }
 
+    if (pathname.endsWith('/edit')) {
+
+        if (!token) {
+            const username = req.nextUrl.pathname.split('/')[2]
+            return NextResponse.redirect(new URL(`${username ? `/user/${username}` : '/'}`, req.url));
+        }
+        else {
+            if (pathname !== `/user/${token.username}/edit`)
+                return NextResponse.redirect(new URL(`/user/${token.username}/edit`, req.url));
+        }
+    }
+
     // Combine negative checks and simplify logic
-    if (!publicUrl.includes(pathname) && !pathname.startsWith('/activateAccount') && !isAuthenticated) {
+    if (!publicUrl.includes(pathname) && !pathname.startsWith('/activateAccount') && !isAuthenticated && !pathname.startsWith('/user')) {
         return NextResponse.redirect(new URL('/login', req.url));
     }
 
@@ -34,5 +48,5 @@ export default async function middleware(req, event) {
 }
 
 export const config = {
-    matcher: ["/login", '/activateAccount', '/admin/:path*', '/profile', '/recoverPassword', '/setPassword'],
+    matcher: ["/login", '/activateAccount', '/admin/:path*', '/profile', '/recoverPassword', '/setPassword', '/user/:path*'],
 };

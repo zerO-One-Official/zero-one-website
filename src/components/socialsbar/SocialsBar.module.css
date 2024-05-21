@@ -1,5 +1,5 @@
 .socialsBar {
-  @apply z-[999] bg-primary flex flex-col justify-between items-center fixed bottom-0 right-0 px-4 py-4 transition-all;
+  @apply z-[999] bg-[var(--background1)] rounded-tl-3xl flex flex-col justify-between items-center fixed bottom-0 right-0 px-4 py-4 transition-all;
   @apply 2xl:pr-10;
   @apply xl:pr-8;
   @apply sm:pr-6;
