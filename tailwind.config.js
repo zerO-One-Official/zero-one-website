@@ -12,6 +12,10 @@ export default withUt({
   ],
   theme: {
     extend: {
+      boxShadow: {
+        btn: '4px 6px -1px var(--tw-shadow-colored),-4px -6px -1px rgba(255,255,255,0.5)',
+        cus: '17px 20px 40px var(--tw-shadow-colored)'
+      },
       colors: {
         accent: {
           DEFAULT: '#FF3333',

@@ -30,10 +30,21 @@ function Navbar() {
       const scrolledDown = window.scrollY > prevScrollY;
       const scrolledUp = window.scrollY < prevScrollY;
 
+      if (window.scrollY > 200) {
+        navRef.current.classList.add('bg-primary');
+        navRef.current.classList.add('shadow');
+        navRef.current.classList.add('shadow-primary');
+      }
+      else {
+        navRef.current.classList.remove('bg-primary');
+        navRef.current.classList.remove('shadow');
+        navRef.current.classList.remove('shadow-primary');
+      }
+
       if (Math.abs(window.scrollY - prevScrollY) > 300) {
         setPrevScrollY(window.scrollY);
 
-        if (scrolledDown || scrolledUp) {
+        if (navRef?.current && scrolledDown || scrolledUp) {
           navRef.current.style.top = scrolledDown ? '-300px' : '0';
         }
       }

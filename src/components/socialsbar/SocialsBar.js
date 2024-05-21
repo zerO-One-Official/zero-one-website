@@ -24,7 +24,7 @@ function SocialsBar() {
       if (Math.abs(window.scrollY - prevScrollY) > 300) {
         setPrevScrollY(window.scrollY);
 
-        if (scrolledDown || scrolledUp) {
+        if (socialRef?.current && scrolledDown || scrolledUp) {
           socialRef.current.style.right = scrolledDown ? '-300px' : '0';
         }
       }

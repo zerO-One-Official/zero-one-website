@@ -121,7 +121,8 @@ function Sidebar({ isMounted, unmount }) {
                     <h2 className='capitalize text-lg font-bold'>Hi, {data.user.name}</h2>
                   </div>
                   <div className="flex xs:flex-col gap-1 w-full">
-                    <Link href={'/profile'} onClick={unmount} className='flex-1 bg-white/5 p-2 py-3 flex justify-center rounded-l-md xs:rounded-md hover:bg-white/10 transition-all items-center'>Profile</Link>
+                    <Link
+                      href={`/user/${data.user.username}`} onClick={unmount} className='flex-1 bg-white/5 p-2 py-3 flex justify-center rounded-l-md xs:rounded-md hover:bg-white/10 transition-all items-center'>Profile</Link>
                     <button onClick={signOut} className='flex-1 bg-red-500 p-2 py-3 flex justify-center rounded-r-md xs:rounded-md hover:bg-red-600 transition-all items-center'>Logout</button>
                   </div>
                 </div>

@@ -15,6 +15,7 @@ const getGallery = async () => {
 
 const GalleryPage = async () => {
   const { gallery } = (await getGallery()) || { gallery: [] };
+
   return (
     <div>
       <div className="text-center mt-10 mb-8 sm:my-8">

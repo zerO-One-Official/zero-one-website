@@ -37,7 +37,6 @@ export default function ProfileForm() {
   }
 
   const [image, setImage] = useState([]);
-  const [edit, setEdit] = useState(false);
 
   const { startUpload, permittedFileInfo } = useUploadThing(
     "profilePicUploader",
@@ -174,20 +173,19 @@ export default function ProfileForm() {
   return isLoading || !userProfile ? (
     <Spinner />
   ) : (
-    <div className="w-full flex flex-col">
-      <form onSubmit={submitForm} className="flex flex-col">
-        <div className="flex items-center justify-center mb-12">
+    <div className="w-full flex flex-col mt-16">
+      <form onSubmit={submitForm} className="flex flex-col ">
+        <div className="flex items-center justify-center mb-12 mx-auto border-4 border-accent rounded-full shrink-0 w-32 h-32 p-2 box-content">
           <ProfilePhoto
             permittedFileInfo={permittedFileInfo}
             setImage={setImage}
-            disabled={!edit}
             profilePic={userProfile.profilePic}
             startUpload={startUpload}
             loading={loading}
           />
         </div>
-        <div className="flex flex-col">
-          <button
+        <div className="flex flex-col border border-white/5 shadow-cus shadow-black p-6 rounded-3xl">
+          {/* <button
             type="button"
             className="ml-auto p-1 hover:bg-white fill-white hover:fill-primary rounded-md"
             title="Edit Profile"
@@ -196,14 +194,13 @@ export default function ProfileForm() {
             }}
           >
             <BiEdit size={20} fill="inherit" />
-          </button>
+          </button> */}
           <div className="flex flex-row lg:flex-col gap-2 items-center justify-center w-full">
             <StyledInput
               value={userProfile?.username}
               name="username"
               label="Username"
               onChange={handleChange}
-              disabled={!edit}
             />
           </div>
           <div className="flex flex-row lg:flex-col gap-2 items-center justify-center w-full">
@@ -231,7 +228,6 @@ export default function ProfileForm() {
               name="email"
               label="Email"
               onChange={handleChange}
-              disabled={!edit}
             />
             <StyledInput
               type="number"
@@ -239,7 +235,6 @@ export default function ProfileForm() {
               name="phone"
               label="Phone"
               onChange={handleChange}
-              disabled={!edit}
             />
           </div>
           <div className="flex flex-row lg:flex-col gap-2 items-center justify-center w-full">
@@ -264,28 +259,26 @@ export default function ProfileForm() {
               name="gitHub"
               label="GitHub Link"
               onChange={handleChange}
-              disabled={!edit}
             />
             <StyledInput
               value={userProfile?.linkedIn}
               name="linkedIn"
               label="LinkedIn Link"
               onChange={handleChange}
-              disabled={!edit}
             />
           </div>
           {data?.user?.email !== userProfile?.email ||
-          data?.user?.phone !== userProfile?.phone ||
-          data?.user?.gitHub !== userProfile?.gitHub ||
-          data?.user?.linkedIn !== userProfile?.linkedIn ||
-          data?.user?.username !== userProfile?.username ? (
+            data?.user?.phone !== userProfile?.phone ||
+            data?.user?.gitHub !== userProfile?.gitHub ||
+            data?.user?.linkedIn !== userProfile?.linkedIn ||
+            data?.user?.username !== userProfile?.username ? (
             <Button type="submit" className="ml-auto" loading={loading}>
               Update Profile
             </Button>
           ) : null}
         </div>
       </form>
-      <form className="mt-12 flex flex-col" onSubmit={updatePassword}>
+      <form className="mt-12 flex flex-col border border-white/5 shadow-cus shadow-black p-6 rounded-3xl" onSubmit={updatePassword}>
         <BottomGlitter text="Update Password" />
         <div className="flex flex-row lg:flex-col gap-2 items-center justify-center w-full mt-10">
           <StyledInput

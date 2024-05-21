@@ -3,17 +3,19 @@ import Button from "../button/Button";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
-import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { MdLogin } from "react-icons/md";
-import { FaCircleUser } from "react-icons/fa6";
 import ProfilePic from "../Profile/ProfilePic";
 
-const LoginBtn = ({ unmount = () => {} }) => {
+const LoginBtn = ({ unmount = () => { } }) => {
   const [active, setActive] = useState(false);
+
 
   const path = usePathname();
   const { data } = useSession();
+  const username = data?.user?.username
+
+  console.log(data)
 
   const popUpRef = useRef(null);
 
@@ -28,7 +30,7 @@ const LoginBtn = ({ unmount = () => {} }) => {
     return () => document.removeEventListener("click", handleOutClick);
   });
 
-  return path === "/login" ? null : data && data.user ? (
+  return path === "/login" ? null : data?.user ? (
     <div className="relative w-10 h-10">
       <button
         className="w-full h-full relative rounded-full  border border-white/20 cursor-pointer flex items-center justify-center overflow-hidden"
@@ -52,7 +54,7 @@ const LoginBtn = ({ unmount = () => {} }) => {
           </div>
           <div className="flex xs:flex-col gap-1 w-full">
             <Link
-              href={"/profile"}
+              href={`/user/${username}`}
               onClick={() => setActive(false)}
               className="flex-1 bg-white/5 p-2 py-3 flex justify-center rounded-l-md xs:rounded-md hover:bg-white/10 transition-all items-center"
             >
