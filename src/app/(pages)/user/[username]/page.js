@@ -1,4 +1,3 @@
-import User from "@/models/Users";
 import Image from "next/image";
 import { BiEdit, BiLogoLinkedinSquare } from "react-icons/bi";
 import { HiEnvelope } from "react-icons/hi2";
@@ -9,10 +8,8 @@ import { DiCodeigniter } from "react-icons/di";
 import { getServerSession } from "next-auth";
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import Link from "next/link";
-const getUser = async (username) => {
-    const user = await User.findOne({ username });
-    return user;
-}
+import { getUser } from "@/action/user";
+
 function capitalizeFirstChar(str) {
     if (str.length === 0) return str; // Handle empty string case
     return str.charAt(0).toUpperCase() + str.slice(1);
@@ -127,9 +124,11 @@ const UserPage = async ({ params }) => {
 
             </div>
             :
-            <div className="container-70 flex flex-col gap-4 h-[calc(100vh-88px)] pt-16">
-                <h2>User Not Found</h2>
-            </div>
+            <section className="container-70">
+                <div className="mt-16 flex flex-col items-center gap-6 border border-white/5 shadow-cus shadow-black p-6 rounded-3xl relative">
+                    <h2 className="text-xl">User Not Found</h2>
+                </div>
+            </section>
     )
 }
 

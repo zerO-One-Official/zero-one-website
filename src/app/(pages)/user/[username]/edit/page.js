@@ -175,7 +175,7 @@ export default function ProfileForm() {
   ) : (
     <div className="w-full flex flex-col mt-16">
       <form onSubmit={submitForm} className="flex flex-col ">
-        <div className="flex items-center justify-center mb-12 mx-auto border-4 border-accent rounded-full shrink-0 w-32 h-32 p-2 box-content">
+        <div className="flex items-center justify-center mb-12 mx-auto border-4 md:border-2 border-accent rounded-full shrink-0 w-32 h-32 p-2 box-content">
           <ProfilePhoto
             permittedFileInfo={permittedFileInfo}
             setImage={setImage}
