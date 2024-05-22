@@ -39,7 +39,7 @@ const LoginBtn = ({ unmount = () => { } }) => {
       {active && (
         <div
           ref={popUpRef}
-          className="absolute -right-[1rem] top-[75px] w-96 shadow-cus border border-l-white/5 border-t-white/5 border-r-black/25 border-b-black/25  rounded-3xl flex flex-col gap-4 items-center p-4"
+          className="absolute -right-[1rem] top-[75px] w-96 shadow-cus border backdrop-blur-3xl border-l-white/5 border-t-white/5 border-r-black/25 border-b-black/25  rounded-3xl flex flex-col gap-4 items-center p-4"
         >
           <h3 className="font-semibold">{data.user.email}</h3>
           <div className="flex flex-col items-center mx-auto gap-2">
