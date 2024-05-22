@@ -28,6 +28,9 @@ export default withUt({
       }
     },
     screens: {
+
+      '3xl': { max: '1800px' },
+
       'm2xl': { min: '1500px' },
 
       '2xl': { max: '1500px' },
@@ -41,7 +44,7 @@ export default withUt({
 
       'm2lg': { min: '1024px' },
 
-      'lg': { max: '900px' },
+      'lg': { max: '920px' },
       // => @media (max-width: 1023px) { ... }
 
       'md': { max: '768px' },

@@ -1,5 +1,5 @@
 .card {
-  @apply p-4 relative flex flex-col justify-center items-center overflow-hidden rounded-2xl;
+  @apply p-4 relative flex flex-col justify-center items-center overflow-hidden rounded-2xl shrink-0;
   min-height: 350px;
   background: var(--accent);
   background: linear-gradient(45deg,
@@ -9,7 +9,7 @@
 }
 
 .cardContainer {
-  @apply gap-4 grid grid-cols-4 xs:grid-cols-1 md:grid-cols-2 items-center justify-center;
+  @apply gap-8 grid grid-cols-4 lg:grid-cols-1 3xl:grid-cols-2 items-center justify-center;
 }
 
 .cardContainer .card:hover {

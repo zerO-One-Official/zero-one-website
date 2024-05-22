@@ -8,7 +8,7 @@ import { checkDuplicateUser, deleteFile } from "@/utils/server";
 
 dbConnect()
 
-export async function GET(req) {
+export async function GET() {
 
     try {
         const session = await getServerSession(options);
@@ -49,7 +49,7 @@ export async function PUT(req) {
         const id = session?.user?._id;
 
         const reqBody = await req.json();
-        const { email, phone, profilePic, username, gitHub, linkedIn } = reqBody;
+        const { email, phone, profilePic, username, gitHub, linkedIn, bio, otherLinks } = reqBody;
 
         if (!session || !id) {
             return NextResponse.json(
@@ -101,6 +101,8 @@ export async function PUT(req) {
         user.email = email;
         user.gitHub = gitHub;
         user.linkedIn = linkedIn;
+        user.bio = bio;
+        user.otherLinks = otherLinks;
 
         if (username !== user.username) {
             const duplicateUsername = await User.findOne({ username }).select(['username']);
@@ -110,6 +112,51 @@ export async function PUT(req) {
                     { status: 409 }
                 )
             user.username = username;
+        }
+
+        const newProfile = await user.save();
+
+
+        return NextResponse.json(
+            { profile: newProfile, message: "Profile Updated Successfully", type: "success", success: true },
+            { status: 200 }
+        )
+
+    } catch (error) {
+        return NextResponse.json(
+            { message: error.message, type: "error", success: false },
+            { status: 500 }
+        )
+
+    }
+}
+export async function PATCH(req) {
+    try {
+        const session = await getServerSession(options);
+        const id = session?.user?._id;
+
+        const reqBody = await req.json();
+        const { profilePic } = reqBody;
+
+        if (!session || !id) {
+            return NextResponse.json(
+                { message: "You are not allowed for this action", type: "error", success: false },
+                { status: 401 }
+            )
+        }
+
+        const user = await User.findById(id).select(['profilePic']);
+
+        if (!user) {
+            return NextResponse.json(
+                { message: "You don't have an account", type: "error", success: false },
+                { status: 404 }
+            )
+        }
+
+        if (profilePic && (profilePic !== user.profilePic)) {
+            deleteFile(user.profilePic);
+            user.profilePic = profilePic;
         }
 
         const newProfile = await user.save();

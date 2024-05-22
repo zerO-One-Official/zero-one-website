@@ -26,18 +26,16 @@ function TeamCard({
       glareColor={"rgb(0,0,0)"}
     >
       <div
-        className={`h-full relative flex flex-col justify-center items-center overflow-hidden bg-primary-light text-primary group`}
+        className={`h-[full] relative flex flex-col justify-center gap-6 items-center overflow-hidden text-primary group border border-white/5 shadow-cus rounded-3xl p-6 min-w-[280px] max-w-[350px]`}
       >
-        <div className="flex justify-center">
-          <Image
-            src={"/fullLogo.png"}
-            width={344}
-            height={200}
-            className="invert w-3/5 h-auto"
-            alt="logo"
-          />
+        <div className="flex gap-4 p-2 w-full">
+          <Image src={'/logo.png'} quality={100} width={80} height={80} className="w-12 h-auto lg:w-10" alt="zero-one logo" priority />
+          <div className="flex flex-col justify-end  translate-y-[1.5px]">
+            <h1 className="font-semibold text-4xl xs:text-3xl lg:text-[40px] lg:leading-9 xs:leading-8">ZERO ONE</h1>
+            <p className="font-normal text-sm text-stone-400 leading-4 xs:leading-0 lg:text-xs">Create. Code. Conquer.</p>
+          </div>
         </div>
-        <div className="relative xs:h-60 lg:h-40 h-60 z-10 w-full overflow-hidden text-center bg-cyan-100 flex items-center justify-center">
+        <div className="relative xs:h-60 lg:h-56 h-72 z-10 w-full overflow-hidden text-center bg-cyan-100 flex items-center justify-center">
           {imageSrc ? (
             <Image
               height={240}
@@ -55,7 +53,7 @@ function TeamCard({
               className="z-10 w-full h-auto scale-[1.2] fill-primary"
             />
           )}
-          <div className="flex-1 flex overflow-hidden flex-col justify-between absolute top-full group-hover:-translate-y-full transition-[transform] bg-black/70 z-10 w-full ">
+          <div className="flex-1 flex overflow-hidden flex-col justify-between absolute top-full group-hover:-translate-y-full transition-[transform] bg-black/70 z-10 w-full rounded-t-3xl">
             <div className="z-10 flex items-center justify-center flex-col text-center p-6 flex-1 capitalize">
               <h2 className="text-2xl font-semibold">{name}</h2>
               <h3 className="text-white/60 text-lg font-medium">{position}</h3>
@@ -114,7 +112,7 @@ function TeamCard({
           </div>
         </div>
 
-        <span className="bg-accent mt-auto z-10 h-1 w-full block"></span>
+        {/* <span className="bg-accent mt-auto z-10 h-1 w-full block"></span> */}
       </div>
     </Tilt>
   );

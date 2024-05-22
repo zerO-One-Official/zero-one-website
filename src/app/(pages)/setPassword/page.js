@@ -65,7 +65,7 @@ const SignupPage = () => {
 
     return (
         <section className='container-70 text-lg grid place-items-center h-[calc(100vh-88px)] ' >
-            <div className="w-4/5 md:w-full border-white/5 shadow-cus shadow-black p-6 rounded-3xl">
+            <div className="w-4/5 md:w-full border border-white/5 shadow-cus shadow-black p-6 rounded-3xl">
                 <BottomGlitter text={'Set a Password'} />
 
                 <form method='POST' onSubmit={updatePassword} className='flex flex-col gap-4 mt-8'>

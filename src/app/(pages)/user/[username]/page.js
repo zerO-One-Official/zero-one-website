@@ -8,7 +8,8 @@ import { DiCodeigniter } from "react-icons/di";
 import { getServerSession } from "next-auth";
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import Link from "next/link";
-import { getUser } from "@/action/user";
+import { getUser, getUsername } from "@/action/user";
+import Skeleton from "@/components/skeleton/skeleton";
 
 function capitalizeFirstChar(str) {
     if (str.length === 0) return str; // Handle empty string case
@@ -28,9 +29,10 @@ export async function generateMetadata({ params }) {
 
 const UserPage = async ({ params }) => {
 
-    const session = await getServerSession(options);
 
-    const loggedInUser = session?.user?.username
+    const session = await getServerSession(options)
+
+    const loggedInUser = session?.user.username
 
     const username = params.username
 
@@ -40,6 +42,8 @@ const UserPage = async ({ params }) => {
     return (
         user ?
             <div className="container-70 flex flex-col gap-4 min-h-[calc(100vh-88px)] pt-16">
+
+
                 <section className="flex flex-col items-center gap-6 border border-white/5 shadow-cus shadow-black p-6 rounded-3xl relative">
                     <div className="flex w-full md:gap-6 gap-10 items-center sm:flex-col">
                         <div className="p-2 border-4 md:border-2 border-accent rounded-full shrink-0">
@@ -73,8 +77,9 @@ const UserPage = async ({ params }) => {
                                             <DiCodeigniter className="w-4 h-4 mr-2" />
                                             Bio
                                         </p>
-                                        <p className="text-white/60 flex items-center">
-                                            {user.bio || ''}
+                                        <p className="text-white/60 flex items-center" title={user.bio}>
+                                            {user.bio.slice(0, 100)}
+                                            {user.bio.length > 100 ? '...' : ''}
                                         </p>
                                     </div>
 

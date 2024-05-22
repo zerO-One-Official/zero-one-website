@@ -1,35 +1,30 @@
-'use client'
+import { getResource } from "@/action/resources"
 import BottomGlitter from "@/components/StyledText/BottomGlitter"
-import Spinner from "@/components/loader/Spinner"
 import Image from 'next/image'
 import Link from 'next/link'
-import toast from 'react-hot-toast'
-import useSWR from 'swr';
 
-const ResourcesPage = () => {
+const ResourcesPage = async () => {
 
-    const fetcher = url => fetch(url).then(r => r.json());
+    const resources = await getResource()
 
-    const { data, error, isLoading } = useSWR(`/api/resources`, fetcher);
-    if (error) toast.error(error.message);
 
     return (
-        <div className="container-70 mb-8 sm:my-8 flex">
-            <div className="flex flex-col mt-10 mx-auto justify-between items-center w-full">
-                <BottomGlitter text={'Club Resources'} />
-                <div className=" md:mt-10 mt-20 grid grid-cols-[repeat(auto-fit,minmax(168px,1fr))] gap-5 w-full">
-                    {
-                        (isLoading || !data) ?
-                            <Spinner />
-                            :
-                            data?.resources?.length === 0 ?
+        <>
+
+            <div className="container-70 mb-8 sm:my-8 flex">
+                <div className="flex flex-col mt-10 mx-auto justify-between items-center w-full">
+                    <BottomGlitter text={'Club Resources'} />
+                    <div className=" md:mt-10 mt-20 grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-5 w-full">
+
+                        {
+                            resources?.length === 0 ?
                                 <div className="flex w-full justify-center p-2 text-2xl text-red-600">
                                     No Resources Found
                                 </div>
                                 :
-                                data?.resources?.map(resource => {
+                                resources?.map(resource => {
                                     return (
-                                        <Link href={`resources/${resource.domain}`} className="flex flex-col items-center bg-primary hover:scale-110 transition-all ease-in-out duration-300" key={resource._id}
+                                        <Link href={`resources/${resource.domain}`} className="flex flex-col items-center hover:scale-105 transition-all ease-in-out duration-300 shadow-cus border border-white/5 rounded-3xl" key={resource._id}
                                         >
                                             <div className="p-5 py-10">
                                                 <Image src={resource.image} width={200} height={200} alt={resource.domain} className="w-32 h-auto transition-all"
@@ -42,10 +37,12 @@ const ResourcesPage = () => {
                                         </Link>
                                     )
                                 })
-                    }
+                        }
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
+
     )
 }
 export default ResourcesPage

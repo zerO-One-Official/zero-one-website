@@ -3,7 +3,7 @@
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useMemo } from "react";
-import { FaCircleUser } from "react-icons/fa6";
+import { HiOutlineUserCircle } from "react-icons/hi2";
 
 const ProfilePic = ({ quality = 80 }) => {
   const { data } = useSession();
@@ -22,7 +22,7 @@ const ProfilePic = ({ quality = 80 }) => {
       className="rounded-full object-cover object-center"
     />
   ) : (
-    <FaCircleUser size={50} />
+    <HiOutlineUserCircle className="w-full h-full" />
   );
 };
 
