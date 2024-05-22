@@ -4,8 +4,9 @@ import { BiUserCircle } from "react-icons/bi";
 import { CiLinkedin, CiMail } from "react-icons/ci";
 import { FaGithub } from "react-icons/fa6";
 import Tilt from "react-parallax-tilt";
+import Logo from "../logo/Logo";
 
-const ICON_SIZE = 28;
+const ICON_SIZE = 24;
 
 function TeamCard({
   name,
@@ -24,17 +25,13 @@ function TeamCard({
       tiltMaxAngleY={10}
       perspective={1000}
       glareColor={"rgb(0,0,0)"}
-      className="min-w-[280px] max-w-[350px] border border-white/5 shadow-cus rounded-3xl overflow-hidden"
+      className="min-w-[280px] max-w-[350px] border border-l-white/5 border-t-white/5 border-r-black/25 border-b-black/25  shadow-cus rounded-3xl overflow-hidden"
     >
       <div
         className={`h-[full] relative flex flex-col justify-center gap-6 items-center text-primary group  p-6 w-full`}
       >
         <div className="flex gap-4 p-2 w-full">
-          <Image src={'/logo.png'} quality={100} width={80} height={80} className="w-12 h-auto lg:w-10" alt="zero-one logo" priority />
-          <div className="flex flex-col justify-end  translate-y-[1.5px]">
-            <h1 className="font-semibold text-4xl xs:text-3xl lg:text-[40px] lg:leading-9 xs:leading-8">ZERO ONE</h1>
-            <p className="font-normal text-sm text-stone-400 leading-4 xs:leading-0 lg:text-xs">Create. Code. Conquer.</p>
-          </div>
+          <Logo />
         </div>
         <div className="relative xs:h-60 lg:h-56 h-72 z-10 w-full overflow-hidden text-center bg-cyan-100 flex items-center justify-center">
           {imageSrc ? (
@@ -55,12 +52,12 @@ function TeamCard({
             />
           )}
           <div className="flex-1 flex overflow-hidden flex-col justify-between absolute top-full group-hover:-translate-y-full transition-[transform] bg-black/70 z-10 w-full rounded-t-3xl">
-            <div className="z-10 flex items-center justify-center flex-col text-center p-6 flex-1 capitalize">
+            <div className="z-10 flex items-center justify-center flex-col text-center p-2 flex-1 capitalize">
               <h2 className="text-2xl font-semibold">{name}</h2>
               <h3 className="text-white/60 text-lg font-medium">{position}</h3>
             </div>
             <div
-              className={`flex justify-around items-center w-full z-10 pb-6`}
+              className={`flex justify-around items-center w-full z-10 pb-2`}
             >
               {gitHub || email || linkedIn ? (
                 <>

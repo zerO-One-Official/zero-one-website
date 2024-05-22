@@ -11,7 +11,7 @@ const EditProfile = async () => {
 
   return (
     <>
-      <section className="w-full mt-16 flex flex-col items-center gap-6 border border-white/5 shadow-cus  p-6 rounded-3xl relative">
+      <section className="w-full mt-16 flex flex-col items-center gap-6 border border-l-white/5 border-t-white/5 border-r-black/25 border-b-black/25  shadow-cus  p-6 rounded-3xl relative">
         <div className="flex w-full md:gap-6 gap-10 items-center sm:flex-col">
           <div className="p-2 border-4 md:border-2 border-accent rounded-full shrink-0">
             <ProfilePhotoUpload profilePic={profilePic} className="md:w-20 md:h-20 lg:w-32 lg:h-32 w-36 h-36 object-cover rounded-full shadow" />
