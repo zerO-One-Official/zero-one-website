@@ -1,7 +1,9 @@
 'use server'
 
+import { options } from "@/app/api/auth/[...nextauth]/options";
 import dbConnect from "@/lib/dbConnect";
 import User from "@/models/Users";
+import { getServerSession } from "next-auth";
 
 dbConnect()
 
@@ -12,5 +14,23 @@ export const getUser = async (username) => {
     } catch (error) {
         console.log(error)
         return null;
+    }
+}
+
+export const getProfile = async () => {
+
+    try {
+        const session = await getServerSession(options)
+        const id = session?.user?._id
+
+        if (!id) return null
+        const user = await User.findById(id).select(['-role', '-updated_at', '-created_at', '-token', '-active']);
+        if (!user)
+            return null
+
+        return user
+    } catch (error) {
+        console.log(error);
+        return null
     }
 }

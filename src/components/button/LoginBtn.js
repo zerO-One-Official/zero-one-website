@@ -15,8 +15,6 @@ const LoginBtn = ({ unmount = () => { } }) => {
   const { data } = useSession();
   const username = data?.user?.username
 
-  console.log(data)
-
   const popUpRef = useRef(null);
 
   useEffect(() => {

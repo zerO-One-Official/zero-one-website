@@ -8,7 +8,6 @@ import Logo from '../logo/Logo';
 import Sidebar from './Sidebar';
 import LoginBtn from '../button/LoginBtn';
 import { useSession } from 'next-auth/react';
-import { usePathname } from 'next/navigation';
 
 
 function Navbar() {
@@ -30,15 +29,18 @@ function Navbar() {
       const scrolledDown = window.scrollY > prevScrollY;
       const scrolledUp = window.scrollY < prevScrollY;
 
-      if (window.scrollY > 200) {
+      if (window.scrollY > 100) {
         navRef.current.classList.add('bg-primary');
         navRef.current.classList.add('shadow');
-        navRef.current.classList.add('shadow-primary');
+        navRef.current.classList.add('shadow-cus');
+        navRef.current.classList.add('border');
+
       }
       else {
         navRef.current.classList.remove('bg-primary');
         navRef.current.classList.remove('shadow');
-        navRef.current.classList.remove('shadow-primary');
+        navRef.current.classList.remove('shadow-cus');
+        navRef.current.classList.remove('border');
       }
 
       if (Math.abs(window.scrollY - prevScrollY) > 300) {
@@ -62,42 +64,8 @@ function Navbar() {
     return () => div.remove();
   }, []);
 
-  // useEffect(() => {
-  //   let prevScroll = window.scrollY;
-
-  //   const handleScroll = () => {
-  //     // const navList = document.getElementById('navList');
-  //     const navbar = document.getElementById('navbar');
-  //     // const title = document.getElementById('Title');
-  //     const height = navbar.offsetHeight;
-
-  //     const currentScrollPos = window.scrollY;
-  //     if (currentScrollPos > height + 10) {
-  //       navbar.style.borderBottom = '1px solid rgba(255, 255, 255, 0.1)';
-  //       navbar.style.backgroundColor = 'var(--background)';
-  //     } else {
-  //       navbar.style.border = 'none';
-  //     }
-
-  //     // if (prevScroll < currentScrollPos) {
-  //     //   // navList.classList.add('fade-up');
-  //     //   // title.classList.add('fade-up');
-  //     //   navbar.style.borderBottom = '1px solid rgba(255, 255, 255, 0.2)';
-  //     //   navbar.style.backgroundColor = 'rgba(24, 30, 35, 0.45)';
-  //     // } else {
-  //     //   navList.classList.remove('fade-up');
-  //     //   title.classList.remove('fade-up');
-  //     // }
-
-  //     prevScroll = currentScrollPos;
-  //   };
-  //   document.addEventListener('scroll', handleScroll);
-
-  //   return () => document.removeEventListener('scroll', handleScroll);
-  // }, []);
-
   return (
-    <header ref={navRef} id="navbar" className={`${styles.navbar} transition-all`}>
+    <header ref={navRef} id="navbar" className={`${styles.navbar} transition-all border-b-white/15`}>
       <Logo />
       <nav id="navList" className={styles.navbarList}>
 

@@ -1,13 +1,17 @@
 import { NextResponse } from "next/server";
-import connect from "@/lib/dbConnect"
 import Team from "@/models/Teams";
+import dbConnect from "@/lib/dbConnect";
+import User from "@/models/Users";
 
-connect();
+dbConnect()
 
 export const GET = async () => {
     try {
 
-        const teams = await Team.find({}).populate('user');
+        const teams = await Team.find({}).populate({
+            path: "user",
+            model: User,
+        });
         return NextResponse.json(
             { teams, type: "success", success: true },
             { status: 200 }

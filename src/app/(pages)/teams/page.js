@@ -1,22 +1,12 @@
+import { getTeams } from "@/action/teams";
 import BottomGlitter from "@/components/StyledText/BottomGlitter";
 import Styles from "@/components/teams/Team.module.css";
 import TeamCard from "@/components/teams/TeamsCard";
 
-const getTeams = async () => {
-  try {
-    const res = await fetch(`${process.env.NEXTAUTH_URL}/api/teams`, {
-      next: { revalidate: 24 * 60 * 60 },
-    });
-    return res.json();
-  } catch (error) {
-    console.log(error);
-  }
-};
 
 async function Teams() {
-  const { teams } = (await getTeams()) || { teams: [] };
+  const teams = (await getTeams())
 
-  console.log(teams);
   const groupedData = teams.reduce((result, current) => {
     if (!result[current.group]) {
       result[current.group] = [];
@@ -36,12 +26,12 @@ async function Teams() {
         </h3>
       </div>
 
-      <div className={`flex flex-col gap-14`}>
+      <div className={`flex flex-col gap-14 lg:items-center`}>
         {groupedData &&
           Object.keys(groupedData).map((group) => (
             <div key={group}>
               <h2 className={Styles.postHead}>{group}</h2>
-              <div className={Styles.cardContainer}>
+              <div className={`${Styles.cardContainer}`}>
                 {groupedData[group].map((team) => (
                   <TeamCard
                     key={team._id}
