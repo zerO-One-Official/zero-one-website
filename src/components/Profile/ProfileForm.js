@@ -101,7 +101,7 @@ export default function ProfileForm({ profileData }) {
     return (
         <div className="w-full flex flex-col mt-16">
             <form onSubmit={submitForm} className="flex flex-col ">
-                <div className="flex flex-col border border-white/5 shadow-cus shadow-black p-6 rounded-3xl">
+                <div className="flex flex-col border border-white/5 shadow-cus  p-6 rounded-3xl">
                     <div className="flex flex-row lg:flex-col gap-2 items-center justify-center w-full">
                         <StyledInput
                             type="desc"
@@ -168,7 +168,7 @@ export default function ProfileForm({ profileData }) {
                     ) : null}
                 </div>
             </form>
-            <form className="mt-12 flex flex-col border border-white/5 shadow-cus shadow-black p-6 rounded-3xl" onSubmit={updatePassword}>
+            <form className="mt-12 flex flex-col border border-white/5 shadow-cus  p-6 rounded-3xl" onSubmit={updatePassword}>
                 <BottomGlitter text="Update Password" />
                 <div className="flex flex-row lg:flex-col gap-2 items-center justify-center w-full mt-10">
                     <StyledInput

@@ -54,7 +54,7 @@ const LoginPage = () => {
 
     return (
         <section className='container-70 text-lg grid place-items-center h-[calc(100vh-88px)]'>
-            <div className="w-4/5 md:w-full border border-white/5 shadow-cus shadow-black p-6 rounded-3xl">
+            <div className="w-4/5 md:w-full border border-l-white/5 border-t-white/5 border-r-black/25 border-b-black/25  shadow-cus  p-6 rounded-3xl">
                 <BottomGlitter text={'Login'} />
                 <form method='POST' onSubmit={logIn} className='flex flex-col gap-4 mt-8' autoComplete='false'>
                     <StyledInput

@@ -10,7 +10,7 @@ export const Participant = ({ participant: user, rank }) => {
     console.log(participant)
 
     return (
-        <li className="flex items-center gap-6 sm:gap-4 shadow-cus  p-4 border-b border-white/5 ">
+        <li className="flex items-center gap-6 sm:gap-4 p-4 border-b border-white/5 ">
             <p className="text-2xl sm:text-lg font-bold scale-110 text-primary-light/30">
                 {rank}
             </p>

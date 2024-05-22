@@ -33,14 +33,14 @@ function Navbar() {
         navRef.current.classList.add('bg-primary');
         navRef.current.classList.add('shadow');
         navRef.current.classList.add('shadow-cus');
-        navRef.current.classList.add('border');
+        navRef.current.classList.add('border-b-white/15');
 
       }
       else {
         navRef.current.classList.remove('bg-primary');
         navRef.current.classList.remove('shadow');
         navRef.current.classList.remove('shadow-cus');
-        navRef.current.classList.remove('border');
+        navRef.current.classList.remove('border-b-white/15');
       }
 
       if (Math.abs(window.scrollY - prevScrollY) > 300) {
@@ -65,7 +65,7 @@ function Navbar() {
   }, []);
 
   return (
-    <header ref={navRef} id="navbar" className={`${styles.navbar} transition-all border-b-white/15`}>
+    <header ref={navRef} id="navbar" className={`${styles.navbar} transition-all border border-transparent  `}>
       <Logo />
       <nav id="navList" className={styles.navbarList}>
 

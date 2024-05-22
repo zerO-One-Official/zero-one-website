@@ -64,7 +64,7 @@ export const OnGoingEvent = ({ events: ev }) => {
         return () => {
             newTimers.forEach((timer) => clearInterval(timer));
         };
-    }, [events]);
+    }, [ev]);
 
     const onGoingEvents =
         events &&
