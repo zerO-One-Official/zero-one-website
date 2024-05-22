@@ -44,7 +44,7 @@ const UserPage = async ({ params }) => {
             <div className="container-70 flex flex-col gap-4 min-h-[calc(100vh-88px)] pt-16">
 
 
-                <section className="flex flex-col items-center gap-6 border border-white/5 shadow-cus shadow-black p-6 rounded-3xl relative">
+                <section className="flex flex-col items-center gap-6 border border-l-white/5 border-t-white/5 border-r-black/25 border-b-black/25 shadow-cus  p-6 rounded-3xl relative">
                     <div className="flex w-full md:gap-6 gap-10 items-center sm:flex-col">
                         <div className="p-2 border-4 md:border-2 border-accent rounded-full shrink-0">
                             <Image src={user?.profilePic} width={160} height={160} alt={user?.firstName} className="md:w-20 md:h-20 lg:w-32 lg:h-32 w-36 h-36 object-cover rounded-full shadow" />
@@ -60,7 +60,7 @@ const UserPage = async ({ params }) => {
                         {
                             username === loggedInUser ?
 
-                                <Link href={`/user/${loggedInUser}/edit`} className="block rounded-full absolute top-4 right-4 p-4 shadow-md shadow-black"
+                                <Link href={`/user/${loggedInUser}/edit`} className="block rounded-full absolute top-4 right-4 p-4 shadow-btn border border-l-white/5 border-t-white/5 border-r-black/25 border-b-black/25 "
                                 >
                                     <BiEdit className="w-4 h-4" />
                                 </Link>
@@ -130,7 +130,7 @@ const UserPage = async ({ params }) => {
             </div>
             :
             <section className="container-70">
-                <div className="mt-16 flex flex-col items-center gap-6 border border-white/5 shadow-cus shadow-black p-6 rounded-3xl relative">
+                <div className="mt-16 flex flex-col items-center gap-6 border border-white/5 shadow-cus  p-6 rounded-3xl relative">
                     <h2 className="text-xl">User Not Found</h2>
                 </div>
             </section>

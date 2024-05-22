@@ -13,8 +13,9 @@ export default withUt({
   theme: {
     extend: {
       boxShadow: {
-        btn: '4px 6px -1px var(--tw-shadow-colored),-4px -6px -1px rgba(255,255,255,0.5)',
-        cus: '17px 20px 40px var(--tw-shadow-colored)'
+        btn: '4px 6px 10px #000, inset 4px 6px 10px #0d0d0d',
+        'btn-lg': '4px 6px 10px #0000006b, inset 4px 6px 10px #232222',
+        cus: '17px 20px 40px #000, inset 17px 20px 50px #0d0d0d'
       },
       colors: {
         accent: {

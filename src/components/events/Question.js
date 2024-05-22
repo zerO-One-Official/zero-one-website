@@ -44,10 +44,10 @@ export const Question = ({ question: que, eventEndDate }) => {
     <div
       ref={questionRef}
       className={`flex flex-col ${activeQuestion === question._id ? "gap-4 bg-white/5 rounded-3xl" : "gap-0"
-        } p-4 `}
+        } p-4  border-b border-white/5`}
     >
       <button
-        className="flex justify-between items-center w-full transition-all"
+        className="flex justify-between items-center w-full transition-all "
         onClick={toggleQuestion}
       >
         <h3 className="text-xl font-medium">{question.name}</h3>

@@ -24,9 +24,10 @@ function TeamCard({
       tiltMaxAngleY={10}
       perspective={1000}
       glareColor={"rgb(0,0,0)"}
+      className="min-w-[280px] max-w-[350px] border border-white/5 shadow-cus rounded-3xl overflow-hidden"
     >
       <div
-        className={`h-[full] relative flex flex-col justify-center gap-6 items-center overflow-hidden text-primary group border border-white/5 shadow-cus rounded-3xl p-6 min-w-[280px] max-w-[350px]`}
+        className={`h-[full] relative flex flex-col justify-center gap-6 items-center text-primary group  p-6 w-full`}
       >
         <div className="flex gap-4 p-2 w-full">
           <Image src={'/logo.png'} quality={100} width={80} height={80} className="w-12 h-auto lg:w-10" alt="zero-one logo" priority />
