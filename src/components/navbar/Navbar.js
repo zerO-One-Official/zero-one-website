@@ -32,14 +32,12 @@ function Navbar() {
       if (window.scrollY > 100) {
         navRef.current.classList.add('bg-primary');
         navRef.current.classList.add('shadow');
-        navRef.current.classList.add('shadow-cus');
         navRef.current.classList.add('border-b-white/15');
 
       }
       else {
         navRef.current.classList.remove('bg-primary');
         navRef.current.classList.remove('shadow');
-        navRef.current.classList.remove('shadow-cus');
         navRef.current.classList.remove('border-b-white/15');
       }
 
@@ -85,9 +83,15 @@ function Navbar() {
         {
 
           data && data.user ?
-            <Link href="/events" className={styles.navLink}>
-              Events
-            </Link> : null
+            <>
+              <Link href="/events" className={styles.navLink}>
+                Events
+              </Link>
+              <Link href="/playground" className={styles.navLink}>
+                Code
+              </Link>
+            </>
+            : null
         }
         <Link href="/resources" className={styles.navLink}>
           Resources
