@@ -201,8 +201,13 @@ a {
   mix-blend-mode: difference;
 } */
 
+
 input[type="number"]::-webkit-inner-spin-button {
   appearance: none;
+}
+
+label {
+  user-select: none;
 }
 
 svg {
@@ -213,6 +218,30 @@ img {
   -webkit-user-drag: none;
 }
 
+
+input[type="color"] {
+  -webkit-appearance: none;
+  appearance: none;
+  border: none;
+  height: 36px;
+}
+
+input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+input[type="color"]::-webkit-color-swatch {
+  border-radius: 10px;
+  border: none;
+  border: 2px solid rgb(255, 255, 255, 0.5);
+}
+
+canvas.react-pdf__Page__canvas,
+.react-pdf__Page__textContent.textLayer,
+.react-pdf__Page__annotations.annotationLayer {
+  width: 100% !important;
+  height: auto !important;
+}
 
 .split {
   display: flex;

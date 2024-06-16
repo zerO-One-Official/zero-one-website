@@ -8,8 +8,10 @@ import { DiCodeigniter } from "react-icons/di";
 import { getServerSession } from "next-auth";
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import Link from "next/link";
-import { getUser, getUsername } from "@/action/user";
-import Skeleton from "@/components/skeleton/skeleton";
+import { getUser } from "@/action/user";
+import BottomGlitter from "@/components/StyledText/BottomGlitter";
+import { getUserCertificates } from "@/action/certificate";
+import FilledCertificate from "@/components/certificates/FilledCertificate";
 
 function capitalizeFirstChar(str) {
     if (str.length === 0) return str; // Handle empty string case
@@ -32,7 +34,9 @@ const UserPage = async ({ params }) => {
 
     const session = await getServerSession(options)
 
-    const loggedInUser = session?.user.username
+    const loggedInUser = session?.user.username;
+
+    const certificates = await getUserCertificates(session?.user?._id);
 
     const username = params.username
 
@@ -126,6 +130,20 @@ const UserPage = async ({ params }) => {
                         </div>
                     </div>
                 </section>
+                <BottomGlitter text={'Certificates'} className={'max-w-fit'} />
+                <div className="gap-2 grid grid-cols-[repeat(auto-fill,minmax(230px,1fr))]">
+                    {
+                        certificates.length > 0 ? certificates.map((certificate, index) => (
+                            <div className="card p-4" key={index} >
+                                <FilledCertificate certificate={JSON.stringify(certificate)} />
+                                <h3 className="text-lg pt-2 font-semibold ">{certificate.template.eventName}</h3>
+                            </div>
+                        ))
+                            :
+                            <h2 className="text-xl">No Certificates Found</h2>
+                    }
+                </div>
+
 
             </div>
             :
