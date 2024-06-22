@@ -59,6 +59,26 @@ export const getCertificates = async () => {
         return [];
     }
 }
+export const getCertificate = async (certificateNumber) => {
+    try {
+
+        const certificate = await Certificate.findOne({ certificateNumber }).populate([
+            {
+                model: Template,
+                path: 'template'
+            }, {
+                model: User,
+                path: 'user'
+            }
+        ]);
+
+        return certificate;
+
+    } catch (error) {
+        console.log(error)
+        return null;
+    }
+}
 export const getUserCertificates = async (_id) => {
     try {
 
