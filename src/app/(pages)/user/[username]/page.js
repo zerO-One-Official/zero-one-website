@@ -36,11 +36,11 @@ const UserPage = async ({ params }) => {
 
     const loggedInUser = session?.user.username;
 
-    const certificates = await getUserCertificates(session?.user?._id);
-
     const username = params.username
 
     const user = await getUser(username);
+
+    const certificates = await getUserCertificates(user?._id);
 
 
     return (
@@ -55,8 +55,8 @@ const UserPage = async ({ params }) => {
                         </div>
                         <div className="p-4 ">
                             <h1 className="capitalize text-4xl md:text-3xl font-semibold sm:text-center">{user.firstName} {user.lastName}</h1>
-                            <p className="text-white/60 capitalize text-xl sm:text-lg sm:text-center font-semibold">{user.branch}</p>
-                            <p className="text-white/40 text-lg font-bold flex items-center sm:justify-center">
+                            <p className="text-zinc-500 capitalize text-xl sm:text-lg sm:text-center font-semibold">{user.branch}</p>
+                            <p className="text-zinc-500 text-lg font-bold flex items-center sm:justify-center">
                                 <MdAlternateEmail className="fill-white/40 md:w-4 md:h-4 w-6 h-6 mr-1" />
                                 {user.username}
                             </p>
@@ -81,7 +81,7 @@ const UserPage = async ({ params }) => {
                                             <DiCodeigniter className="w-4 h-4 mr-2" />
                                             Bio
                                         </p>
-                                        <p className="text-white/60 flex items-center" title={user.bio}>
+                                        <p className="text-zinc-500 flex items-center" title={user.bio}>
                                             {user.bio.slice(0, 100)}
                                             {user.bio.length > 100 ? '...' : ''}
                                         </p>
@@ -94,12 +94,12 @@ const UserPage = async ({ params }) => {
                         }
 
                         <div className="flex-1 p-4 space-y-2">
-                            <p className="text-white/60 flex items-center">
-                                <PiGenderIntersexBold className='stroke-white/60 md:w-4 md:h-4 w-6 h-6 mr-2' />
+                            <p className="text-zinc-500 flex items-center">
+                                <PiGenderIntersexBold className='stroke-ztext-zinc-500 md:w-4 md:h-4 w-6 h-6 mr-2' />
                                 {user.gender}
                             </p>
-                            <p className="text-white/60 flex items-center">
-                                <IoSchool className='stroke-white/60 md:w-4 md:h-4 w-6 h-6 mr-2' />
+                            <p className="text-zinc-500 flex items-center">
+                                <IoSchool className='stroke-ztext-zinc-500 md:w-4 md:h-4 w-6 h-6 mr-2' />
                                 {user.roll}
                             </p>
                         </div>
@@ -108,21 +108,21 @@ const UserPage = async ({ params }) => {
 
                         <div className="flex-1 p-4 space-y-2">
                             <div className="flex items-center">
-                                <HiEnvelope className='stroke-white/60  md:w-4 md:h-4 w-6 h-6 mr-2 shrink-0' />
-                                <a href={`mailto:${user.email}`} className="text-white/60  overflow-hidden text-ellipsis">{user.email}</a>
+                                <HiEnvelope className='stroke-ztext-zinc-500  md:w-4 md:h-4 w-6 h-6 mr-2 shrink-0' />
+                                <a href={`mailto:${user.email}`} className="text-zinc-500  overflow-hidden text-ellipsis">{user.email}</a>
                             </div>
                             {user.gitHub ?
                                 <div className="flex items-center">
-                                    <IoLogoGithub className='stroke-white/60  md:w-4 md:h-4 w-6 h-6 mr-2 shrink-0' />
-                                    <a href={user.gitHub} className="text-white/60 overflow-hidden text-ellipsis">{user.gitHub}</a>
+                                    <IoLogoGithub className='stroke-ztext-zinc-500  md:w-4 md:h-4 w-6 h-6 mr-2 shrink-0' />
+                                    <a href={user.gitHub} className="text-zinc-500 overflow-hidden text-ellipsis">{user.gitHub}</a>
                                 </div>
                                 :
                                 null
                             }
                             {user.linkedIn ?
                                 <div className="flex items-center">
-                                    <BiLogoLinkedinSquare className='stroke-white/60  md:w-4 md:h-4 w-6 h-6 mr-2 shrink-0' />
-                                    <a href={user.linkedIn} className="text-white/60 overflow-hidden text-ellipsis">{user.linkedIn}</a>
+                                    <BiLogoLinkedinSquare className='stroke-ztext-zinc-500  md:w-4 md:h-4 w-6 h-6 mr-2 shrink-0' />
+                                    <a href={user.linkedIn} className="text-zinc-500 overflow-hidden text-ellipsis">{user.linkedIn}</a>
                                 </div>
                                 :
                                 null

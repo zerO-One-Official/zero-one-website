@@ -8,7 +8,6 @@ import RenderPdf from "./RenderPdf";
 import Skeleton from "../skeleton/skeleton";
 
 const FilledCertificate = ({ certificate: c }) => {
-    const [certificate, setCertificate] = useState(null);
     const [url, setUrl] = useState(null);
 
     useEffect(() => {
@@ -37,8 +36,8 @@ const FilledCertificate = ({ certificate: c }) => {
                 url ?
                     <div className="relative">
                         <RenderPdf url={url} />
-                        <a href={url} target="_blank" className="absolute top-1 right-1 p-1 z-50 hover:bg-accent rounded-full backdrop-blur-lg">
-                            <BsEye className="w-4 h-4" />
+                        <a href={url} target="_blank" className="absolute top-1 right-1 p-2 z-50 hover:bg-accent rounded-full backdrop-blur-lg">
+                            <BsEye className="w-6 h-6" />
                         </a>
                     </div>
                     :
