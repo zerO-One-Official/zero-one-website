@@ -1,13 +1,16 @@
 'use client'
 
 import { useEffect, useState } from "react";
-import generateCertificate from "@/utils/generateCertificate"
 import toast from "react-hot-toast";
-import { BsEye } from "react-icons/bs";
+import Link from "next/link";
+import generateCertificate from "@/utils/generateCertificate";
 import RenderPdf from "./RenderPdf";
 import Skeleton from "../skeleton/skeleton";
+import { usePathname } from "next/navigation";
+import Button from "../button/Button";
 
-const FilledCertificate = ({ certificate: c }) => {
+const FilledCertificate = ({ certificate: c, download = false }) => {
+    const [certificateNumber, setCertificateNumber] = useState(null);
     const [url, setUrl] = useState(null);
 
     useEffect(() => {
@@ -17,9 +20,9 @@ const FilledCertificate = ({ certificate: c }) => {
                 const parsedCertificate = JSON.parse(c);
 
                 const fields = [...parsedCertificate.template.fields.map((f, i) => ({ ...f, value: parsedCertificate.fields[i].value })), { ...parsedCertificate.template.certificateNumber, value: parsedCertificate.certificateNumber }];
-
-                const url = await generateCertificate(fields, parsedCertificate.template.url);
+                const url = await generateCertificate(fields, parsedCertificate.template.url, parsedCertificate.certificateNumber);
                 setUrl(url);
+                setCertificateNumber(parsedCertificate.certificateNumber)
 
             } catch (error) {
                 toast.error(error.message);
@@ -29,17 +32,24 @@ const FilledCertificate = ({ certificate: c }) => {
     }, [c])
 
 
+    const pathName = usePathname();
+
 
     return (
         <div >
             {
-                url ?
-                    <div className="relative">
+                url && certificateNumber ?
+                    download ?
+                        <div className="flex flex-col items-end justify-center">
+                            <RenderPdf url={url} />
+                            <Link legacyBehavior href={url} target="_blank" download={`${certificateNumber}.pdf`} className="">
+                                <Button className="max-w-min mt-3">
+                                    Download
+                                </Button>
+                            </Link>
+                        </div>
+                        :
                         <RenderPdf url={url} />
-                        <a href={url} target="_blank" className="absolute top-1 right-1 p-2 z-50 hover:bg-accent rounded-full backdrop-blur-lg">
-                            <BsEye className="w-6 h-6" />
-                        </a>
-                    </div>
                     :
                     <Skeleton className={'w-full aspect-video'} />
             }
@@ -48,3 +58,4 @@ const FilledCertificate = ({ certificate: c }) => {
 }
 
 export default FilledCertificate
+

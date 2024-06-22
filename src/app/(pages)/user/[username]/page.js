@@ -134,10 +134,10 @@ const UserPage = async ({ params }) => {
                 <div className="gap-2 grid grid-cols-[repeat(auto-fill,minmax(230px,1fr))]">
                     {
                         certificates.length > 0 ? certificates.map((certificate, index) => (
-                            <div className="card p-4" key={index} >
+                            <Link href={`/certificate?cn=${certificate.certificateNumber}`} className="flex flex-col card p-4" key={index} >
                                 <FilledCertificate certificate={JSON.stringify(certificate)} />
                                 <h3 className="text-lg pt-2 font-semibold ">{certificate.template.eventName}</h3>
-                            </div>
+                            </Link>
                         ))
                             :
                             <h2 className="text-xl">No Certificates Found</h2>

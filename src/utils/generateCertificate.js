@@ -29,44 +29,57 @@ function hexToRgb(hex) {
     return { r, g, b };
 }
 
-const generateCertificate = async (fields, template) => {
-
+const generateCertificate = async (fields, template, certificateNumber) => {
     try {
         if (!template) throw new Error("Template is empty");
         let pdfBuffer;
         if (typeof template === 'string') {
             pdfBuffer = await fetch(template).then((res) => res.arrayBuffer());
+        } else {
+            pdfBuffer = await fileToArrayBuffer(template[0]);
         }
-        else pdfBuffer = await fileToArrayBuffer(template[0]);
 
         const pdfDoc = await PDFDocument.load(pdfBuffer);
         pdfDoc.registerFontkit(fontkit);
 
-
         const fontBuffer = await fetch("/font/Gilroy-SemiBold.ttf").then((res) => res.arrayBuffer());
         const font = await pdfDoc.embedFont(fontBuffer);
-
-        // const boldFont = await pdfDoc.embedFont(StandardFonts.TimesRomanBold);
 
         const pages = pdfDoc.getPages();
         const pageWidth = pages[0].getWidth();
         const pageHeight = pages[0].getHeight();
 
-        fields.map(feild => {
-            const { r, g, b } = hexToRgb(feild.color)
+        console.log(fields)
+        await Promise.all(fields.map(async (field) => {
+            if (field.value === "QR") {
 
-            const textWidth = font.widthOfTextAtSize(String(feild.value), Number(feild.size));
-            const textHeight = font.sizeAtHeight(Number(feild.size));
+                const qrImage = `https://quickchart.io/qr?text=https://zeroonemce.com/certificate?cn=${certificateNumber.value || certificateNumber}&dark=fff&light=000&ecLevel=Q&margin=2&size=${parseInt(field.size) || 150}`
 
-            pages[0].drawText(String(feild.value), {
-                x: parseFloat(feild.x) || (pageWidth / 2) - textWidth / 2,
-                y: parseFloat(feild.y) || (pageHeight / 2) - textHeight / 2,
-                size: parseFloat(feild.size) || 34,
-                font: font,
-                color: rgb(r || 1, g || 1, b || 1)
-            });
+                const qrImageBuffer = await fetch(qrImage).then((res) => res.arrayBuffer());
 
-        });
+                const Qr = await pdfDoc.embedPng(qrImageBuffer);
+
+                pages[0].drawImage(Qr, {
+                    x: parseFloat(field.x) || (pageWidth / 2) - field.size / 2,
+                    y: parseFloat(field.y) || (pageHeight / 2) - field.size / 2,
+                    width: parseFloat(field.size) || 150,
+                    height: parseFloat(field.size) || 150,
+                });
+            } else {
+                const { r, g, b } = hexToRgb(field.color);
+
+                const textWidth = font.widthOfTextAtSize(String(field.value), Number(field.size));
+                const textHeight = font.sizeAtHeight(Number(field.size));
+
+                pages[0].drawText(String(field.value), {
+                    x: parseFloat(field.x) || (pageWidth / 2) - textWidth / 2,
+                    y: parseFloat(field.y) || (pageHeight / 2) - textHeight / 2,
+                    size: parseFloat(field.size) || 34,
+                    font: font,
+                    color: rgb(r || 1, g || 1, b || 1)
+                });
+            }
+        }));
 
         const modifiedPdfBytes = await pdfDoc.save();
         const modifiedPdfBlob = new Blob([modifiedPdfBytes], { type: "application/pdf" });
@@ -74,9 +87,9 @@ const generateCertificate = async (fields, template) => {
 
         return modifiedPdfUrl;
     } catch (error) {
-        console.error("Error generating certificate:", error.message);
+        console.error("Error generating certificate:", error);
         throw error;
     }
 }
 
-export default generateCertificate
+export default generateCertificate;

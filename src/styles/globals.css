@@ -241,6 +241,8 @@ canvas.react-pdf__Page__canvas,
 .react-pdf__Page__annotations.annotationLayer {
   width: 100% !important;
   height: auto !important;
+  user-select: none;
+  cursor: default;
 }
 
 .split {
