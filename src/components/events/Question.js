@@ -78,7 +78,7 @@ export const Question = ({ question: que, eventEndDate }) => {
           <h4 className="font-medium underline mb-2 text-lg">
             Problem Statement:
           </h4>
-          <p className="text-primary-light/80">{question.desc}</p>
+          <div className="text-primary-light/80" suppressHydrationWarning dangerouslySetInnerHTML={{ __html: question.desc }} />
         </div>
         <div className="ml-auto">
           <Link href={question.link} target="_blank">

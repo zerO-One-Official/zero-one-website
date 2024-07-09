@@ -42,7 +42,7 @@ const CertificateNumber = async ({ searchParams }) => {
     }
 
     return (
-        <div className="flex min-h-[calc(100vh-83px)] items-center justify-center p-2 pt-10">
+        <div className="flex min-h-[calc(100vh-83px)] justify-center p-2 pt-10">
             <div className="w-4/5">
                 <FilledCertificate certificate={JSON.stringify(certificate)} download />
             </div>

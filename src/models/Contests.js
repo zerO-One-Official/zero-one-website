@@ -46,6 +46,9 @@ const ContestSchema = new mongoose.Schema({
         rank: {
             type: Number,
             required: [true, 'Rank is Required.']
+        },
+        team: {
+            type: String,
         }
     }]
 
