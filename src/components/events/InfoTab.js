@@ -25,7 +25,7 @@ export
               </h1>
             </Link>
             :
-            <a target={_blank} href={event.link} className="hover:underline text-accent">
+            <a target={'_blank'} href={event.link} className="hover:underline text-accent">
               <h1 className="text-4xl font-semibold text-center w-full text-accent">
                 {event.name}
               </h1>
