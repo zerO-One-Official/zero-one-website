@@ -1,30 +1,39 @@
+import { getGallery } from "@/action/gallery";
 import AnimatedScrollButton from "@/components/AnimatedScrollButton";
 import BottomGlitter from "@/components/StyledText/BottomGlitter";
 import { GalleryImages } from "@/components/gallery/gallery";
 
-const getGallery = async () => {
-  try {
-    const res = await fetch(`${process.env.NEXTAUTH_URL}/api/gallery`, {
-      next: { revalidate: 24 * 60 * 60 },
-    });
-    return res.json();
-  } catch (error) {
-    console.log(error);
-  }
-};
 
 const GalleryPage = async () => {
-  const { gallery } = (await getGallery()) || { gallery: [] };
+  const gallery = await getGallery() || [];
+
+  const groupedGallery = {};
+
+  gallery.forEach(gal => {
+    if (!groupedGallery[gal.eventName]) {
+      groupedGallery[gal.eventName] = []
+    }
+    groupedGallery[gal.eventName].push(gal);
+  })
+
+  const groupedGal = Object.values(groupedGallery)
 
   return (
     <>
-      <div className="text-center mt-10 mb-8 sm:my-8">
+      <div className="mt-10 mb-8 sm:my-8">
         <div className="flex flex-col justify-between h-[calc(100vh-100px-3rem)] items-center sm:h-[calc(90vh-100px-1rem)]">
           <BottomGlitter text="Our Gallery" />
           <AnimatedScrollButton scrollTo="scrolled-to" />
         </div>
-        <div id="scrolled-to" className="min-h-screen">
-          <GalleryImages className gallery={gallery} />
+        <div id="scrolled-to" className="min-h-screen pt-10">
+          {
+            groupedGal.map((group, index) => {
+              return <div key={index} className="flex flex-col">
+                <h2 className="pl-10 font-semibold text-2xl">{group[0].eventName}</h2>
+                <GalleryImages gallery={JSON.stringify(group)} />
+              </div>
+            })
+          }
         </div>
       </div>
     </>
