@@ -6,13 +6,34 @@ import { InfoTab } from "@/components/events/InfoTab";
 import { Question } from "@/components/events/Question";
 import { getEvent } from "@/action/event";
 import Link from "next/link";
-import Skeleton from "@/components/skeleton/skeleton";
+import TeamParticipant from "@/components/events/TeamParticipant";
 
 const EventPage = async ({ params, searchParams }) => {
   const { eventName } = params;
 
 
   const event = await getEvent(eventName)
+
+  // Check if participants array exists and contains 'team' property
+  const hasTeamProperty = event.participants.some(participant => {
+    return participant?.team !== undefined;
+  });
+
+  // Group participants by teamname
+  const groupedParticipants = {};
+  if (hasTeamProperty) {
+    event.participants.forEach(participant => {
+      const teamname = participant.team;
+
+      if (!groupedParticipants[teamname]) {
+        groupedParticipants[teamname] = [];
+      }
+
+      groupedParticipants[teamname].push(participant);
+    });
+  }
+
+  const participants = hasTeamProperty ? Object.values(groupedParticipants) : event.participants;
 
   const activeTab = searchParams?.tab;
 
@@ -38,6 +59,12 @@ const EventPage = async ({ params, searchParams }) => {
       href: `${eventName}?tab=participants`
     }
   ]
+  // Define a custom order of difficulty
+  const difficultyOrder = {
+    'easy': 1,
+    'medium': 2,
+    'hard': 3
+  };
 
   return event ? (
     <div className="container-70 min-h-screen pt-10 flex flex-col">
@@ -71,7 +98,7 @@ const EventPage = async ({ params, searchParams }) => {
             ) :
               activeTab === "problems" ? (
                 <div className="flex flex-col w-full gap-4">
-                  {event?.questions.map((question) => {
+                  {event?.questions.sort((a, b) => difficultyOrder[a.difficulty] - difficultyOrder[b.difficulty]).map((question) => {
                     return (
                       <Question
                         key={question._id}
@@ -84,26 +111,30 @@ const EventPage = async ({ params, searchParams }) => {
               ) :
                 activeTab === "participants" ? (
                   <ol className="flex flex-col w-full gap-4">
-                    {event?.participants.length ? (
-                      event?.participants
-                        .sort((a, b) => a.rank - b.rank)
-                        .map((participant) => {
+                    {
+                      participants.length ?
+                        hasTeamProperty ? (
+                          participants.sort((a, b) => a[0].rank - b[0].rank).map((team, index) => {
+                            return <TeamParticipant key={index} team={JSON.stringify(team)} contestId={event._id.toString()} />
+                          }))
+                          :
+                          (
+                            participants
+                              .sort((a, b) => a.rank - b.rank)
+                              .map((participant) => {
+                                return <Participant
+                                  contestId={event._id.toString()}
+                                  participant={JSON.stringify(participant?.user)}
+                                  rank={participant?.rank}
+                                  team={participant?.team}
+                                  key={participant?._id}
+                                />
+                              })
+                          )
+                        : (
 
-                          return (
-                            <Participant
-                              participant={JSON.stringify(participant?.user)}
-                              rank={participant?.rank}
-                              key={participant?._id}
-                            />
-                          );
-                        })
-                    ) : (
-                      <div className="flex-1">
-                        <p className="text-red-500 text-xl text-center">
-                          Participant List Not Available
-                        </p>
-                      </div>
-                    )}
+                          <h4 className="text-accent text-lg font-semibold text-center">No Participants were added to this Event</h4>
+                        )}
                   </ol>
                 ) :
                   (

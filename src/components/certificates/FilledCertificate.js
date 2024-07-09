@@ -40,9 +40,9 @@ const FilledCertificate = ({ certificate: c, download = false }) => {
             {
                 url && certificateNumber ?
                     download ?
-                        <div className="flex flex-col items-end justify-center">
+                        <div className="flex flex-col justify-center">
                             <RenderPdf url={url} />
-                            <Link legacyBehavior href={url} target="_blank" download={`${certificateNumber}.pdf`} className="">
+                            <Link href={url} target="_blank" download={`${certificateNumber}.pdf`} className="flex w-full justify-end">
                                 <Button className="max-w-min mt-3">
                                     Download
                                 </Button>

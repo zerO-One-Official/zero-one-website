@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { getMonthName, getTime } from "@/utils/helper";
+import Link from "next/link";
 
 export
   const InfoTab = ({ event: ev }) => {
@@ -16,11 +17,20 @@ export
 
     return (
       <div className="flex flex-col w-full gap-4">
-        <a href={event.link} className="hover:underline text-accent">
-          <h1 className="text-4xl font-semibold text-center w-full text-accent">
-            {event.name}
-          </h1>
-        </a>
+        {
+          event.link.startsWith('https://zeroonemce.com/') ?
+            <Link href={event.link} className="hover:underline text-accent">
+              <h1 className="text-4xl font-semibold text-center w-full text-accent">
+                {event.name}
+              </h1>
+            </Link>
+            :
+            <a target={_blank} href={event.link} className="hover:underline text-accent">
+              <h1 className="text-4xl font-semibold text-center w-full text-accent">
+                {event.name}
+              </h1>
+            </a>
+        }
         <div className="flex gap-4 justify-center text-xl">
           <span>{`${day} ${month} ${year}`}</span>
           <span>{`${time}`}</span>
