@@ -1,8 +1,7 @@
 import { getGallery } from "@/action/gallery";
-import AnimatedScrollButton from "@/components/AnimatedScrollButton";
 import BottomGlitter from "@/components/StyledText/BottomGlitter";
 import { GalleryImages } from "@/components/gallery/gallery";
-import Skeleton from "@/components/skeleton/skeleton";
+
 
 
 const GalleryPage = async () => {
@@ -21,9 +20,6 @@ const GalleryPage = async () => {
 
   return (
     <>
-
-
-
       <div className="mt-10 mb-8 sm:my-8 px-20 2xl:px-10 xl:px-8 sm:px-6 xs:px-3">
         <div className="flex flex-col justify-between items-center">
           <BottomGlitter text="Our Gallery" />
