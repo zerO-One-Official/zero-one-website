@@ -23,7 +23,7 @@ export const Past = ({ events: ev }) => {
                 eventStartDate.getTime() + event.duration * 60 * 60 * 1000
             );
             return eventEndDate < currentDate;
-        });
+        }).sort((a, b) => new Date(b.date) - new Date(a.date));
 
     return (
         <section

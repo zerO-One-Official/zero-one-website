@@ -25,7 +25,7 @@ export const GalleryImages = ({ gallery: gl }) => {
 
 
   return (
-    <div className="p-10">
+    <div className="p-10 pl-0">
       <Gallery
         images={images}
         onClick={handleClick}
