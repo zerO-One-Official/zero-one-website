@@ -2,6 +2,7 @@
 
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import dbConnect from "@/lib/dbConnect";
+import Team from "@/models/Teams";
 import User from "@/models/Users";
 import { getServerSession } from "next-auth";
 
@@ -10,6 +11,8 @@ dbConnect()
 export const getUser = async (username) => {
     try {
         const user = await User.findOne({ username });
+        const team = await Team.findOne({ user: user._id });
+        user.position = team?.position || 'member';
         return user;
     } catch (error) {
         console.log(error)
