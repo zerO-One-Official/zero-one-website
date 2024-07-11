@@ -8,7 +8,7 @@
 }
 
 .headingText {
-  @apply text-6xl text-primary-light font-semibold leading-none capitalize sm:text-5xl xs:text-4xl;
+  @apply text-5xl text-primary-light font-semibold leading-none capitalize sm:text-4xl xs:text-3xl;
 }
 
 .heading>span {

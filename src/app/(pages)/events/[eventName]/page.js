@@ -54,9 +54,9 @@ const EventPage = async ({ params, searchParams }) => {
       href: `${eventName}?tab=problems`
     },
     {
-      label: 'Participants',
+      label: 'Winners',
       icon: <HiOutlineUserGroup className="stroke-inherit shrink-0 -translate-y-1" size={25} />,
-      href: `${eventName}?tab=participants`
+      href: `${eventName}?tab=winners`
     }
   ]
   // Define a custom order of difficulty
@@ -109,7 +109,7 @@ const EventPage = async ({ params, searchParams }) => {
                   })}
                 </div>
               ) :
-                activeTab === "participants" ? (
+                activeTab === "winners" ? (
                   <ol className="flex flex-col w-full gap-4">
                     {
                       participants.length ?
@@ -133,7 +133,7 @@ const EventPage = async ({ params, searchParams }) => {
                           )
                         : (
 
-                          <h4 className="text-accent text-lg font-semibold text-center">No Participants were added to this Event</h4>
+                          <h4 className="text-accent text-lg font-semibold text-center">Winners not declared.</h4>
                         )}
                   </ol>
                 ) :
