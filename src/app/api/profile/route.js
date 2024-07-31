@@ -5,6 +5,7 @@ import User from "@/models/Users";
 import { getServerSession } from "next-auth";
 import { options } from "../auth/[...nextauth]/options";
 import { checkDuplicateUser, deleteFile } from "@/utils/server";
+import { revalidatePath } from "next/cache";
 
 dbConnect()
 
@@ -160,6 +161,7 @@ export async function PATCH(req) {
         }
 
         const newProfile = await user.save();
+        revalidatePath('/teams');
 
 
         return NextResponse.json(
