@@ -1,5 +1,5 @@
 .button::before {
-  content: '';
+  content: "";
   position: absolute;
   top: var(--y);
   left: var(--x);
@@ -8,11 +8,23 @@
   height: 0;
   border-radius: 50%;
   background: var(--accent);
-  background: radial-gradient(circle, var(--accent) 0%, var(--accent-light) 100%);
+  background: radial-gradient(
+    circle,
+    var(--accent) 0%,
+    var(--accent-light) 100%
+  );
   transition: width 0.5s, height 0.5s;
+}
+.button:disabled {
+  pointer-events: none;
 }
 
 .button:hover::before {
   height: 600px;
   width: 600px;
+}
+
+.button:disabled:hover::before {
+  height: 0;
+  width: 0;
 }
