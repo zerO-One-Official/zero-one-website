@@ -1,4 +1,4 @@
-.active.item>.title {
+.active.item > .title {
   border-bottom-color: #ffff;
 }
 
@@ -13,17 +13,13 @@
   transition: border 0.28s;
 }
 
-.title>svg {
+.title > svg {
   transition: all 0.28s;
 }
 
 .body {
   @apply py-3 pr-1 pl-0 border-none;
   @apply sm:py-2;
-}
-
-.body * {
-  color: rgb(196, 196, 196);
 }
 
 .body ul {
