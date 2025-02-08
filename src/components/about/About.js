@@ -39,7 +39,7 @@ function About() {
           you&#39;re a seasoned developer or just starting out, we welcome you
           to join us and be a part of our community. The club is open to all
           students. The only prerequisite to join us is enthusiasm for coding
-          and development, or at least curiosity towards it
+          and development, or at least curiosity towards it. Hello yaSh
         </p>
       </div>
       <Link href="/about" className="flex w-[fit-content] rounded-full">
