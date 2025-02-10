@@ -9,12 +9,7 @@ export const getQuestions = async () => {
       "name slug difficulty askedIn desc"
     );
 
-    return {
-      message: "Questions fetched successfully",
-      data: questions,
-      type: "success",
-      success: true,
-    };
+    return questions;
   } catch (error) {
     throw new Error(error);
   }
