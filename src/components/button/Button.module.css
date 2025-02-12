@@ -15,7 +15,7 @@
   );
   transition: width 0.5s, height 0.5s;
 }
-.button:disabled {
+.button[disabled] {
   pointer-events: none;
 }
 
@@ -24,7 +24,7 @@
   width: 600px;
 }
 
-.button:disabled:hover::before {
+.button[disabled]:hover::before {
   height: 0;
   width: 0;
 }

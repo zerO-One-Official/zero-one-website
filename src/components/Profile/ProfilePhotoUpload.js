@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useDropzone } from "@uploadthing/react/hooks";
+import { useDropzone } from "@uploadthing/react";
 import { generateClientDropzoneAccept } from "uploadthing/client";
 import { useCallback, useState } from "react";
 import toast from "react-hot-toast";
@@ -10,11 +10,8 @@ import { HiOutlineUserCircle } from "react-icons/hi2";
 import { useSession } from "next-auth/react";
 import { BiEdit } from "react-icons/bi";
 
-const ProfilePhotoUpload = ({
-  profilePic,
-}) => {
-
-  const { data: session, update } = useSession()
+const ProfilePhotoUpload = ({ profilePic }) => {
+  const { data: session, update } = useSession();
 
   const [imageUrl, setImageUrl] = useState(profilePic);
 
@@ -45,11 +42,11 @@ const ProfilePhotoUpload = ({
               ...session,
               user: {
                 ...session.user,
-                profilePic
-              }
-            })
+                profilePic,
+              },
+            });
 
-            console.log(d)
+            console.log(d);
           }
 
           toast[data.type](data.message);
@@ -89,7 +86,7 @@ const ProfilePhotoUpload = ({
     const file = e.target.files?.[0];
     if (!file) return setImageUrl(profilePic);
     else if (file.size > 1024 * 1024) {
-      setImageUrl(profilePic)
+      setImageUrl(profilePic);
       return toast.error("Image must be less than 1MB");
     }
     setImage([file]);
@@ -100,17 +97,16 @@ const ProfilePhotoUpload = ({
     if (file) {
       setLoading(true);
       startUpload([file]);
-
     }
   };
 
   return (
     <div
-      className={`select-none bg-white/10 w-32 h-32 rounded-full overflow-hidden border border-white/25 relative ${loading ? "animate-pulse " : "cursor-pointer group"
-        }`}
+      className={`select-none bg-white/10 w-32 h-32 rounded-full overflow-hidden border border-white/25 relative ${
+        loading ? "animate-pulse " : "cursor-pointer group"
+      }`}
       {...getRootProps()}
     >
-
       <input
         {...getInputProps()}
         type="file"
@@ -118,26 +114,24 @@ const ProfilePhotoUpload = ({
         disabled={loading}
       />
 
-
       <span className="group-hover:visible invisible transition-opacity z-50 bg-primary/70 absolute w-full h-full left-0 top-0 flex items-center justify-center pointer-events-none">
         <BiEdit className="w-6 h-6 " />
       </span>
 
-      {
-        imageUrl ? (
-          <Image
-            className="w-full h-full object-cover rounded-full"
-            style={{ userDrag: "none" }}
-            width={150}
-            height={150}
-            src={imageUrl}
-            alt={"profilePic"}
-          />
-        ) :
-          <span className="z-50 bg-white/10 absolute w-full h-full left-0 top-0 flex items-center justify-center pointer-events-none">
-            <HiOutlineUserCircle className="w-full h-full" />
-          </span>
-      }
+      {imageUrl ? (
+        <Image
+          className="w-full h-full object-cover rounded-full"
+          style={{ userDrag: "none" }}
+          width={150}
+          height={150}
+          src={imageUrl}
+          alt={"profilePic"}
+        />
+      ) : (
+        <span className="z-50 bg-white/10 absolute w-full h-full left-0 top-0 flex items-center justify-center pointer-events-none">
+          <HiOutlineUserCircle className="w-full h-full" />
+        </span>
+      )}
     </div>
   );
 };

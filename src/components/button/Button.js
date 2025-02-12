@@ -27,7 +27,7 @@ function Button({ className, loading, varrient, children, ...otherProps }) {
         Styles.button
       } ${className} ${
         varrient === "filled"
-          ? "bg-primary-light text-primary stroke-primary fill-primary disabled:hover:text-primary disabled:hover:fill-primary disabled:hover:stroke-primary hover:text-primary-light hover:stroke-primary-light hover:fill-primary-light"
+          ? "bg-primary-light text-primary stroke-primary fill-primary disabled:hover:text-primary disabled:hover:fill-primary disabled:hover:stroke-primary"
           : "text-primary-light stroke-primary-light fill-primary-light border border-white/25"
       } `}
       {...otherProps}
