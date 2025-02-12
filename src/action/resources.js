@@ -1,7 +1,7 @@
 "use server";
 
 import connect from "@/lib/dbConnect"; // Ensure correct path to DB connection
-import Resource from "@/models/Resouces"; // Ensure correct path to Resource model
+import Resources from "@/models/Resources"; // Ensure correct path to Resource model
 import { revalidatePath } from "next/cache";
 
 // ✅ Server Action for adding a new resource (POST)
@@ -20,7 +20,14 @@ export async function addResource(formData) {
       };
     }
 
-    const existingResources = await Resource.findOne({ domain });
+    const existingResources = await Resources.findOne({
+      $or: [
+        { domain },
+        {
+          domain: { $regex: new RegExp("^" + domain + "$", "i") },
+        },
+      ],
+    });
 
     if (existingResources) {
       return {
@@ -30,7 +37,7 @@ export async function addResource(formData) {
       };
     }
 
-    const newResource = new Resource({
+    const newResource = await Resources.create({
       domain,
       description,
       image,
@@ -50,5 +57,38 @@ export async function addResource(formData) {
       message: error.message || "Internal server error",
       type: "error",
     };
+  }
+}
+
+export async function getResource() {
+  try {
+    await connect();
+    const resources = await Resources.find();
+    return resources;
+  } catch (error) {
+    return [];
+  }
+}
+
+export async function getTopics(slug) {
+  try {
+    await connect();
+    const domain = await Resources.find({ slug });
+    return domain.topics || [];
+  } catch (error) {
+    return [];
+  }
+}
+
+export async function getSubTopics(domainSlug, topicSlug) {
+  try {
+    await connect();
+    const domain = await Resources.find({
+      $and: [{ slug: domainSlug }, { "topics.slug": topicSlug }],
+    });
+
+    return domain.topics || [];
+  } catch (error) {
+    return [];
   }
 }

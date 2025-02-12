@@ -9,7 +9,7 @@ export const getQuestions = async () => {
       "name slug difficulty askedIn desc"
     );
 
-    return questions;
+    return questions || [];
   } catch (error) {
     throw new Error(error);
   }
