@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/dbConnect";
 import { addResource } from "@/action/resources";
-import Resource from "@/models/Resouces";
+import Resources from "@/models/Resources";
 
 await dbConnect();
 
@@ -22,7 +22,7 @@ export async function POST(req) {
 // ✅ GET Request: Fetch All Resources
 export async function GET() {
   try {
-    const resources = await Resource.find();
+    const resources = await Resources.find();
     return NextResponse.json(
       { success: true, data: resources },
       { status: 200 }
