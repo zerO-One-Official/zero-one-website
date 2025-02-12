@@ -1,36 +1,65 @@
 import mongoose from "mongoose";
 
-const ResourceSchema = new mongoose.Schema({
-    domain: {
-        type: String,
-        enum: ['Web Development', 'App Development', 'AI/ML', 'Competetive Programming', 'Programming', 'Animation'],
-        unique: true,
-        trim: true,
-        required: [true, 'Please enter resource Domain name']
-    },
-    image: {
-        type: String, // Assuming the image path or URL will be stored as a string
-        required: [true, 'Domain Image is required'],
-    },
-    totalResources: {
-        type: Number,
-        default: 0,
-    },
-    resources: [
-        {
-            heading: {
-                type: String,
-                required: [true, 'Resource heading is required'],
-            },
-            content: {
-                type: String,
-                required: [true, 'Resource content is required'],
-            },
-        }
-    ]
+// ✅ Subtopic Schema (Embedded Inside Topics)
+const SubtopicSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    required: [true, "Subtopic title is required"],
+  },
+  description: String,
+  image: String,
+  resourceUrl: String,
+});
 
-}, { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } });
+// ✅ Topic Schema (Embedded Inside Domains)
+const TopicSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    required: [true, "Topic title is required"],
+  },
+  description: String,
+  image: String,
+  resourceUrl: String,
+  subtopics: [SubtopicSchema], // ✅ Embedding Subtopics
+});
 
+// ✅ Domain Schema (Embedded Inside Resource)
+const DomainSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    required: [true, "Domain title is required."],
+  },
+  description: String,
+  image: {
+    type: String,
+    required: [true, "Domain Image is required"],
+  },
+  totalResources: {
+    type: Number,
+    default: 0,
+  },
+  topics: [TopicSchema], // ✅ Embedding Topics
+});
 
-const Resource = mongoose.models.resource || mongoose.model('resource', ResourceSchema);
+// ✅ Resource Schema (Top-Level Entity)
+const ResourceSchema = new mongoose.Schema(
+    [
+    {
+        
+        domains: {
+            
+          type: [DomainSchema], // ✅ Ensures `domains` is an array
+          default: [], // ✅ Default to an empty array
+        },
+    
+      }, 
+    ],
+  
+
+  { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }
+);
+
+// Explicitly define the model before checking mongoose.models
+const Resource =
+  mongoose.models.Resourcedata || mongoose.model("Resourcedata", ResourceSchema);
 export default Resource;
