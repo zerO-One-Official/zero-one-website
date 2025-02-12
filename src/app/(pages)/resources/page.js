@@ -1,4 +1,4 @@
-import { getResource } from "@/action/resources"
+import  getResource  from "@/action/resources"
 import BottomGlitter from "@/components/StyledText/BottomGlitter"
 import Image from 'next/image'
 import Link from 'next/link'
@@ -6,6 +6,7 @@ import Link from 'next/link'
 const ResourcesPage = async () => {
 
     const resources = await getResource()
+    console.log(resources)
 
 
     return (
@@ -24,15 +25,15 @@ const ResourcesPage = async () => {
                                 :
                                 resources?.map(resource => {
                                     return (
-                                        <Link href={`resources/${resource.domain}`} className="flex flex-col items-center hover:scale-105 transition-all ease-in-out duration-300 shadow-cus border border-white/5 rounded-3xl" key={resource._id}
+                                        <Link href={`resources/${resource.domains.title}`} className="flex flex-col items-center hover:scale-105 transition-all ease-in-out duration-300 shadow-cus border border-white/5 rounded-3xl" key={resource._id}
                                         >
                                             <div className="p-5 py-10">
-                                                <Image src={resource.image} width={200} height={200} alt={resource.domain} className="w-32 h-auto transition-all"
+                                                <Image src={resource.domains.image} width={200} height={200} alt={resource.domain} className="w-32 h-auto transition-all"
                                                 />
                                             </div>
                                             <div className="text-center p-2">
                                                 <h2 className="text-lg font-semibold transition-all">{resource.domain}</h2>
-                                                <p className="font-medium text-primary-light/60 transition-all">{resource.totalResources} Resources</p>
+                                                <p className="font-medium text-primary-light/60 transition-all">{resource.domains.totalResources} Resources</p>
                                             </div>
                                         </Link>
                                     )
