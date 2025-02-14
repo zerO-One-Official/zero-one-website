@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import React, { useRef, useState } from "react";
 import { LuSend } from "react-icons/lu";
 import toast from "react-hot-toast";
+import Link from "next/link";
 function ThankYou({ show }) {
   const router = useRouter();
 
@@ -21,18 +22,10 @@ function ThankYou({ show }) {
         We&apos;ll be in touch shortly.
       </h1>
       <p className="mt-20 w-3/5 text-lg xl:w-3/5 sm:w-3/4 sm:text-base">
-        Feel free to explore some interesting topics on our{" "}
-        <span>
-          <a className="text-blue" href="#">
-            blog
-          </a>
-        </span>{" "}
-        and roam around the{" "}
-        <span>
-          <a className="text-blue" href="/">
-            website
-          </a>
-        </span>
+        Feel free to explore our
+        <Link className="text-accent" href="/">
+          website
+        </Link>
       </p>
       <div className="mt-16">
         <Button onClick={() => router.push("/")}>Back to home</Button>
@@ -79,22 +72,22 @@ const ContactPage = () => {
   };
 
   return (
-    <section className="container-70 overflow-hidden">
+    <section className="container-70 overflow-hidden mx-auto">
       <ThankYou show={show} />
       <div className={`${show ? "invisible hidden" : "visible"} z-10`}>
         <div className="mt-28 mb-12 pt-10 pb-8 sm:mt-20 sm:mb-10">
-          <h1 className="text-7xl sm:text-5xl">
+          <h1 className="text-7xl sm:text-5xl text-center">
             Interested?
             <br />
             Let&apos;s talk!
           </h1>
-          <p className="mt-20 w-2/5 text-lg xl:w-3/5 sm:w-3/4 sm:text-base">
+          <p className="mt-20 text-lg sm:text-base text-center">
             Just fill this simple form in and we will contact you promptly. Hate
             forms? Drop us a line at{" "}
             <span>
-              <a className="text-blue" href="mailto:info@zeroonemce.com">
+              <Link className="text-accent" href="mailto:info@zeroonemce.com">
                 info@zeroonemce.com
-              </a>
+              </Link>
             </span>
           </p>
         </div>
