@@ -18,3 +18,20 @@ export const getQuestions = async () => {
     throw new Error(error);
   }
 };
+
+export const getQuestion = async (slug) => {
+  try {
+    dbConnect();
+    const question = await Question.findOne({ slug })
+      .select("name slug difficulty askedIn desc point")
+      .lean(); // Returns plain objects instead of Mongoose documents
+
+    return {
+      ...question,
+      _id: question._id.toString(), // Convert _id to string
+      title: question.name,
+    };
+  } catch (error) {
+    throw new Error(error);
+  }
+};

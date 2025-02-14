@@ -118,6 +118,11 @@ body {
   );
 }
 
+::selection {
+  background: hsl(var(--primary-foreground));
+  color: hsl(var(--primary));
+}
+
 ::-webkit-scrollbar {
   width: 5px;
 }
