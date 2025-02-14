@@ -24,7 +24,7 @@ function Navbar() {
       const scrolledDown = window.scrollY > prevScrollY;
       const scrolledUp = window.scrollY < prevScrollY;
 
-      if (window.scrollY > 100) {
+      if (window.scrollY > 10) {
         navRef.current.classList.add("bg-background");
         navRef.current.classList.add("shadow");
         navRef.current.classList.add("border-b-white/15");
