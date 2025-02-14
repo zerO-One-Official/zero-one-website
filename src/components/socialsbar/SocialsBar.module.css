@@ -7,16 +7,15 @@
   min-height: 15%;
 }
 
-.socialsBar>a {
+.socialsBar > a {
   @apply my-3 text-accent-light;
 }
 
 .socialsBarIcons {
-  @apply opacity-70;
+  @apply opacity-70 fill-foreground;
   transition: all 300ms ease-in-out;
 }
 
 .socialsBarIcons:hover {
-  @apply text-accent-light opacity-100;
-  fill: var(--accent) !important;
+  @apply fill-accent opacity-100;
 }
