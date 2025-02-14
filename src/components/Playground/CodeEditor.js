@@ -1,15 +1,14 @@
 "use client";
 import { Editor } from "@monaco-editor/react";
 import { useEffect, useRef, useState } from "react";
-import Skeleton from "../skeleton/skeleton";
-import Button from "../button/Button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { CiPlay1 } from "react-icons/ci";
-import { HiOutlinePaperAirplane } from "react-icons/hi2";
 import { BsGear } from "react-icons/bs";
 import toast from "react-hot-toast";
 import { c, cpp, java, javascript, python } from "./defaultCodeTemplate";
 import { atob } from "@/utils/helper";
 import { BiLoader } from "react-icons/bi";
+import { Button } from "../ui/button";
 
 const options = {
   mouseWheelZoom: true,
@@ -47,6 +46,15 @@ const CodeEditor = ({ code, submitCode }) => {
   }, [language]);
 
   function handleEditorDidMount(editor, monaco) {
+    monaco.editor.defineTheme("my-theme", {
+      base: "vs-dark",
+      inherit: true,
+      rules: [],
+      colors: {
+        "editor.background": "#101010",
+      },
+    });
+    monaco.editor.setTheme("my-theme");
     editorRef.current = editor;
   }
 
@@ -156,105 +164,119 @@ const CodeEditor = ({ code, submitCode }) => {
   };
 
   return (
-    <div className="flex flex-col gap-2 ">
-      <div className="ml-auto p-4 flex items-center gap-4">
-        <button
-          disabled={loading}
-          ref={popUpRef}
-          onClick={setSettingOpen}
-          type="button"
-          className={
-            "relative shadow-btn p-4 border border-white/5 flex items-center justify-center rounded-full"
-          }
-        >
-          <BsGear className="shrink-0 w-5 h-5" />
-          {settingOpen ? (
-            <div className="absolute top-16 p-6 z-10 backdrop-blur-xl left-1/2 -translate-x-1/2 shadow-cus border border-l-white/5 border-t-white/5 border-r-black/25 border-b-black/25 rounded-3xl min-w-56 ">
-              <h4 className="text-left font-semibold text-accent">Language</h4>
-              <section className="space-y-2 mt-4 min-w-max">
-                <div className="flex items-center gap-2">
-                  <input
-                    type="radio"
-                    value="c"
-                    checked={language === "c"}
-                    id="c"
-                    name="langauge"
-                    onChange={(e) => handleChange(e.target.value)}
-                  />
-                  <label htmlFor="c">C (GCC 9.2.0)</label>
-                </div>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="radio"
-                    value="cpp"
-                    checked={language === "cpp"}
-                    id="cpp"
-                    name="langauge"
-                    onChange={(e) => handleChange(e.target.value)}
-                  />
-                  <label htmlFor="cpp">C++ (GCC 9.2.0)</label>
-                </div>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="radio"
-                    value="java"
-                    checked={language === "java"}
-                    id="java"
-                    name="langauge"
-                    onChange={(e) => handleChange(e.target.value)}
-                  />
-                  <label htmlFor="java">Java (OpenJDK 9)</label>
-                </div>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="radio"
-                    value="javascript"
-                    checked={language === "javascript"}
-                    id="javascript"
-                    name="langauge"
-                    onChange={(e) => handleChange(e.target.value)}
-                  />
-                  <label htmlFor="javascript">JavaScript (Node 12.14.0)</label>
-                </div>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="radio"
-                    value="python"
-                    checked={language === "python"}
-                    id="python"
-                    name="langauge"
-                    onChange={(e) => handleChange(e.target.value)}
-                  />
-                  <label htmlFor="python">Python (3.8.1)</label>
-                </div>
-              </section>
-            </div>
-          ) : null}
-        </button>
-        <Button className={"shadow-btn"} onClick={runCode} disabled={loading}>
-          <CiPlay1 className="w-4 h-4" />
-        </Button>
-        <Button className={"group"} varrient={"filled"} disabled={loading}>
-          <HiOutlinePaperAirplane className="w-4 h-4 stroke-primary  group-hover:stroke-primary-light" />
-          Submit
-        </Button>
-      </div>
-      <div className="grid grid-cols-6 min-h-[calc(100vh-83px-64px-84px-20px)] gap-4">
-        <div className="bg-[#1e1e1e] py-6 px-2 min-h-[447px] col-span-6 xl:col-span-6 border border-l-white/5 border-t-white/5 border-r-black/25 border-b-black/25  rounded-3xl overflow-hidden">
+    <div className="flex flex-col gap-2 w-full">
+      <div className="flex flex-col min-h-[calc(100vh-83px-64px-84px-20px)] border border-l-white/5 border-t-white/5 border-r-black/25 border-b-black/25 gap-4 bg-[#101010] rounded-xl py-4">
+        <div className="ml-auto flex items-center gap-4 px-4">
+          <Button
+            disabled={loading}
+            ref={popUpRef}
+            onClick={() => setSettingOpen((prev) => !prev)}
+            type="button"
+            size={"icon"}
+            className={
+              "relative shadow-btn border border-white/5 flex items-center justify-center rounded-full"
+            }
+          >
+            <BsGear className="shrink-0 w-4 h-4 stroke-primary-foreground fill-primary-foreground" />
+            {settingOpen ? (
+              <div className="absolute top-16 p-6 z-10 backdrop-blur-xl left-1/2 -translate-x-1/2 shadow-cus border border-l-white/5 border-t-white/5 border-r-black/25 border-b-black/25 rounded-3xl min-w-56 ">
+                <h4 className="text-left font-semibold text-accent">
+                  Language
+                </h4>
+                <section className="space-y-2 mt-4 min-w-max">
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="radio"
+                      value="c"
+                      checked={language === "c"}
+                      id="c"
+                      name="langauge"
+                      onChange={(e) => handleChange(e.target.value)}
+                    />
+                    <label htmlFor="c">C (GCC 9.2.0)</label>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="radio"
+                      value="cpp"
+                      checked={language === "cpp"}
+                      id="cpp"
+                      name="langauge"
+                      onChange={(e) => handleChange(e.target.value)}
+                    />
+                    <label htmlFor="cpp">C++ (GCC 9.2.0)</label>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="radio"
+                      value="java"
+                      checked={language === "java"}
+                      id="java"
+                      name="langauge"
+                      onChange={(e) => handleChange(e.target.value)}
+                    />
+                    <label htmlFor="java">Java (OpenJDK 9)</label>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="radio"
+                      value="javascript"
+                      checked={language === "javascript"}
+                      id="javascript"
+                      name="langauge"
+                      onChange={(e) => handleChange(e.target.value)}
+                    />
+                    <label htmlFor="javascript">
+                      JavaScript (Node 12.14.0)
+                    </label>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="radio"
+                      value="python"
+                      checked={language === "python"}
+                      id="python"
+                      name="langauge"
+                      onChange={(e) => handleChange(e.target.value)}
+                    />
+                    <label htmlFor="python">Python (3.8.1)</label>
+                  </div>
+                </section>
+              </div>
+            ) : null}
+          </Button>
+          <Button
+            size="sm"
+            className={"bg-blue-300 hover:bg-blue-300/80 font-semibold"}
+            onClick={runCode}
+            disabled={loading}
+          >
+            <CiPlay1 className="w-4 h-4" />
+          </Button>
+          <Button
+            size="sm"
+            className="bg-green-300 hover:bg-green-300/80 text-primary font-semibold"
+            disabled={loading}
+          >
+            Submit
+          </Button>
+        </div>
+        <div className="min-h-[350px] col-span-6 xl:col-span-6 overflow-hidden">
           <Editor
             // options={options}
             options={options}
-            theme="vs-dark"
+            theme="my-theme"
             defaultLanguage="cpp"
             language={language} // java javascript cpp python
             defaultValue={cpp}
             onMount={handleEditorDidMount}
             value={code || defaultCode}
-            loading={<Skeleton className={"w-full h-full"} />}
+            className="h-full p-0"
+            loading={<Skeleton className={"w-full h-full rounded-none"} />}
           />
         </div>
         <div className="col-span-6 h-auto flex gap-4 overflow-hidden">
-          <div className="overflow-hidden bg-[#1e1e1e] w-full flex-1 flex flex-col gap-4 p-4 border border-l-white/5 border-t-white/5 border-r-black/25 border-b-black/25 rounded-3xl">
+          {/* <div className="overflow-hidden bg-[#1e1e1e] w-full flex-1 flex flex-col gap-4 p-4 border border-l-white/5 border-t-white/5 border-r-black/25 border-b-black/25 rounded-3xl">
             <h3 className="text-center font-semibold text-white/40 text-xl">
               Input
             </h3>
@@ -265,13 +287,19 @@ const CodeEditor = ({ code, submitCode }) => {
               className="overflow-auto bg-transparent outline-none h-full resize-none font-semibold text-sm"
               rows={4}
             />
-          </div>
-          <div className="overflow-hidden bg-[#1e1e1e]  w-full flex-1 flex flex-col gap-4 p-4 border border-l-white/5 border-t-white/5 border-r-black/25 border-b-black/25 rounded-3xl">
-            <h3 className="text-center font-semibold text-white/40 text-xl">
-              Output
-            </h3>
+          </div> */}
+          <div className="overflow-hidden w-full flex-1 flex flex-col gap-4 p-4">
+            <div className="flex items-center justify-between gap-2">
+              <h3 className="text-left font-semibold text-white/40 text-xl">
+                Console
+              </h3>
+              <span className="ml-auto inline-block text-sm text-green-300">
+                {executionTime}
+                {executionTime && "s"}
+              </span>
+            </div>
             {loading ? (
-              <div className="w-full h-full flex items-center justify-center">
+              <div className="w-full h-20 flex items-center justify-center">
                 <BiLoader className="animate-spin fill-accent" size={30} />
               </div>
             ) : (
@@ -282,10 +310,6 @@ const CodeEditor = ({ code, submitCode }) => {
                   rows={4}
                   value={output}
                 />
-                <span className="ml-auto inline-block text-sm text-green-300">
-                  {executionTime}
-                  {executionTime && "s"}
-                </span>
               </>
             )}
           </div>

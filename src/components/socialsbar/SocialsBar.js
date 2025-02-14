@@ -1,20 +1,18 @@
-"use client"
-import { FaInstagram, FaGithub, FaLinkedin, FaDiscord } from 'react-icons/fa';
-import Styles from './SocialsBar.module.css';
-import { usePathname } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+"use client";
+import { FaInstagram, FaGithub, FaLinkedin, FaDiscord } from "react-icons/fa";
+import Styles from "./SocialsBar.module.css";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 
 const ICON_SIZE = 30;
 function SocialsBar() {
-
   const pathname = usePathname();
 
   const socialRef = useRef();
 
   const [prevScrollY, setPrevScrollY] = useState(0);
 
-  useEffect(() => setPrevScrollY(window.scrollY), [])
-
+  useEffect(() => setPrevScrollY(window.scrollY), []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,34 +22,46 @@ function SocialsBar() {
       if (Math.abs(window.scrollY - prevScrollY) > 300) {
         setPrevScrollY(window.scrollY);
 
-        if (socialRef?.current && scrolledDown || scrolledUp) {
-          socialRef.current.style.right = scrolledDown ? '-300px' : '0';
+        if ((socialRef?.current && scrolledDown) || scrolledUp) {
+          socialRef.current.style.right = scrolledDown ? "-300px" : "0";
         }
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [prevScrollY]);
 
-  return (
-    (pathname === '/login' || pathname === '/recoverPassword' || pathname.startsWith('/setPassword')) ?
-      null
-      :
-      <section ref={socialRef} className={Styles.socialsBar}>
-        <a href="#" target="_blank" rel="noreferrer">
-          <FaDiscord className={Styles.socialsBarIcons} size={ICON_SIZE} />
-        </a>
-        <a href="https://www.instagram.com/zeroonemce" target="_blank" rel="noreferrer">
-          <FaInstagram className={Styles.socialsBarIcons} size={ICON_SIZE} />
-        </a>
-        <a href="https://github.com/zerO-One-Official" target="_blank" rel="noreferrer">
-          <FaGithub className={Styles.socialsBarIcons} size={ICON_SIZE} />
-        </a>
-        <a href="https://www.linkedin.com/company/zero-one-coding-club-mce" target="_blank" rel="noreferrer">
-          <FaLinkedin className={Styles.socialsBarIcons} size={ICON_SIZE} />
-        </a>
-      </section>
+  return pathname === "/login" ||
+    pathname === "/recoverPassword" ||
+    pathname.startsWith("/setPassword") ||
+    pathname.startsWith("/playground") ? null : (
+    <section ref={socialRef} className={Styles.socialsBar}>
+      <a href="#" target="_blank" rel="noreferrer">
+        <FaDiscord className={Styles.socialsBarIcons} size={ICON_SIZE} />
+      </a>
+      <a
+        href="https://www.instagram.com/zeroonemce"
+        target="_blank"
+        rel="noreferrer"
+      >
+        <FaInstagram className={Styles.socialsBarIcons} size={ICON_SIZE} />
+      </a>
+      <a
+        href="https://github.com/zerO-One-Official"
+        target="_blank"
+        rel="noreferrer"
+      >
+        <FaGithub className={Styles.socialsBarIcons} size={ICON_SIZE} />
+      </a>
+      <a
+        href="https://www.linkedin.com/company/zero-one-coding-club-mce"
+        target="_blank"
+        rel="noreferrer"
+      >
+        <FaLinkedin className={Styles.socialsBarIcons} size={ICON_SIZE} />
+      </a>
+    </section>
   );
 }
 
