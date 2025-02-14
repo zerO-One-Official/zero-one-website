@@ -10,8 +10,8 @@
   background: var(--accent);
   background: radial-gradient(
     circle,
-    var(--accent) 0%,
-    var(--accent-light) 100%
+    hsl(var(--accent)) 0%,
+    hsl(var(--accent-light)) 100%
   );
   transition: width 0.5s, height 0.5s;
 }
