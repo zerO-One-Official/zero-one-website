@@ -21,10 +21,6 @@ const SubtopicSchema = new mongoose.Schema({
     sparse: true, // ✅ Ensures uniqueness is only applied if slug exists
   },
   description: { type: String },
-  image: {
-    type: String,
-    required: [true, "Subtopic image is required."],
-  },
   resourceUrl: { type: String },
 });
 
@@ -102,7 +98,34 @@ ResourceSchema.pre("save", function (next) {
   next();
 });
 
-const Resource =
+// Auto-generate slug before updating Resources
+ResourceSchema.pre("findOneAndUpdate", function (next) {
+  const update = this.getUpdate();
+  if (update.domain) {
+    update.slug = generateSlug(update.domain);
+  }
+  next();
+});
+
+// Auto-generate slug before updating Topics
+TopicSchema.pre("findOneAndUpdate", function (next) {
+  const update = this.getUpdate();
+  if (update.title) {
+    update.slug = generateSlug(update.title);
+  }
+  next();
+});
+
+// Auto-generate slug before updating Subtopics
+SubtopicSchema.pre("findOneAndUpdate", function (next) {
+  const update = this.getUpdate();
+  if (update.title) {
+    update.slug = generateSlug(update.title);
+  }
+  next();
+});
+
+const Resources =
   mongoose.models?.Resource || mongoose.model("Resource", ResourceSchema);
 
-export default Resource;
+export default Resources;

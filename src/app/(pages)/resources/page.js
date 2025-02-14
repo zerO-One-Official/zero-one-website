@@ -13,9 +13,9 @@ const ResourcesPage = async () => {
           <BottomGlitter text={"Club Resources"} />
           <div className=" md:mt-10 mt-20 grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-5 w-full">
             {resources?.length === 0 ? (
-              <div className="flex w-full justify-center p-2 text-2xl text-red-600">
+              <p className="flex w-full col-span-full items-center justify-center p-2 text-2xl text-red-600">
                 No Resources Found
-              </div>
+              </p>
             ) : (
               resources?.map((resource) => {
                 return (
