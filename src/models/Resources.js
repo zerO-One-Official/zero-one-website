@@ -8,7 +8,7 @@ const generateSlug = (text) => {
     .replace(/^-+|-+$/g, ""); // Trim "-" from start and end
 };
 
-// ✅ Subtopic Schema
+// Subtopic Schema
 const SubtopicSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -18,7 +18,7 @@ const SubtopicSchema = new mongoose.Schema({
     type: String,
     lowercase: true,
     unique: true,
-    sparse: true, // ✅ Ensures uniqueness is only applied if slug exists
+    sparse: true, // Ensures uniqueness is only applied if slug exists
   },
   description: { type: String },
   resourceUrl: { type: String },
@@ -32,7 +32,7 @@ SubtopicSchema.pre("save", function (next) {
   next();
 });
 
-// ✅ Topic Schema
+// Topic Schema
 const TopicSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -42,7 +42,7 @@ const TopicSchema = new mongoose.Schema({
     type: String,
     lowercase: true,
     unique: true,
-    sparse: true, // ✅ Prevents duplicate `null` slugs
+    sparse: true, // Prevents duplicate `null` slugs
   },
   description: { type: String },
   image: {
@@ -50,7 +50,7 @@ const TopicSchema = new mongoose.Schema({
     required: [true, "Topic image is required."],
   },
   subtopics: {
-    type: [SubtopicSchema], // ✅ Embedding Subtopics Correctly
+    type: [SubtopicSchema], // Embedding Subtopics Correctly
     default: [],
   },
 });
@@ -63,7 +63,7 @@ TopicSchema.pre("save", function (next) {
   next();
 });
 
-// ✅ Resource Schema
+// Resource Schema
 const ResourceSchema = new mongoose.Schema(
   {
     domain: {
@@ -75,7 +75,7 @@ const ResourceSchema = new mongoose.Schema(
       type: String,
       lowercase: true,
       unique: true,
-      sparse: true, // ✅ Avoid duplicate `null` slugs
+      sparse: true, // Avoid duplicate `null` slugs
     },
     description: { type: String },
     image: {
@@ -83,7 +83,7 @@ const ResourceSchema = new mongoose.Schema(
       required: [true, "Domain image is required."],
     },
     topics: {
-      type: [TopicSchema], // ✅ Embedding Topics Properly
+      type: [TopicSchema], // Embedding Topics Properly
       default: [],
     },
   },

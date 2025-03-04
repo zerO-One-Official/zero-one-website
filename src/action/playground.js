@@ -22,10 +22,12 @@ export const getQuestions = async () => {
 export const getQuestion = async (slug) => {
   try {
     dbConnect();
-    const question = await Question.findOne({ slug })
-      .select("name slug difficulty askedIn desc point")
-      .lean(); // Returns plain objects instead of Mongoose documents
+    const question = await Question.findOne({ slug }).lean(); // Returns plain objects instead of Mongoose documents
 
+    const publicTestCases = question.testCases.filter(
+      (testCase) => testCase.isPublic
+    );
+    question.testCases = publicTestCases;
     return {
       ...question,
       _id: question._id.toString(), // Convert _id to string

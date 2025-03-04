@@ -32,10 +32,7 @@ function SocialsBar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [prevScrollY]);
 
-  return pathname === "/login" ||
-    pathname === "/recoverPassword" ||
-    pathname.startsWith("/setPassword") ||
-    pathname.startsWith("/playground") ? null : (
+  return (
     <section ref={socialRef} className={Styles.socialsBar}>
       <a href="#" target="_blank" rel="noreferrer">
         <FaDiscord className={Styles.socialsBarIcons} size={ICON_SIZE} />

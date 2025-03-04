@@ -8,14 +8,25 @@ import Logo from "../logo/Logo";
 import Sidebar from "./Sidebar";
 import LoginBtn from "../button/LoginBtn";
 import { useSession } from "next-auth/react";
+import { usePathname } from "next/navigation";
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [smallHeader, setSmallHeader] = useState(false);
   const { data } = useSession();
 
   const navRef = useRef();
 
   const [prevScrollY, setPrevScrollY] = useState(0);
+  const pathname = usePathname();
+
+  useEffect(() => {
+    if (pathname.startsWith("/playground") && smallHeader === false) {
+      setSmallHeader(true);
+    } else {
+      setSmallHeader(false);
+    }
+  }, [pathname]);
 
   useEffect(() => setPrevScrollY(window.scrollY), []);
 
@@ -59,7 +70,9 @@ function Navbar() {
     <header
       ref={navRef}
       id="navbar"
-      className={`${styles.navbar} transition-all border border-transparent  `}
+      className={`${styles.navbar} transition-all border border-transparent ${
+        smallHeader ? "md:py-3 py-2" : "md:py-4 py-3"
+      } `}
     >
       <Logo />
       <nav id="navList" className={styles.navbarList}>

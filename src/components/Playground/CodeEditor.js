@@ -9,6 +9,7 @@ import { c, cpp, java, javascript, python } from "./defaultCodeTemplate";
 import { atob } from "@/utils/helper";
 import { BiLoader } from "react-icons/bi";
 import { Button } from "../ui/button";
+import { cn } from "@/lib/utils";
 
 const options = {
   mouseWheelZoom: true,
@@ -28,7 +29,7 @@ const options = {
   cursorStyle: "underline",
 };
 
-const CodeEditor = ({ code, submitCode }) => {
+const CodeEditor = ({ code, className, questionId, publicTestCases }) => {
   const editorRef = useRef(null);
   const popUpRef = useRef(null);
 
@@ -141,6 +142,7 @@ const CodeEditor = ({ code, submitCode }) => {
         method: "POST",
         body: JSON.stringify({
           code: editorRef.current.getValue(),
+          questionId,
           language,
           input,
         }),
@@ -164,7 +166,7 @@ const CodeEditor = ({ code, submitCode }) => {
   };
 
   return (
-    <div className="flex flex-col gap-2 w-full">
+    <div className={cn("flex flex-col gap-2 w-full", className)}>
       <div className="flex flex-col min-h-[calc(100vh-83px-64px-84px-20px)] border border-l-white/5 border-t-white/5 border-r-black/25 border-b-black/25 gap-4 bg-[#101010] rounded-xl py-4">
         <div className="ml-auto flex items-center gap-4 px-4">
           <Button
