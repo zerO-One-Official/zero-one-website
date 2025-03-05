@@ -79,9 +79,9 @@ const UserPage = async ({ params }) => {
           {username === loggedInUser ? (
             <Link
               href={`/user/${loggedInUser}/edit`}
-              className="block rounded-full absolute top-4 right-4 p-4 shadow-btn border border-l-white/5 border-t-white/5 border-r-black/25 border-b-black/25 "
+              className="group block rounded-full absolute top-4 right-4 p-4 shadow-btn border border-l-white/5 border-t-white/5 border-r-black/25 border-b-black/25"
             >
-              <BiEdit className="w-4 h-4" />
+              <BiEdit className="w-4 h-4 fill-foreground/50 group-hover:fill-foreground" />
             </Link>
           ) : null}
         </div>
@@ -89,11 +89,14 @@ const UserPage = async ({ params }) => {
           {user?.bio ? (
             <>
               <div className="flex-1 p-4 space-y-2">
-                <p className="flex items-baseline font-semibold">
-                  <DiCodeigniter className="w-4 h-4 mr-2" />
+                <p className="text-zinc-500 flex items-baseline font-semibold">
+                  <DiCodeigniter className="w-4 h-4 fill-zinc-500 mr-2" />
                   Bio
                 </p>
-                <p className="text-zinc-500 flex items-center" title={user.bio}>
+                <p
+                  className="text-foreground/80 flex items-center"
+                  title={user.bio}
+                >
                   {user.bio.slice(0, 100)}
                   {user.bio.length > 100 ? "..." : ""}
                 </p>
@@ -105,11 +108,11 @@ const UserPage = async ({ params }) => {
 
           <div className="flex-1 p-4 space-y-2">
             <p className="text-zinc-500 flex items-center">
-              <PiGenderIntersexBold className="stroke-ztext-zinc-500 md:w-4 md:h-4 w-6 h-6 mr-2" />
+              <PiGenderIntersexBold className="fill-zinc-500 md:w-4 md:h-4 w-6 h-6 mr-2" />
               {user.gender}
             </p>
             <p className="text-zinc-500 flex items-center">
-              <IoSchool className="stroke-ztext-zinc-500 md:w-4 md:h-4 w-6 h-6 mr-2" />
+              <IoSchool className="fill-zinc-500 md:w-4 md:h-4 w-6 h-6 mr-2" />
               {user.roll}
             </p>
           </div>
@@ -118,17 +121,17 @@ const UserPage = async ({ params }) => {
 
           <div className="flex-1 p-4 space-y-2">
             <div className="flex items-center">
-              <HiEnvelope className="stroke-ztext-zinc-500  md:w-4 md:h-4 w-6 h-6 mr-2 shrink-0" />
+              <HiEnvelope className="fill-zinc-500 text-zinc-500 md:w-4 md:h-4 w-6 h-6 mr-2 shrink-0" />
               <a
                 href={`mailto:${user.email}`}
-                className="text-zinc-500  overflow-hidden text-ellipsis"
+                className="text-zinc-500 overflow-hidden text-ellipsis"
               >
                 {user.email}
               </a>
             </div>
             {user.gitHub ? (
               <div className="flex items-center">
-                <IoLogoGithub className="stroke-ztext-zinc-500  md:w-4 md:h-4 w-6 h-6 mr-2 shrink-0" />
+                <IoLogoGithub className="fill-zinc-500  md:w-4 md:h-4 w-6 h-6 mr-2 shrink-0" />
                 <a
                   href={user.gitHub}
                   className="text-zinc-500 overflow-hidden text-ellipsis"
@@ -139,7 +142,7 @@ const UserPage = async ({ params }) => {
             ) : null}
             {user.linkedIn ? (
               <div className="flex items-center">
-                <BiLogoLinkedinSquare className="stroke-ztext-zinc-500  md:w-4 md:h-4 w-6 h-6 mr-2 shrink-0" />
+                <BiLogoLinkedinSquare className="fill-zinc-500  md:w-4 md:h-4 w-6 h-6 mr-2 shrink-0" />
                 <a
                   href={user.linkedIn}
                   className="text-zinc-500 overflow-hidden text-ellipsis"

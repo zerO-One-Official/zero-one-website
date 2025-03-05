@@ -1,3 +1,4 @@
+import { decodeBase64 } from "@/utils/helper";
 import { NextResponse } from "next/server";
 
 const LANGUAGE_ID = {
@@ -12,12 +13,13 @@ export const POST = async (req) => {
   try {
     const reqBody = await req.json();
 
+    // Validate request body
     const { code, testCases, language } = reqBody;
 
-    if (!code || !testCases || !language || !testCases.length) {
+    if (!code || typeof code !== "string") {
       return NextResponse.json(
         {
-          message: "Invalid Request for code execution.",
+          message: "Code is required and must be a string.",
           success: false,
           type: "error",
         },
@@ -25,51 +27,90 @@ export const POST = async (req) => {
       );
     }
 
+    if (!testCases || !Array.isArray(testCases) || !testCases.length) {
+      return NextResponse.json(
+        {
+          message: "Test cases are required and must be a non-empty array.",
+          success: false,
+          type: "error",
+        },
+        { status: 400 }
+      );
+    }
+
+    if (!language || typeof language !== "string") {
+      return NextResponse.json(
+        {
+          message: "Language is required and must be a string.",
+          success: false,
+          type: "error",
+        },
+        { status: 400 }
+      );
+    }
+
+    // Prepare payload for submissions
     const payload = testCases.map((testCase) => {
-      const { input, output } = testCase;
+      const { stdin, expected_output } = testCase;
+
+      // Validate each test case
+      if (typeof stdin !== "string" || typeof expected_output !== "string") {
+        throw new Error(
+          "Each test case must have valid input and output as strings."
+        );
+      }
+
       return {
         source_code: code,
         language_id: LANGUAGE_ID[language],
-        stdin: input,
-        expected_output: output,
+        stdin,
+        expected_output,
       };
     });
 
-    console.log(payload);
-
-    // const URL = 'https://judge0-ce.p.rapidapi.com'
     const URL = "http://13.203.158.214:2358";
 
+    // Send the request to the Judge0 API
     const res = await fetch(
       `${URL}/submissions/batch?base64_encoded=false&wait=false`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          // "x-rapidapi-key": "fa0908be8dmsh0af843b3f6aac78p179e57jsnae94a194540a",
-          // "x-rapidapi-host": "judge0-ce.p.rapidapi.com",
         },
         body: JSON.stringify({ submissions: payload }),
       }
     );
 
+    // Check if the response is OK
+    if (!res.ok) {
+      const errorData = await res.json();
+      return NextResponse.json(
+        {
+          message: errorData.message || "Failed to submit code for execution.",
+          success: false,
+          type: "error",
+        },
+        { status: res.status }
+      );
+    }
+
     const data = await res.json();
 
     return NextResponse.json(
       {
-        data,
-        token: data.token,
-        message: "",
+        tokens: data,
+        message: "Submissions processed successfully.",
         success: true,
         type: "success",
       },
       { status: 200 }
     );
   } catch (error) {
-    console.log(error);
+    console.error("Error occurred:", error);
     return NextResponse.json(
       {
-        message: error.message,
+        message: error.message || "An unexpected error occurred.",
         success: false,
         type: "error",
       },
@@ -83,22 +124,23 @@ export const GET = async (req) => {
     const { searchParams } = new URL(req.url);
     const token = searchParams.get("token");
 
-    if (!token)
+    if (!token) {
       return NextResponse.json({
         message: "Invalid Submission token",
         success: false,
         type: "error",
       });
+    }
 
     const URI = "http://13.203.158.214:2358";
 
     const res = await fetch(
-      `${URI}/submissions/${token}?base64_encoded=true&fields=*`
+      `${URI}/submissions/${token}?base64_encoded=true&fields=stdout,stderr,status,time,memory,expected_output,compile_output,finished_at,message`
     );
 
-    let data = await res.json();
+    const data = await res.json();
 
-    if (data?.error)
+    if (data?.error) {
       return NextResponse.json(
         {
           message: data.error,
@@ -107,10 +149,24 @@ export const GET = async (req) => {
         },
         { status: 400 }
       );
+    }
+
+    // Decode outputs if they exist
+    const decodedData = {
+      ...data,
+      stdout: data.stdout ? decodeBase64(data.stdout) : null,
+      stderr: data.stderr ? decodeBase64(data.stderr) : null,
+      compile_output: data.compile_output
+        ? decodeBase64(data.compile_output)
+        : null,
+      expected_output: data.expected_output
+        ? decodeBase64(data.expected_output)
+        : null,
+    };
 
     return NextResponse.json(
       {
-        data,
+        data: decodedData,
         message: "Code Compiled",
         success: true,
         type: "success",
@@ -121,7 +177,7 @@ export const GET = async (req) => {
     console.log(error);
     return NextResponse.json(
       {
-        message: error.message,
+        message: error.message || "An unexpected error occurred.",
         success: false,
         type: "error",
       },

@@ -14,10 +14,18 @@ export function generateAccessCode() {
 
   return code;
 }
-export function atob(b64txt) {
-  const buff = Buffer.from(b64txt, "base64");
-  const txt = buff.toString("utf-8");
-  return txt;
+
+export function decodeBase64(base64String) {
+  // Check if the input is a valid Base64 string
+  if (!base64String) return null;
+  if (typeof base64String !== "string") {
+    throw new Error("Input must be a Base64 encoded string");
+  }
+
+  // Decode the Base64 string using Buffer
+  const decodedText = Buffer.from(base64String, "base64").toString("utf-8");
+
+  return decodedText;
 }
 
 export const getMonthName = (date) => {

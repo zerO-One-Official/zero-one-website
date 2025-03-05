@@ -110,7 +110,7 @@ function Navbar() {
         onClick={() => setIsOpen(true)}
         className={styles.humburgerMenu}
       >
-        <HiMenuAlt4 size={32} className="block" />
+        <HiMenuAlt4 size={32} className="block fill-foreground" />
       </div>
       <Sidebar isMounted={isOpen} unmount={() => setIsOpen(false)} />
     </header>

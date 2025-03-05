@@ -6,11 +6,11 @@ export const getQuestions = async () => {
   try {
     // dbConnect();
     const questions = await Question.find()
-      .select("name slug difficulty askedIn desc, point")
-      .lean(); // Returns plain objects instead of Mongoose documents
-
+      .select("_id name slug difficulty askedIn desc point")
+      .lean();
     return questions.map((question) => ({
       ...question,
+      _id: question._id.toString(), // Convert _id to string
       title: question.name,
     }));
   } catch (error) {
@@ -21,7 +21,7 @@ export const getQuestions = async () => {
 export const getQuestion = async (slug) => {
   try {
     // dbConnect();
-    const question = await Question.findOne({ slug }).lean(); // Returns plain objects instead of Mongoose documents
+    const question = await Question.findOne({ slug }).lean();
 
     const publicTestCases = question.testCases.filter(
       (testCase) => testCase.isPublic

@@ -12,7 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { SunMoon } from "lucide-react";
+import { LoaderCircle, Palette, Triangle } from "lucide-react";
 import { BiLoader } from "react-icons/bi";
 
 const CodeExecuter = ({ testCases }) => {
@@ -52,10 +52,10 @@ const CodeExecuter = ({ testCases }) => {
   };
 
   return (
-    <div className="flex items-center justify-between gap-4 p-2">
+    <div className="flex items-center justify-between gap-4 p-2 bg-secondary">
       <Select value={theme} onValueChange={setTheme}>
         <SelectTrigger className="max-w-min">
-          <SunMoon />
+          <Palette className="w-4 h-4 fill-none stroke-foreground mr-2" />
           {/* <SelectValue placeholder="Theme" /> */}
         </SelectTrigger>
         <SelectContent>
@@ -79,24 +79,24 @@ const CodeExecuter = ({ testCases }) => {
 
       <div className="flex gap-2">
         <Button
-          size="sm"
-          className={"bg-blue-400 hover:bg-blue-400/80 font-semibold"}
+          size="icon"
+          className={"font-semibold bg-transparent"}
           onClick={executeCode}
           disabled={loading}
         >
           {loading ? (
-            <BiLoader className="animate-spin fill-accent" size={20} />
+            <LoaderCircle className="w-6 h-6 animate-spin fill-transparent stroke-foreground" />
           ) : (
-            <CiPlay1 className="w-4 h-4" />
+            <Triangle className="w-4 h-4 rotate-90 fill-foreground " />
           )}
         </Button>
-        <Button
+        {/* <Button
           size="sm"
           className="bg-green-400 hover:bg-green-400/80 text-primary font-semibold"
           disabled={loading}
         >
           Submit
-        </Button>
+        </Button> */}
       </div>
     </div>
   );
