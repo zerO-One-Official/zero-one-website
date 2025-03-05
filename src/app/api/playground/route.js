@@ -12,19 +12,36 @@ export const POST = async (req) => {
   try {
     const reqBody = await req.json();
 
-    const { code, input, language } = reqBody;
+    const { code, testCases, language } = reqBody;
 
-    const payload = {
-      source_code: code,
-      language_id: LANGUAGE_ID[language],
-      stdin: input,
-    };
+    if (!code || !testCases || !language || !testCases.length) {
+      return NextResponse.json(
+        {
+          message: "Invalid Request for code execution.",
+          success: false,
+          type: "error",
+        },
+        { status: 400 }
+      );
+    }
+
+    const payload = testCases.map((testCase) => {
+      const { input, output } = testCase;
+      return {
+        source_code: code,
+        language_id: LANGUAGE_ID[language],
+        stdin: input,
+        expected_output: output,
+      };
+    });
+
+    console.log(payload);
 
     // const URL = 'https://judge0-ce.p.rapidapi.com'
     const URL = "http://13.203.158.214:2358";
 
     const res = await fetch(
-      `${URL}/submissions?base64_encoded=false&wait=false`,
+      `${URL}/submissions/batch?base64_encoded=false&wait=false`,
       {
         method: "POST",
         headers: {
@@ -32,7 +49,7 @@ export const POST = async (req) => {
           // "x-rapidapi-key": "fa0908be8dmsh0af843b3f6aac78p179e57jsnae94a194540a",
           // "x-rapidapi-host": "judge0-ce.p.rapidapi.com",
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({ submissions: payload }),
       }
     );
 
@@ -49,6 +66,7 @@ export const POST = async (req) => {
       { status: 200 }
     );
   } catch (error) {
+    console.log(error);
     return NextResponse.json(
       {
         message: error.message,

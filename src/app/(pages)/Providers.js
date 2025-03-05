@@ -1,58 +1,55 @@
-"use client"
+"use client";
 
 import { SessionProvider } from "next-auth/react";
 import { useEffect } from "react";
 
 const Providers = ({ children }) => {
+  useEffect(() => {
+    let mouseX = 0;
+    let mouseY = 0;
 
-    useEffect(() => {
+    let cursorX = 0;
+    let cursorY = 0;
 
-        let mouseX = 0;
-        let mouseY = 0;
+    const cursor = document.querySelector(".cursor");
 
-        let cursorX = 0;
-        let cursorY = 0;
+    let speed = 1; // change to increase the ease
 
-        const cursor = document.querySelector('.cursor');
+    function animate() {
+      let distX = mouseX - cursorX;
+      let distY = mouseY - cursorY;
 
-        let speed = 1; // change to increase the ease
+      cursorX = cursorX + distX * speed;
+      cursorY = cursorY + distY * speed;
 
-        function animate() {
-            let distX = mouseX - cursorX;
-            let distY = mouseY - cursorY;
+      cursor.style.left = cursorX + "px";
+      cursor.style.top = cursorY + "px";
 
-            cursorX = cursorX + (distX * speed);
-            cursorY = cursorY + (distY * speed);
+      requestAnimationFrame(animate);
+    }
 
-            cursor.style.left = cursorX + 'px';
-            cursor.style.top = cursorY + 'px';
+    animate();
 
-            requestAnimationFrame(animate);
-        }
+    document.addEventListener("mousemove", (event) => {
+      mouseX = event.clientX;
+      mouseY = event.clientY;
+    });
 
-        animate();
+    return () =>
+      document.removeEventListener("mousemove", (event) => {
+        mouseX = event.clientX;
+        mouseY = event.clientY;
+      });
+  }, []);
 
-        document.addEventListener('mousemove', (event) => {
-            mouseX = event.clientX;
-            mouseY = event.clientY;
-        })
+  return (
+    <SessionProvider>
+      <main id="overlayScreen">
+        <div className="cursor" />
+        {children}
+      </main>
+    </SessionProvider>
+  );
+};
 
-        return () =>
-            document.removeEventListener('mousemove', (event) => {
-                mouseX = event.clientX;
-                mouseY = event.clientY;
-            });
-    }, []);
-
-    return (
-
-        <SessionProvider>
-            <main id='overlayScreen'>
-                <div className='cursor' />
-                {children}
-            </main>
-        </SessionProvider>
-    )
-}
-
-export default Providers
+export default Providers;

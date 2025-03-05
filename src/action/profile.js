@@ -2,7 +2,7 @@ import User from "@/models/Users";
 
 export const activateAccount = async (token) => {
   try {
-    const user = await User.findOne({ token }).select("firstName");
+    const user = await User.findOne({ token }).select("firstName").lean();
 
     if (!user)
       return {

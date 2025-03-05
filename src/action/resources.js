@@ -65,7 +65,7 @@ export async function addResource(formData) {
 export async function getResource() {
   try {
     await connect();
-    const resources = await Resources.find();
+    const resources = await Resources.find().lean();
     return resources;
   } catch (error) {
     return [];
@@ -75,7 +75,7 @@ export async function getResource() {
 export async function getTopics(slug) {
   try {
     await connect();
-    const domain = await Resources.findOne({ slug });
+    const domain = await Resources.findOne({ slug }).lean();
     return domain;
   } catch (error) {
     throw new Error(error.message);
@@ -87,7 +87,7 @@ export async function getSubTopics(domainSlug, topicSlug) {
     await connect();
     const domain = await Resources.find({
       $and: [{ slug: domainSlug }, { "topics.slug": topicSlug }],
-    });
+    }).lean();
 
     return domain.topics || [];
   } catch (error) {

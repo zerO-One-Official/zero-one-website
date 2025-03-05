@@ -8,7 +8,15 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
+import {
+  ArrowRight,
+  ArrowUpDown,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  MoreHorizontal,
+  Search,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -98,6 +106,16 @@ export const columns = [
   // },
   {
     accessorKey: "difficulty",
+    sortingFn: (rowA, rowB) => {
+      const difficultyMap = {
+        easy: 1,
+        medium: 2,
+        hard: 3,
+      };
+      const difficultyA = difficultyMap[rowA.getValue("difficulty")] || 0; // Default to 0 if not found
+      const difficultyB = difficultyMap[rowB.getValue("difficulty")] || 0; // Default to 0 if not found
+      return difficultyA - difficultyB; // Ascending order
+    },
     header: ({ column }) => {
       return (
         <div className="w-full flex items-center justify-center">
@@ -205,7 +223,7 @@ function QuestionsTable({ data }) {
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
 
-  const [columnVisibility, setColumnVisibility] = useState({});
+  // const [columnVisibility, setColumnVisibility] = useState({});
   const [rowSelection, setRowSelection] = useState({});
 
   const table = useReactTable({
@@ -217,12 +235,12 @@ function QuestionsTable({ data }) {
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
+    // onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
     state: {
       sorting,
       columnFilters,
-      columnVisibility,
+      // columnVisibility,
       rowSelection,
     },
   });
@@ -233,16 +251,22 @@ function QuestionsTable({ data }) {
 
   return (
     <div className="w-full">
-      <div className="flex flex-wrap items-center py-4 gap-2">
+      <div className="flex flex-wrap items-center gap-2 relative my-2">
         <Input
           placeholder="Find Questions by Name..."
           value={table.getColumn("title")?.getFilterValue() ?? ""}
           onChange={(event) =>
             table.getColumn("title")?.setFilterValue(event.target.value)
           }
-          className="max-w-sm"
+          className="max-w-full pr-10"
         />
-        <DropdownMenu>
+        <Button
+          size="icon"
+          className="absolute right-0 top-0 bg-transparent pointer-events-none"
+        >
+          <Search className="h-4 w-4 opacity-50" />
+        </Button>
+        {/* <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
               size="sm"
@@ -271,7 +295,7 @@ function QuestionsTable({ data }) {
                 );
               })}
           </DropdownMenuContent>
-        </DropdownMenu>
+        </DropdownMenu> */}
       </div>
       <div className="rounded-md border">
         <Table>
@@ -298,6 +322,7 @@ function QuestionsTable({ data }) {
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
+                  className="cursor-pointer"
                   data-state={row.getIsSelected() && "selected"}
                   onClick={() => redirectToQuestion(row.original.slug)}
                 >
@@ -326,15 +351,17 @@ function QuestionsTable({ data }) {
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
         <div className="flex-1 text-sm text-muted-foreground">
-          Total {table.getPageCount()} Pages
+          Page {table.getState().pagination.pageIndex + 1} of{" "}
+          {table.getPageCount()}
         </div>
-        <div className="space-x-2">
+        <div className="flex items-center gap-2">
           <Button
             variant="outline"
             size="sm"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
+            <ChevronLeft className="h-4 w-4 fill-none" />
             Previous
           </Button>
           <Button
@@ -344,6 +371,7 @@ function QuestionsTable({ data }) {
             disabled={!table.getCanNextPage()}
           >
             Next
+            <ChevronRight className="h-4 w-4 fill-none" />
           </Button>
         </div>
       </div>

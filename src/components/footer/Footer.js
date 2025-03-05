@@ -7,11 +7,9 @@ import { usePathname } from "next/navigation";
 import { HiOutlineEnvelope } from "react-icons/hi2";
 import { IoSchoolOutline } from "react-icons/io5";
 import { FiMapPin } from "react-icons/fi";
-function Footer() {
-  const pathname = usePathname();
-  return pathname === "/login" ||
-    pathname === "/recoverPassword" ||
-    pathname.startsWith("/setPassword" || pathname.startsWith("/")) ? null : (
+
+function FooterUI() {
+  return (
     <footer className={`${Styles.footer} container-70 `}>
       <div className="">
         <BottomGlitter text="Get In Touch" />
@@ -101,10 +99,19 @@ function Footer() {
         </div>
       </div>
       <div className="">
-        <Logo />
+        <Logo size="lg" />
       </div>
     </footer>
   );
 }
+const Footer = () => {
+  const pathname = usePathname();
+  const hiddenFooter =
+    pathname === "/login" ||
+    pathname === "/recoverPassword" ||
+    pathname.startsWith("/setPassword") ||
+    pathname.startsWith("/playground");
 
+  return hiddenFooter ? null : <FooterUI />;
+};
 export default Footer;

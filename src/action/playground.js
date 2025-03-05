@@ -1,17 +1,16 @@
 "use server";
-import dbConnect from "@/lib/dbConnect";
+// import dbConnect from "@/lib/dbConnect";
 import Question from "@/models/Questions";
 
 export const getQuestions = async () => {
   try {
-    dbConnect();
+    // dbConnect();
     const questions = await Question.find()
       .select("name slug difficulty askedIn desc, point")
       .lean(); // Returns plain objects instead of Mongoose documents
 
     return questions.map((question) => ({
       ...question,
-      _id: question._id.toString(), // Convert _id to string
       title: question.name,
     }));
   } catch (error) {
@@ -21,11 +20,13 @@ export const getQuestions = async () => {
 
 export const getQuestion = async (slug) => {
   try {
-    dbConnect();
-    const question = await Question.findOne({ slug })
-      .select("name slug difficulty askedIn desc point")
-      .lean(); // Returns plain objects instead of Mongoose documents
+    // dbConnect();
+    const question = await Question.findOne({ slug }).lean(); // Returns plain objects instead of Mongoose documents
 
+    const publicTestCases = question.testCases.filter(
+      (testCase) => testCase.isPublic
+    );
+    question.testCases = publicTestCases;
     return {
       ...question,
       _id: question._id.toString(), // Convert _id to string

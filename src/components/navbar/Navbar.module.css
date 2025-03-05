@@ -1,11 +1,10 @@
 .navbar {
-  @apply sticky top-0 left-0 right-0 w-full md:py-4 py-3 px-20 flex justify-between items-center z-[100];
+  @apply sticky top-0 left-0 right-0 w-full px-20 flex justify-between items-center z-[100];
   @apply 2xl:px-10;
   @apply xl:px-8;
   @apply sm:px-6;
   @apply xs:px-3;
 }
-
 
 .navTitle {
   transition: all 400ms ease-in-out;
@@ -20,13 +19,13 @@
   @apply lg:hidden;
 }
 
-.navbarList>.navLink {
+.navbarList > .navLink {
   @apply font-semibold text-base xl:mx-5;
   transition: all 300ms ease-in-out;
   width: fit-content;
 }
 
-.navbarList>.navLink:hover {
+.navbarList > .navLink:hover {
   @apply text-accent;
 }
 

@@ -1,5 +1,5 @@
 .footer {
-  @apply flex flex-col justify-between gap-8 relative h-screen pt-24 pb-8;
+  @apply flex flex-col justify-between gap-8 relative h-screen pt-24 pb-8 backdrop-blur-xl;
   @apply sm:h-auto sm:pt-16;
 }
 
