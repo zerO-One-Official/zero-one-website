@@ -1,6 +1,6 @@
 "use client";
 import { Editor } from "@monaco-editor/react";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { defaultCode } from "./defaultCodeTemplate";
 import { cn } from "@/lib/utils";
@@ -43,7 +43,7 @@ const options = {
 const CodeEditor = ({ className }) => {
   const editorRef = useRef(null);
 
-  const { language, theme, setCode, code, runCode } = usePlayground();
+  const { language, theme, setCode, code } = usePlayground();
 
   function handleEditorDidMount(editor, monaco) {
     monacoThemes.forEach((theme) => {
@@ -53,6 +53,7 @@ const CodeEditor = ({ className }) => {
     // Set the theme
     monaco.editor.setTheme(theme);
     editorRef.current = editor;
+
     setCode(editor.getValue());
   }
 
@@ -72,7 +73,7 @@ const CodeEditor = ({ className }) => {
         defaultValue={defaultCode.cpp}
         onChange={setCode}
         onMount={handleEditorDidMount}
-        value={code || defaultCode[language]}
+        value={code}
         className={`p-0`}
         loading={<Skeleton className={"w-full h-full rounded-none"} />}
       />

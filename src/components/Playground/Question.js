@@ -1,6 +1,23 @@
+"use client";
+import { usePlayground } from "@/context/playground";
+import { useEffect } from "react";
 import Markdown from "react-markdown";
 
 export const Question = ({ question }) => {
+  const { setTestCases } = usePlayground();
+
+  useEffect(() => {
+    const initialTestCases = question.testCases.map((testCase) => ({
+      stdin: testCase.input,
+      expected_output: testCase.output,
+      code_output: "",
+      status: "Idle",
+      token: "",
+      time: null,
+    }));
+    setTestCases(initialTestCases);
+  }, [question.testCases, setTestCases]);
+
   const difficultyColor = () => {
     switch (question?.difficulty) {
       case "easy":
@@ -13,84 +30,84 @@ export const Question = ({ question }) => {
   };
 
   return (
-    <div className={`flex flex-col h-full gap-4 p-2 overflow-y-auto`}>
-      <div
-        className={`h-auto opacity-1 pointer-events-auto transition-all flex flex-col text-left gap-4`}
-      >
-        <h1>{question?.name}</h1>
-        <div className="p-4 rounded-xl">
-          <h4 className="font-medium underline mb-2 text-lg">
-            Problem Statement:
-          </h4>
-          <div className="text-primary-light/80">
-            <Markdown>{question?.desc}</Markdown>
+    <div className={`flex flex-col h-full gap-2 overflow-y-auto`}>
+      <div className="bg-secondary p-4">
+        <h1 className="font-bold text-xl">{question?.name}</h1>
+      </div>
+      <div className="p-2 flex flex-col gap-4 pb-4">
+        <div className="">
+          <Markdown>{question?.desc}</Markdown>
+        </div>
+        <div className="flex flex-col gap-2">
+          <div className="flex gap-6 ml-auto">
+            <p
+              className={`font-medium capitalize ${difficultyColor()} font-medium`}
+            >
+              {question?.difficulty}
+            </p>
+            <p className="text-foreground/60 font-medium">
+              {question?.point} Point
+            </p>
           </div>
         </div>
-        <div className="flex gap-6 ml-auto">
-          <h4
-            className={`font-medium capitalize ${difficultyColor()} font-medium`}
-          >
-            {question?.difficulty}
-          </h4>
-          <p className="text-primary-light/80 font-medium">
-            {question?.point} Point
-          </p>
-        </div>
 
-        <div className="bg-white/5 p-4 rounded-xl">
-          <h4 className="font-medium underline mb-2 text-lg">Input Format:</h4>
+        <div>
+          <h4 className="font-semibold text-foreground/50">Input Format:</h4>
 
-          <div className="text-primary-light/80">
+          <div className="bg-foreground/5 rounded-xl p-2 ">
             <Markdown>{question?.inputFormat}</Markdown>
           </div>
         </div>
 
-        <div className="bg-white/5 p-4 rounded-xl">
-          <h4 className="font-medium underline mb-2 text-lg">Output Format:</h4>
-          <div className="text-primary-light/80">
+        <div>
+          <h4 className="font-semibold text-foreground/50">Output Format:</h4>
+          <div className=" p-2 bg-foreground/5 rounded-xl">
             <Markdown>{question?.outputFormat}</Markdown>
-          </div>
-        </div>
-
-        <div className="bg-white/5 p-4 rounded-xl">
-          <h4 className="font-medium underline mb-2 text-lg">Constraints:</h4>
-          <div className="text-primary-light/80">
-            <Markdown>{question?.constraints}</Markdown>
           </div>
         </div>
 
         {question?.testCases.map((testCase, index) => {
           return (
-            <div key={index} className={`bg-white/5 rounded-xl p-4`}>
-              <div className="flex justify-between items-center">
-                <h4 className="font-medium underline mb-2 text-lg">
-                  Example {index + 1}:
-                </h4>
-                {testCase.isPublic ? null : <BsFillEyeSlashFill />}
+            <div key={index} className={`space-y-2`}>
+              <h4 className="font-semibold text-foreground/50">
+                Example {index + 1}:
+              </h4>
+              <div className="p-4 border-l-2">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <div className="font-medium text-foreground/50">Input</div>
+                  {testCase?.input ? (
+                    <div className="font-medium">
+                      <Markdown>{testCase.input}</Markdown>
+                    </div>
+                  ) : (
+                    <p key={index} className="font-medium">
+                      No Input
+                    </p>
+                  )}
+                </div>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <div className="font-medium text-foreground/50">Output</div>
+                  {testCase?.output ? (
+                    <div className="font-medium">
+                      <Markdown>{testCase.output}</Markdown>
+                    </div>
+                  ) : (
+                    <p key={index} className="font-medium">
+                      No Output
+                    </p>
+                  )}
+                </div>
               </div>
-              <div className="font-medium text-blue-400">Input</div>
-              {testCase?.input ? (
-                <div className="text-primary-light/80">
-                  <Markdown>{testCase.input}</Markdown>
-                </div>
-              ) : (
-                <p key={index} className="text-primary-light/80">
-                  No Input
-                </p>
-              )}
-              <div className="font-medium text-green-400">Output</div>
-              {testCase?.output ? (
-                <div className="text-primary-light/80">
-                  <Markdown>{testCase.output}</Markdown>
-                </div>
-              ) : (
-                <p key={index} className="text-primary-light/80">
-                  No Output
-                </p>
-              )}
             </div>
           );
         })}
+
+        <div>
+          <h4 className="font-semibold text-foreground/50">Constraints:</h4>
+          <div className=" p-2 bg-foreground/5 rounded-xl">
+            <Markdown>{question?.constraints}</Markdown>
+          </div>
+        </div>
       </div>
     </div>
   );

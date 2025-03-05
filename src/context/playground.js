@@ -1,11 +1,14 @@
 "use client";
-import React, { createContext, useContext, useState } from "react";
-import { atob } from "@/utils/helper";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { defaultCode } from "@/components/Playground/defaultCodeTemplate";
+import { decodeBase64 } from "@/utils/helper";
+import { set } from "mongoose";
+import { time } from "framer-motion";
 
 const initialState = {
   theme: "github",
   setTheme: () => {},
-  code: "github",
+  code: "",
   setCode: () => {},
   language: "cpp",
   testCases: [],
@@ -13,7 +16,6 @@ const initialState = {
   setLanguage: () => {},
   output: "",
   loading: false,
-  executionTime: null,
   runCode: async () => {},
   error: "",
 };
@@ -22,70 +24,35 @@ const PlaygroundContext = createContext(initialState);
 
 export const PlaygroundProvider = ({ children }) => {
   const [language, setLanguage] = useState("cpp");
-  const [error, setError] = useState("cpp");
-  const [output, setOutput] = useState(null);
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [testCases, setTestCases] = useState([]);
-  const [executionTime, setExecutionTime] = useState(null);
   const [theme, setTheme] = useState("github");
   const [code, setCode] = useState("");
 
-  const getResult = async (tokens) => {
+  useEffect(() => {
+    setCode(defaultCode[language]);
+  }, [language]);
+
+  const runCode = async () => {
     try {
-      if (!tokens || !tokens.length) return;
-      tokens.map(async (token) => {
-        while (true) {
-          const response = await fetch(`/api/playground?token=${token}`);
-          const result = await response.json();
+      setTestCases((prev) =>
+        prev.map((tc) => ({ ...tc, status: "Running", code_output: "" }))
+      );
 
-          if (result?.data?.status?.id >= 3) {
-            const finishedAt = new Date(result.data.finished_at);
-            const createdAt = new Date(result.data.created_at);
-            const diffInS = (finishedAt - createdAt) / 1000;
-
-            setExecutionTime(result.data.time || diffInS);
-
-            const message = result?.data.status.description;
-
-            if (message !== "Accepted") setError(message);
-
-            // Status ID >= 3 means completed
-            if (result?.data?.compile_output) {
-              setOutput(atob(result?.data?.compile_output));
-            } else if (result?.data?.stdout) {
-              setOutput(atob(result?.data?.stdout));
-            } else if (result?.data?.stderr) {
-              setOutput(atob(result?.data?.stderr));
-            } else {
-              setOutput("No Output");
-            }
-            break;
-          }
-
-          // Wait 1 second before polling again
-          await new Promise((resolve) => setTimeout(resolve, 1000));
-        }
-      });
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const runCode = async (testCases) => {
-    try {
       setLoading(true);
-      setOutput("");
-      setExecutionTime(null);
+      setError("");
 
       if (!code) {
-        throw new Error("Can't Run empty Code.");
+        throw new Error("Can't run empty code.");
       }
 
       // Step 1: Submit the code
       const res = await fetch("/api/playground", {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           code,
           language,
@@ -100,10 +67,68 @@ export const PlaygroundProvider = ({ children }) => {
         return;
       }
 
-      const tokens = data;
+      const tokens = data.tokens; // Assuming tokens is an array of tokens
 
-      // Step 3: Call polling function
-      getResult(tokens);
+      // Step 2: Update test cases with tokens and set status to 'Running'
+      const updatedTestCases = testCases.map((testCase, index) => ({
+        ...testCase,
+        token: tokens[index]?.token, // Ensure token exists
+      }));
+
+      setTestCases(updatedTestCases);
+
+      // Step 3: Poll each test case's token
+      await Promise.all(
+        updatedTestCases.map(async (testCase, index) => {
+          const token = testCase.token;
+
+          while (true) {
+            const response = await fetch(`/api/playground?token=${token}`);
+            const result = await response.json();
+
+            if (result?.data?.status?.id >= 3) {
+              const code_output =
+                result.data.stdout ||
+                result.data.stderr ||
+                result.data.compile_output ||
+                "No Output";
+
+              // Update the specific test case
+              setTestCases((prev) =>
+                prev.map((tc, i) =>
+                  i === index
+                    ? {
+                        ...tc,
+                        code_output,
+                        status: result.data.status.description,
+                        time: result.data.time,
+                      }
+                    : tc
+                )
+              );
+              break;
+            }
+            // Handle potential errors in the result
+            if (result?.error) {
+              setTestCases((prev) =>
+                prev.map((tc, i) =>
+                  i === index
+                    ? {
+                        ...tc,
+                        code_output: result.error,
+                        status: "Error",
+                      }
+                    : tc
+                )
+              );
+              break;
+            }
+
+            // Wait before polling again
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+          }
+        })
+      );
     } catch (error) {
       setError(error.message);
     } finally {
@@ -120,11 +145,11 @@ export const PlaygroundProvider = ({ children }) => {
         theme,
         setTheme,
         setLanguage,
-        output,
         loading,
-        executionTime,
         runCode,
         error,
+        testCases,
+        setTestCases,
       }}
     >
       {children}
