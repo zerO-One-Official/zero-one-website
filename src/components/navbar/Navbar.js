@@ -12,7 +12,7 @@ import { usePathname } from "next/navigation";
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const [smallHeader, setSmallHeader] = useState(false);
+  const [isPlaygroundPath, setIsPlaygroundPath] = useState(false);
   const { data } = useSession();
 
   const navRef = useRef();
@@ -21,10 +21,10 @@ function Navbar() {
   const pathname = usePathname();
 
   useEffect(() => {
-    if (pathname.startsWith("/playground") && smallHeader === false) {
-      setSmallHeader(true);
+    if (pathname.startsWith("/playground") && !isPlaygroundPath) {
+      setIsPlaygroundPath(true);
     } else {
-      setSmallHeader(false);
+      setIsPlaygroundPath(false);
     }
   }, [pathname]);
 
@@ -42,7 +42,8 @@ function Navbar() {
       } else {
         navRef.current.classList.remove("bg-background");
         navRef.current.classList.remove("shadow");
-        navRef.current.classList.remove("border-b-white/15");
+        !isPlaygroundPath &&
+          navRef.current.classList.remove("border-b-white/15");
       }
 
       if (Math.abs(window.scrollY - prevScrollY) > 300) {
@@ -70,11 +71,9 @@ function Navbar() {
     <header
       ref={navRef}
       id="navbar"
-      className={`${styles.navbar} transition-all border border-transparent ${
-        smallHeader ? "md:py-3 py-2" : "md:py-4 py-3"
-      } `}
+      className={`${styles.navbar} transition-all border border-transparent md:py-4 py-3 border-b-white/15`}
     >
-      <Logo />
+      <Logo size={`${isPlaygroundPath ? "icon" : "default"}`} />
       <nav id="navList" className={styles.navbarList}>
         {data && data.user && data.user.role === "admin" ? (
           <a href="https://admin.zeroonemce.com" className={styles.navLink}>
@@ -82,22 +81,27 @@ function Navbar() {
           </a>
         ) : null}
 
-        <Link href="/gallery" className={styles.navLink}>
-          Gallery
-        </Link>
-        {data && data.user ? (
+        {!isPlaygroundPath ? (
           <>
+            <Link href="/gallery" className={styles.navLink}>
+              Gallery
+            </Link>
             <Link href="/events" className={styles.navLink}>
               Events
             </Link>
+          </>
+        ) : null}
+
+        {data && data.user && !isPlaygroundPath ? (
+          <>
             <Link href="/playground" className={styles.navLink}>
               Code
             </Link>
+            <Link href="/resources" className={styles.navLink}>
+              Resources
+            </Link>
           </>
         ) : null}
-        <Link href="/resources" className={styles.navLink}>
-          Resources
-        </Link>
 
         <LoginBtn />
       </nav>

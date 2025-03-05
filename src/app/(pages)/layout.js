@@ -3,7 +3,8 @@ import Navbar from "@/components/navbar/Navbar";
 import SocialsBar from "@/components/socialsbar/SocialsBar";
 import "@/styles/globals.css";
 import Providers from "./Providers";
-import { ToastBar, Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
+import dbConnect from "@/lib/dbConnect";
 
 export const metadata = {
   title: "ZERO ONE",
@@ -11,7 +12,8 @@ export const metadata = {
     "Zero-one Coding Club of Motihari College of Engineering, Motihari",
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  await dbConnect();
   return (
     <html lang="en" suppressHydrationWarning>
       <body>

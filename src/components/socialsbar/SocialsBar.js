@@ -5,7 +5,8 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 const ICON_SIZE = 30;
-function SocialsBar() {
+
+function SocialsBarUI() {
   const pathname = usePathname();
 
   const socialRef = useRef();
@@ -61,5 +62,16 @@ function SocialsBar() {
     </section>
   );
 }
+
+const SocialsBar = () => {
+  const pathname = usePathname();
+  const hiddenSocialsBar =
+    pathname === "/login" ||
+    pathname === "/recoverPassword" ||
+    pathname.startsWith("/setPassword") ||
+    pathname.startsWith("/playground");
+
+  return hiddenSocialsBar ? null : <SocialsBarUI />;
+};
 
 export default SocialsBar;

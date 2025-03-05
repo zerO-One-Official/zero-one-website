@@ -1,15 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { cva } from "class-variance-authority";
+import { cn } from "@/lib/utils";
 
 // Define the variants using cva
-const logoStyles = cva("flex items-stretch gap-4", {
+const logoStyles = cva("h-auto", {
   variants: {
     size: {
-      icon: "w-12 h-auto", // Only logo image shown
-      small: "w-10 h-auto", // Small size
-      default: "flex justify-end translate-y-[1.5px]", // Default size
-      large: "flex-col justify-end translate-y-[1.5px] text-5xl", // Large size
+      sm: "w-10", // Small size
+      default: "w-12", // Default size
+      lg: "w-16", // Large size
     },
   },
   defaultVariants: {
@@ -17,26 +17,48 @@ const logoStyles = cva("flex items-stretch gap-4", {
   },
 });
 
-const Logo = ({ size = "default" }) => {
+// Define title and quote styles based on size
+const titleStyles = cva("font-semibold", {
+  variants: {
+    size: {
+      default: "text-3xl leading-8",
+      sm: "hidden",
+      lg: "text-4xl xs:text-3xl lg:text-[40px] lg:leading-9 xs:leading-8",
+    },
+  },
+  defaultVariants: {
+    size: "default",
+  },
+});
+
+const quoteStyles = cva("font-normal", {
+  variants: {
+    size: {
+      default: "text-xs text-stone-400 leading-4 xs:leading-0 lg:text-xs",
+      sm: "hidden",
+      lg: "text-md text-stone-400 leading-4 xs:leading-0 lg:text-sm",
+    },
+  },
+  defaultVariants: {
+    size: "default",
+  },
+});
+const Logo = ({ size = "default", className }) => {
   return (
-    <Link href="/" className={logoStyles({ size: size })}>
+    <Link href="/" className={cn("flex items-stretch gap-4", className)}>
       <Image
-        src="/logo.png"
+        src={"/logo.png"}
         quality={100}
-        width={80} // Set appropriate width
-        height={80} // Set appropriate height
-        className="h-auto lg:w-10"
-        alt="zero-one logo"
+        width={50} // Set appropriate width
+        height={50} // Set appropriate height
+        className={logoStyles({ size })}
+        alt="ZERO ONE"
         priority
       />
       {size !== "icon" && ( // Only show text if not in icon mode
         <div className="flex flex-col justify-end translate-y-[1.5px]">
-          <h1 className="font-semibold text-4xl xs:text-3xl lg:text-[40px] lg:leading-9 xs:leading-8">
-            ZERO ONE
-          </h1>
-          <p className="font-normal text-sm text-stone-400 leading-4 xs:leading-0 lg:text-xs">
-            Create. Code. Conquer.
-          </p>
+          <h1 className={titleStyles({ size })}>ZERO ONE</h1>
+          <p className={quoteStyles({ size })}>Create. Code. Conquer.</p>
         </div>
       )}
     </Link>

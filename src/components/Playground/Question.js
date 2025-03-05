@@ -1,9 +1,3 @@
-"use client";
-
-import Button from "@/components/button/Button";
-import { Lock } from "lucide-react";
-import Link from "next/link";
-import { RxCode } from "react-icons/rx";
 import Markdown from "react-markdown";
 
 export const Question = ({ question }) => {
@@ -19,12 +13,19 @@ export const Question = ({ question }) => {
   };
 
   return (
-    <div
-      className={`flex flex-col gap-4 bg-white/5 rounded-3xl p-4 border-b border-white/5`}
-    >
+    <div className={`flex flex-col h-full gap-4 p-2 overflow-y-auto`}>
       <div
         className={`h-auto opacity-1 pointer-events-auto transition-all flex flex-col text-left gap-4`}
       >
+        <h1>{question?.name}</h1>
+        <div className="p-4 rounded-xl">
+          <h4 className="font-medium underline mb-2 text-lg">
+            Problem Statement:
+          </h4>
+          <div className="text-primary-light/80">
+            <Markdown>{question?.desc}</Markdown>
+          </div>
+        </div>
         <div className="flex gap-6 ml-auto">
           <h4
             className={`font-medium capitalize ${difficultyColor()} font-medium`}
@@ -34,15 +35,6 @@ export const Question = ({ question }) => {
           <p className="text-primary-light/80 font-medium">
             {question?.point} Point
           </p>
-        </div>
-
-        <div className="p-4 rounded-xl">
-          <h4 className="font-medium underline mb-2 text-lg">
-            Problem Statement:
-          </h4>
-          <div className="text-primary-light/80">
-            <Markdown>{question?.desc}</Markdown>
-          </div>
         </div>
 
         <div className="bg-white/5 p-4 rounded-xl">
@@ -69,56 +61,32 @@ export const Question = ({ question }) => {
 
         {question?.testCases.map((testCase, index) => {
           return (
-            <div key={testCase._id} className={`bg-white/5 rounded-xl p-4`}>
+            <div key={index} className={`bg-white/5 rounded-xl p-4`}>
               <div className="flex justify-between items-center">
                 <h4 className="font-medium underline mb-2 text-lg">
                   Example {index + 1}:
                 </h4>
                 {testCase.isPublic ? null : <BsFillEyeSlashFill />}
               </div>
-              {testCase.isPublic ? (
-                <>
-                  <div className="font-medium text-blue-400">Input</div>
-                  {testCase?.input ? (
-                    <div className="text-primary-light/80">
-                      <Markdown>{testCase.input}</Markdown>
-                    </div>
-                  ) : (
-                    <p key={index} className="text-primary-light/80">
-                      No Input
-                    </p>
-                  )}
-                  <div className="font-medium text-green-400">Output</div>
-                  {testCase?.output ? (
-                    <div className="text-primary-light/80">
-                      <Markdown>{testCase.output}</Markdown>
-                    </div>
-                  ) : (
-                    <p key={index} className="text-primary-light/80">
-                      No Output
-                    </p>
-                  )}
-                </>
+              <div className="font-medium text-blue-400">Input</div>
+              {testCase?.input ? (
+                <div className="text-primary-light/80">
+                  <Markdown>{testCase.input}</Markdown>
+                </div>
               ) : (
-                <>
-                  <Lock />
-                  {/* <div className="font-medium text-blue-400">Input</div>
-                  {testCase.input.split(",").map((inp, index) => {
-                    return (
-                      <p key={index} className="text-primary-light/80">
-                        {inp}
-                      </p>
-                    );
-                  })}
-                  <div className="font-medium text-green-400">Output</div>
-                  {testCase.output.split(",").map((op, index) => {
-                    return (
-                      <p key={index} className="text-primary-light/80">
-                        {op}
-                      </p>
-                    );
-                  })} */}
-                </>
+                <p key={index} className="text-primary-light/80">
+                  No Input
+                </p>
+              )}
+              <div className="font-medium text-green-400">Output</div>
+              {testCase?.output ? (
+                <div className="text-primary-light/80">
+                  <Markdown>{testCase.output}</Markdown>
+                </div>
+              ) : (
+                <p key={index} className="text-primary-light/80">
+                  No Output
+                </p>
               )}
             </div>
           );
