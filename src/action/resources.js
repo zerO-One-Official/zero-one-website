@@ -84,16 +84,34 @@ export async function getTopics(slug) {
 
 export async function getSubTopics(domainSlug, topicSlug) {
   try {
-    await connect();
-    const domain = await Resources.find({
-      $and: [{ slug: domainSlug }, { "topics.slug": topicSlug }],
-    }).lean();
+    
 
-    return domain.topics || [];
+    // Find the domain and get only the specific topic's data
+    const domain = await Resources.findOne(
+      { slug: domainSlug, "topics.slug": topicSlug }, // Find matching domain & topic
+      { "topics.$": 1 } // Retrieve only the matched topic
+    ).lean();
+
+    console.log("Filtered Domain Data:", domain); // Debugging
+
+    if (!domain || !domain.topics?.length) {
+      return []; // If no data found, return empty array
+    }
+
+    // Extract the matched topic's subtopics
+    const matchedTopic = domain.topics[0];
+    
+
+    // **Ensure only subtopics belonging to the requested topicSlug are sent**
+    
+
+    return  matchedTopic;
   } catch (error) {
+    console.error("Error fetching subtopics:", error);
     return [];
   }
 }
+
 
 export async function addTopics(topicdata) {
   try {
@@ -161,7 +179,7 @@ export async function addSubtopic(subtopicdata) {
     }
     const existDomain = await Resources.findOne(
       {
-        domain: { $regex: new RegExp("^" + domain + "$", "i") },
+        domains: { $regex: new RegExp("^" + domain + "$", "i") },
         "topics.title": { $regex: new RegExp("^" + topic + "$", "i") },
       },
       { "topics.$": 1 }
