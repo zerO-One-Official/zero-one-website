@@ -11,7 +11,7 @@ const SubtopicPage = async ({ params }) => {
 
   return (
     <div>
-      <Subtopic data={JSON.parse(JSON.stringify(data))} />
+      <Subtopic data={JSON.parse(JSON.stringify(data))}  domain={ domainSlug} topic={ topicSlug} />
     </div>
   );
 };

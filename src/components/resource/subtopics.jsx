@@ -1,9 +1,14 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import Button from "../button/Button";
 
-export default function Subtopic({ data }) {
+export default function Subtopic({ data,domain,topic }) {
   console.log("data:", data);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const titleFromUrl = searchParams.get("title");
 
   const [selectedResource, setSelectedResource] = useState(null);
   const [selectedTitle, setSelectedTitle] = useState("");
@@ -11,129 +16,119 @@ export default function Subtopic({ data }) {
   const [showPreview, setShowPreview] = useState(false);
 
   useEffect(() => {
-    // Check screen width
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
     };
 
-    handleResize(); // Initial check
+    handleResize();
     window.addEventListener("resize", handleResize);
-
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  useEffect(() => {
+    if (titleFromUrl) {
+      const matchedItem = data.subtopics?.find((item) => item.title === titleFromUrl);
+      if (matchedItem) {
+        setSelectedResource(matchedItem.resourceUrl);
+        setSelectedTitle(matchedItem.title);
+        setShowPreview(true);
+      }
+    }
+  }, [titleFromUrl, data.subtopics]);
+
+  const handleClick = (item) => {
+    const encodedTitle = encodeURIComponent(item.title);
+    router.push(`/resources/${domain}/${topic}?title=${encodedTitle}`);
+
+    setSelectedResource(item.resourceUrl);
+    setSelectedTitle(item.title);
+    setShowPreview(true);
+  };
+
   return (
-    <div className="flex h-screen w-full bg-gray-100 dark:bg-neutral-900">
-      {/* Mobile View - Show only subtopics initially */}
+    <div className="flex h-screen w-full bg-black">
       {isMobile ? (
         showPreview ? (
-          // PDF Preview Page
           <div className="flex flex-col items-center justify-center w-full p-5">
-            <button
+            <Button
               onClick={() => setShowPreview(false)}
-              className="mb-3 px-4 py-2 bg-gray-700 text-white rounded-lg"
+              className="mb-3 px-4 py-2 bg-oklch(0.13 0.028 261.692) text-white bordershadow-cus border border-white/5 rounded-3xl"
             >
               Back to Topics
-            </button>
-            <h2 className="text-2xl font-semibold text-center mb-4 text-white">
-              {selectedTitle}
-            </h2>
-            <div className="w-full max-w-4xl h-[500px] bg-gray-800 dark:bg-neutral-700 rounded-lg flex items-center justify-center shadow-md border">
-              <iframe
-                src={selectedResource}
-                className="w-full h-full rounded-lg"
-                title="Resource Preview"
-              />
+            </Button>
+            <h2 className="text-2xl font-semibold text-center mb-4 text-white ">{selectedTitle}</h2>
+            <div className="w-full max-w-4xl h-[500px] bg-black rounded-lg flex items-center justify-center shadow-md border border-white">
+              <iframe src={selectedResource} className="w-full h-full rounded-lg" title="Resource Preview" />
             </div>
             <a
               href={selectedResource}
               download
-              className="mt-4 px-5 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all"
+              className="mt-4 px-5 py-2 bg-oklch(0.13 0.028 261.692) text-white bordershadow-cus border border-white/5 rounded-3xl hover:bg-white hover:text-black transition-all"
             >
               Download Resource
             </a>
           </div>
         ) : (
-          // Subtopics List Page
           <div className="w-full flex flex-col items-center p-5">
-            <h2 className="text-xl font-semibold text-center mb-4 text-white">
-              Resources
-            </h2>
+            <h2 className="text-xl font-semibold text-center mb-4 text-white">Resources</h2>
             <div className="space-y-3 w-full max-w-sm">
               {data.subtopics?.length === 0 ? (
                 <p className="text-red-600 text-center">No Resources Found</p>
               ) : (
                 data.subtopics?.map((item, subIdx) => (
-                  <button
+                  <Button
+                    onClick={() => handleClick(item)}
                     key={`${item._id}-${subIdx}`}
-                    onClick={() => {
-                      setSelectedResource(item.resourceUrl);
-                      setSelectedTitle(item.title);
-                      setShowPreview(true);
-                    }}
-                    className="w-full text-left p-3 bg-gray-900 text-white rounded-lg border border-gray-700 
-                    hover:border-blue-500 hover:shadow-lg hover:shadow-blue-500 transition-all"
+                   className='text-center'
                   >
                     {item.title}
-                  </button>
+                  </Button>
                 ))
               )}
             </div>
           </div>
         )
       ) : (
-        // Desktop View - Sidebar + Preview Panel
         <>
-          {/* Sidebar */}
-          <div className="w-1/4 min-w-[270px] bg-black text-white shadow-lg  p-4 overflow-y-auto  left-0 top-0 bottom-0">
-            <h2 className="text-xl font-semibold text-center mb-4">Resources</h2>
+          <div className="w-1/4 min-w-[270px] bg-black text-white shadow-lg p-4 overflow-y-auto">
+            <h2 className="text-xl font-semibold text-center mb-4 border-b-2 border-red-500  border-spacing-3">Resources</h2>
             <div className="space-y-3">
               {data.subtopics?.length === 0 ? (
                 <p className="text-red-600 text-center">No Resources Found</p>
               ) : (
                 data.subtopics?.map((item, subIdx) => (
-                  <button
+                  <Button
                     key={`${item._id}-${subIdx}`}
-                    onClick={() => {
-                      setSelectedResource(item.resourceUrl);
-                      setSelectedTitle(item.title);
-                    }}
-                    className="w-full text-left p-3 bg-gray-900 text-white rounded-lg border border-gray-700 
-                    hover:border-blue-500 hover:shadow-lg hover:shadow-blue-500 transition-all"
+                    onClick={() => handleClick(item)}
+                    className="w-full text-center p-3
+                   "
                   >
                     {item.title}
-                  </button>
+                  </Button>
                 ))
               )}
             </div>
           </div>
 
-          {/* Preview Panel */}
-          <div className="flex-1  flex flex-col items-center justify-center  bg-gray-900">
+          <div className="flex-1 flex flex-col items-center justify-center bg-black">
             {selectedResource ? (
               <>
-                <h2 className="text-2xl font-semibold text-center mb-4 text-white">
-                  {selectedTitle}
-                </h2>
-                <div className="w-full max-w-5xl h-[600px] bg-gray-800 dark:bg-neutral-700 rounded-lg flex items-center justify-center shadow-md border">
-                  <iframe
-                    src={selectedResource}
-                    className="w-full h-full rounded-lg"
-                    title="Resource Preview"
-                  />
+                <h2 className="text-2xl font-semibold text-center mb-4 text-white">{selectedTitle}</h2>
+                <div className="w-full max-w-5xl h-[600px] bg-black rounded-lg flex items-center justify-center shadow-md border border-white">
+                  <iframe src={selectedResource} className="w-full h-full rounded-lg" title="Resource Preview" />
                 </div>
-                <a
+                <Button className="mt-4">                <a
                   href={selectedResource}
                   download
-                  className="mt-4 px-5 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all"
+                
                 >
                   Download Resource
                 </a>
+                </Button>
+
               </>
             ) : (
-              <p className="text-gray-600 dark:text-gray-400">
-                Select a resource to preview
-              </p>
+              <p className="text-gray-400">Select a resource to preview</p>
             )}
           </div>
         </>
