@@ -33,6 +33,11 @@ export default function Subtopic({ data,domain,topic }) {
         setSelectedTitle(matchedItem.title);
         setShowPreview(true);
       }
+    }else if (data.subtopics?.length > 0) {
+      // Set default first PDF if no title is in URL
+      setSelectedResource(data.subtopics[0].resourceUrl);
+      setSelectedTitle(data.subtopics[0].title);
+      setShowPreview(true);
     }
   }, [titleFromUrl, data.subtopics]);
 
