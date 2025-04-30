@@ -12,6 +12,7 @@ export const Question = ({ question }) => {
       expected_output: testCase.output,
       code_output: "",
       status: "Idle",
+      message: "",
       token: "",
       time: null,
     }));

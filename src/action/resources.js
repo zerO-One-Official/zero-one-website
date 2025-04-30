@@ -1,9 +1,8 @@
 "use server";
 
-import connect from "@/lib/dbConnect"; // Ensure correct path to DB connection
-import Resources from "@/models/Resources"; // Ensure correct path to Resource model
+import connect from "@/lib/dbConnect";
+import Resources from "@/models/Resources";
 
-// ✅ Server Action for adding a new resource (POST)
 export async function addResource(formData) {
   try {
     await connect();

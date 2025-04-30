@@ -1,6 +1,6 @@
 "use server";
 // import dbConnect from "@/lib/dbConnect";
-import Question from "@/models/Questions";
+import Question from "@/models/CodingQuestions";
 
 export const getQuestions = async () => {
   try {

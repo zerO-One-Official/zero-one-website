@@ -21,7 +21,7 @@ function capitalizeFirstChar(str) {
 
 export async function generateMetadata({ params }) {
   // read route params
-  const username = params.username;
+  const { username } = await params;
   const user = await getUser(username);
   const name = user
     ? `${capitalizeFirstChar(user.firstName)} ${capitalizeFirstChar(
@@ -39,7 +39,7 @@ const UserPage = async ({ params }) => {
 
   const loggedInUser = session?.user.username;
 
-  const username = params.username;
+  const { username } = await params;
 
   const user = await getUser(username);
 

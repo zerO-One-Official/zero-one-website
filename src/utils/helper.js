@@ -1,3 +1,5 @@
+import { format } from "date-fns";
+
 export function generateAccessCode() {
   // Define the character set for alphanumeric code
   const charset =
@@ -47,24 +49,71 @@ export const getMonthName = (date) => {
 };
 
 export function getTime(date) {
-  // Extract hours and minutes from the input string
-  // const [hours, minutes] = time24.split(':');
+  return format(new Date(date), "h:mm a");
+}
 
-  const hours = date.getHours();
-  const minutes = date.getMinutes();
+export function getDate(date) {
+  return format(new Date(date), "d LLL yyyy");
+}
 
-  // Convert hours to a number
-  let hours12 = parseInt(hours, 10);
+export const distanceTime = (date) => {
+  const now = new Date();
+  const targetDate = new Date(date);
 
-  // Determine AM or PM
-  const meridiem = hours12 >= 12 ? "PM" : "AM";
+  // Calculate the difference in milliseconds
+  const diff = targetDate - now;
+  const isPast = diff < 0; // Whether the time is in the past or future
 
-  // Convert to 12-hour format
-  hours12 = hours12 % 12 || 12;
+  // Get the absolute values for calculations
+  const absDiff = Math.abs(diff);
 
-  // Add leading zero to minutes if necessary
-  const minutesWithLeadingZero = minutes.toString().padStart(2, "0");
+  // Convert milliseconds into days, hours, and minutes
+  const days = Math.floor(absDiff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor(
+    (absDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+  );
+  const minutes = Math.floor((absDiff % (1000 * 60 * 60)) / (1000 * 60));
 
-  // Return the formatted time
-  return `${hours12}:${minutesWithLeadingZero} ${meridiem}`;
+  // Create the detailed string
+  let timeString = "";
+  timeString += `${days} day${days > 1 ? "s" : ""} `;
+  timeString += `${hours} hour `;
+  timeString += `${minutes} min`;
+
+  // Append "ago" or "in" based on whether it's past or future
+  if (isPast) {
+    return `${timeString} ago`;
+  } else {
+    return `in ${timeString}`;
+  }
+};
+
+export const generateSlug = (text) => {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-") // Replace non-alphanumeric characters with "-"
+    .replace(/^-+|-+$/g, ""); // Trim "-" from start and end
+};
+
+export function convertIdsToString(data) {
+  if (Array.isArray(data)) {
+    return data.map((item) => convertIdsToString(item));
+  } else if (data !== null && typeof data === "object") {
+    const newObj = {};
+    for (const key in data) {
+      if (Object.prototype.hasOwnProperty.call(data, key)) {
+        if (
+          key === "_id" &&
+          typeof data[key] === "object" &&
+          data[key].toString
+        ) {
+          newObj[key] = data[key].toString();
+        } else {
+          newObj[key] = convertIdsToString(data[key]);
+        }
+      }
+    }
+    return newObj;
+  }
+  return data;
 }

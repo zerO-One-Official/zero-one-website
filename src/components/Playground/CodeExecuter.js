@@ -13,7 +13,6 @@ import {
   SelectValue,
 } from "../ui/select";
 import { LoaderCircle, Palette, Triangle } from "lucide-react";
-import { BiLoader } from "react-icons/bi";
 
 const CodeExecuter = ({ testCases }) => {
   const { language, setLanguage, runCode, loading, theme, setTheme, error } =

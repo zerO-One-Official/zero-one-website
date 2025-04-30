@@ -3,6 +3,7 @@ import dbConnect from "@/lib/dbConnect";
 import Certificate from "@/models/Certificate";
 import Template from "@/models/Template";
 import User from "@/models/Users";
+import { convertIdsToString } from "@/utils/helper";
 import { deleteFile, isValidMongooseId } from "@/utils/server";
 import { revalidatePath } from "next/cache";
 
@@ -71,7 +72,7 @@ export const getCertificate = async (certificateNumber) => {
       ])
       .lean();
 
-    return certificate;
+    return convertIdsToString(certificate);
   } catch (error) {
     console.log(error);
     return null;

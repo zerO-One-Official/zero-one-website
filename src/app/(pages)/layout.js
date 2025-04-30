@@ -5,6 +5,7 @@ import "@/styles/globals.css";
 import Providers from "./Providers";
 import { Toaster } from "react-hot-toast";
 import dbConnect from "@/lib/dbConnect";
+import NextTopLoader from "nextjs-toploader";
 
 export const metadata = {
   title: "ZERO ONE",
@@ -17,6 +18,12 @@ export default async function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
+        <NextTopLoader
+          color="#f33"
+          zIndex={100}
+          height={5}
+          showSpinner={false}
+        />
         <Providers>
           <Navbar />
           <SocialsBar />

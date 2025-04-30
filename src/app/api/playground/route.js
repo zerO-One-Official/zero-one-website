@@ -68,11 +68,9 @@ export const POST = async (req) => {
       };
     });
 
-    const URL = "http://13.203.158.214:2358";
-
     // Send the request to the Judge0 API
     const res = await fetch(
-      `${URL}/submissions/batch?base64_encoded=false&wait=false`,
+      `${process.env.JUDGE0_URI}/submissions/batch?base64_encoded=false&wait=false`,
       {
         method: "POST",
         headers: {
@@ -132,11 +130,11 @@ export const GET = async (req) => {
       });
     }
 
-    const URI = "http://13.203.158.214:2358";
-
     const res = await fetch(
-      `${URI}/submissions/${token}?base64_encoded=true&fields=stdout,stderr,status,time,memory,expected_output,compile_output,finished_at,message`
+      `${process.env.JUDGE0_URI}/submissions/${token}?base64_encoded=true&fields=stdout,stderr,status,time,memory,expected_output,compile_output,finished_at,message`
     );
+
+    console.log(token);
 
     const data = await res.json();
 
@@ -156,6 +154,7 @@ export const GET = async (req) => {
       ...data,
       stdout: data.stdout ? decodeBase64(data.stdout) : null,
       stderr: data.stderr ? decodeBase64(data.stderr) : null,
+      message: data.message ? decodeBase64(data.message) : null,
       compile_output: data.compile_output
         ? decodeBase64(data.compile_output)
         : null,

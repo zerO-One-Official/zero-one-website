@@ -1,53 +1,106 @@
-'use client'
-import { useRef, useState } from 'react';
-import { Document, Page, pdfjs } from 'react-pdf';
-import 'react-pdf/dist/Page/AnnotationLayer.css';
-import 'react-pdf/dist/Page/TextLayer.css';
-import Skeleton from '../skeleton/skeleton';
-import Button from '../button/Button';
+"use client";
+import { useRef, useState, useEffect, useMemo } from "react";
+import { Document, Page, pdfjs } from "react-pdf";
+import "react-pdf/dist/Page/AnnotationLayer.css";
+import "react-pdf/dist/Page/TextLayer.css";
+import Skeleton from "../skeleton/skeleton";
+import Button from "../button/Button";
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.mjs`;
-const options = {
-    cMapUrl: `https://unpkg.com/pdfjs-dist@${pdfjs.version}/cmaps/`,
-};
-const RenderPdf = ({ url }) => {
-    const [numPages, setNumPages] = useState();
-    const [pageNumber, setPageNumber] = useState(1);
-    // const [width, setWidth] = useState(w);
-    const [download, setDownload] = useState(false);
-    const docRef = useRef();
+// pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@4.8.69/legacy/build/pdf.worker.min.mjs`;
+pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.mjs`;
 
-    function onDocumentLoadSuccess(numPages) {
-        setNumPages(numPages);
-    }
+const RenderPdf = ({ url, thumbnailMode = false, download = false }) => {
+  const [numPages, setNumPages] = useState(null);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [containerWidth, setContainerWidth] = useState(null);
+  const containerRef = useRef(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-    // useEffect(() => {
-    //     const updateWidth = () => {
-    //         if (docRef.current) {
-    //             setWidth(w || docRef.current?.getBoundingClientRect().width)
-    //         }
-    //     }
-    //     document.addEventListener('resize', updateWidth)
+  // Memoize the options to prevent unnecessary reloads
+  const renderOptions = useMemo(
+    () => ({
+      ...(thumbnailMode && {
+        disableAutoFetch: true,
+        disableStream: true,
+        disableFontFace: true,
+      }),
+    }),
+    [thumbnailMode]
+  ); // Only recreate when these dependencies change
 
-    //     return () => {
-    //         document.removeEventListener('resize', updateWidth)
-    //     }
-    // }, [docRef.current?.getBoundingClientRect().width])
+  // Memoize page options as well
+  const pageOptions = useMemo(
+    () => ({
+      ...(thumbnailMode && {
+        renderTextLayer: false,
+        renderAnnotationLayer: false,
+        scale: 1.0,
+      }),
+    }),
+    [thumbnailMode]
+  );
 
-    return (
-        url &&
-        <div className="relative w-inherit overflow-hidden pointer-events-none" ref={docRef}>
-            <Document options={options} file={url} onLoadSuccess={onDocumentLoadSuccess} loading={<Skeleton className={`w-full aspect-video`} />}>
-                <Page pageNumber={pageNumber} canvasBackground='transparent' loading={<Skeleton className={`w-full aspect-video`} />} />
-            </Document>
-            {
-                download ?
-                    <Button className="absolute top-0 left-0" onClick={() => window.open(url, '_blank')}>Download</Button>
-                    :
-                    null
-            }
+  // Set up resize observer for container
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      const width = entries[0].contentRect.width;
+      setContainerWidth(width);
+    });
+
+    resizeObserver.observe(containerRef.current);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, []);
+
+  const onDocumentLoadSuccess = ({ numPages }) => {
+    setNumPages(numPages);
+    setIsLoading(false);
+  };
+
+  const onDocumentLoadError = (error) => {
+    console.error("PDF load error:", error);
+    setIsLoading(false);
+  };
+
+  return (
+    <div
+      className={`relative w-full overflow-hidden rounded-2xl pointer-events-none ${
+        thumbnailMode ? "aspect-video" : ""
+      }`}
+      ref={containerRef}
+    >
+      {isLoading && !url && <Skeleton className="w-full aspect-video" />}
+
+      {url && (
+        <Document
+          file={url}
+          options={renderOptions}
+          onLoadSuccess={onDocumentLoadSuccess}
+          onLoadError={onDocumentLoadError}
+          loading={<Skeleton className="w-full aspect-video " />}
+        >
+          <Page
+            pageNumber={pageNumber}
+            width={containerWidth}
+            loading={<Skeleton className="w-full aspect-video" />}
+            {...pageOptions}
+          />
+        </Document>
+      )}
+
+      {download && url && (
+        <div className="absolute bottom-4 right-4">
+          <Button onClick={() => window.open(url, "_blank")} size="sm">
+            Download
+          </Button>
         </div>
-    )
-}
+      )}
+    </div>
+  );
+};
 
-export default RenderPdf
+export default RenderPdf;

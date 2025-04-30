@@ -1,12 +1,11 @@
-'use client'
+"use client";
 
 import useScroll from "@/hooks/useScroll";
-import { getMonthName, getTime } from "@/utils/helper";
+import { getDate, getMonthName, getTime } from "@/utils/helper";
 import Link from "next/link";
 import { useRef } from "react";
 
-export const Upcoming = ({ events: ev }) => {
-  const events = JSON.parse(ev)
+export const Upcoming = ({ events }) => {
   const ref = useRef();
 
   useScroll(ref);
@@ -33,19 +32,15 @@ export const Upcoming = ({ events: ev }) => {
             const eventDate = new Date(event.date);
             return (
               <Link
-                href={`/events/${event.name}?tab=info`}
+                href={`/events/${event.slug}?tab=info`}
                 key={event._id}
-                className="group border-b border-white/5 hover:scale-105 transition-all rounded flex flex-1 justify-between items-center p-4 w-full gap-6 sm:gap-2 "
+                className="group border-b border-white/5 hover:scale-105 transition-all rounded flex flex-1 justify-between items-center p-4 w-full gap-6 sm:gap-2 flex-wrap"
               >
                 <h2 className=" text-accent font-medium text-3xl sm:text-xl">
                   {event.name}
                 </h2>
-                <h2 className="flex gap-6 sm:gap-2">
-                  <span>
-                    {`${eventDate.getDate()} ${getMonthName(
-                      eventDate
-                    )} ${eventDate.getFullYear()}`}
-                  </span>
+                <h2 className="flex gap-6 sm:gap-2 flex-wrap">
+                  <span>{getDate(eventDate)} </span>
                   <span>{`${getTime(eventDate)}`}</span>
                 </h2>
               </Link>

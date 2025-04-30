@@ -7,8 +7,7 @@ import Link from "next/link";
 import { RxCode } from "react-icons/rx";
 import Markdown from "react-markdown";
 
-export const Question = ({ question, eventEndDate }) => {
-  const currentDate = new Date();
+export const Question = ({ question }) => {
   const [activeQuestion, setActiveQuestion] = useState("");
 
   const questionRef = useRef();
