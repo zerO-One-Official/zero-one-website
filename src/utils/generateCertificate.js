@@ -45,8 +45,8 @@ const generateCertificate = async (fields, template, certificateNumber) => {
     let font = null;
 
     try {
-      const fontBytes = await fetch("/font/Gilroy-SemiBold.ttf").then((res) =>
-        res.arrayBuffer()
+      const fontBytes = await fetch("/static/fonts/Gilroy-SemiBold.ttf").then(
+        (res) => res.arrayBuffer()
       );
 
       font = await pdfDoc.embedFont(fontBytes);

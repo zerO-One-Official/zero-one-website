@@ -1,8 +1,8 @@
-import { getQuestions } from "@/action/playground";
+import { getCodingQuestion } from "@/action/codingQuestion";
 import QuestionTable from "@/components/Playground/questionTable";
 
 const Playground = async () => {
-  const questions = await getQuestions();
+  const questions = await getCodingQuestion();
 
   return (
     <div className="container-70 py-4 h-auto">

@@ -37,7 +37,7 @@ export const Question = ({ question }) => {
       </div>
       <div className="p-2 flex flex-col gap-4 pb-4">
         <div className="">
-          <Markdown>{question?.desc}</Markdown>
+          <Markdown>{question?.description}</Markdown>
         </div>
         <div className="flex flex-col gap-2">
           <div className="flex gap-6 ml-auto">

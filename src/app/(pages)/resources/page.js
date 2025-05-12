@@ -1,10 +1,10 @@
-import { getResource } from "@/action/resources";
+import { getResources } from "@/action/resource";
 import BottomGlitter from "@/components/StyledText/BottomGlitter";
 import Image from "next/image";
 import Link from "next/link";
 
 const ResourcesPage = async () => {
-  const resources = await getResource();
+  const resources = await getResources();
 
   return (
     <>

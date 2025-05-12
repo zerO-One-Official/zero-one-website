@@ -1,11 +1,10 @@
-import { getTeams } from "@/action/teams";
+import { getTeams } from "@/action/team";
 import BottomGlitter from "@/components/StyledText/BottomGlitter";
 import Styles from "@/components/teams/Team.module.css";
 import TeamCard from "@/components/teams/TeamsCard";
 
-
 async function Teams() {
-  const teams = (await getTeams())
+  const { teams } = await getTeams();
 
   const groupedData = teams.reduce((result, current) => {
     if (!result[current.group]) {

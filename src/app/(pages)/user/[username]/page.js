@@ -8,25 +8,18 @@ import { DiCodeigniter } from "react-icons/di";
 import { getServerSession } from "next-auth";
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import Link from "next/link";
-import { getUser } from "@/action/user";
+import { getUser, getUserContests } from "@/action/user";
 import BottomGlitter from "@/components/StyledText/BottomGlitter";
 import { getUserCertificates } from "@/action/certificate";
 import FilledCertificate from "@/components/certificates/FilledCertificate";
-import { getUserEvents } from "@/action/event";
-
-function capitalizeFirstChar(str) {
-  if (str.length === 0) return str; // Handle empty string case
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
+import { capitalizeFirstLetter } from "@/utils/helper";
 
 export async function generateMetadata({ params }) {
   // read route params
   const { username } = await params;
   const user = await getUser(username);
   const name = user
-    ? `${capitalizeFirstChar(user.firstName)} ${capitalizeFirstChar(
-        user.lastName
-      )}`
+    ? capitalizeFirstLetter(`${user.firstName} ${user.lastName}`)
     : "User not Found";
 
   return {
@@ -43,7 +36,7 @@ const UserPage = async ({ params }) => {
 
   const user = await getUser(username);
 
-  const userEvents = await getUserEvents(user?._id);
+  const userEvents = await getUserContests(user?._id);
 
   const certificates = await getUserCertificates(user?._id);
 

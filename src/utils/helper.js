@@ -1,4 +1,31 @@
-import { format } from "date-fns";
+import { formatInTimeZone } from "date-fns-tz";
+
+export const branchOptions = [
+  {
+    value: "Artificial Intelligence",
+    label: "Artificial Intelligence",
+  },
+  {
+    value: "Computer Science & Engineering",
+    label: "Computer Science & Engineering",
+  },
+  {
+    value: "Electrical & Electronics Engineering",
+    label: " Electrical & Electronics Engineering",
+  },
+  {
+    value: "Civil with Computer Applications",
+    label: "Civil with Computer Applications",
+  },
+  {
+    value: "Mechanical Engineering",
+    label: "Mechanical Engineering",
+  },
+  {
+    value: "Civil Engineering",
+    label: "Civil Engineering",
+  },
+];
 
 export function generateAccessCode() {
   // Define the character set for alphanumeric code
@@ -48,14 +75,19 @@ export const getMonthName = (date) => {
   return months[date.getMonth()];
 };
 
+const KOLKATA_TZ = "Asia/Kolkata";
+
 export function getTime(date) {
-  return format(new Date(date), "h:mm a");
+  if (!date || !(date instanceof Date)) return date;
+  const kolkataTime = formatInTimeZone(date, KOLKATA_TZ, "h:mm a");
+  return kolkataTime;
 }
 
 export function getDate(date) {
-  return format(new Date(date), "d LLL yyyy");
+  if (!date || !(date instanceof Date)) return date;
+  const kolkataTime = formatInTimeZone(date, KOLKATA_TZ, "d LLL yyyy");
+  return kolkataTime;
 }
-
 export const distanceTime = (date) => {
   const now = new Date();
   const targetDate = new Date(date);
@@ -95,9 +127,23 @@ export const generateSlug = (text) => {
     .replace(/^-+|-+$/g, ""); // Trim "-" from start and end
 };
 
+export const capitalizeFirstLetter = (string) => {
+  if (!string) return string; // Check if the string is empty or null
+  if (typeof string !== "string") return string; // Check if the input is a string
+  let str = string.toLowerCase();
+  return str
+    .split(" ")
+    .map((word) => {
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    })
+    .join(" ");
+};
+
 export function convertIdsToString(data) {
   if (Array.isArray(data)) {
     return data.map((item) => convertIdsToString(item));
+  } else if (data instanceof Date) {
+    return data; // ✅ Preserve Date objects
   } else if (data !== null && typeof data === "object") {
     const newObj = {};
     for (const key in data) {

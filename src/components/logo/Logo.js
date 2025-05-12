@@ -47,7 +47,7 @@ const Logo = ({ size = "default", className }) => {
   return (
     <Link href="/" className={cn("flex items-stretch gap-4", className)}>
       <Image
-        src={"/logo.png"}
+        src={"/static/images/logo.png"}
         quality={100}
         width={50} // Set appropriate width
         height={50} // Set appropriate height

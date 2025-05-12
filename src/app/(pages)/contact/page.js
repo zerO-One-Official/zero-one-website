@@ -6,6 +6,7 @@ import React, { useRef, useState } from "react";
 import { LuSend } from "react-icons/lu";
 import toast from "react-hot-toast";
 import Link from "next/link";
+import { addQuery } from "@/action/query";
 function ThankYou({ show }) {
   const router = useRouter();
 
@@ -48,22 +49,18 @@ const ContactPage = () => {
     setLoading(true);
     e.preventDefault();
 
-    if (!name || !email || !message || !roll) {
+    if (!name || !email || !message) {
       toast.error("Please fill all fields.");
     }
 
     try {
-      const res = await fetch("/api/contactUs", {
-        method: "POST",
-        body: JSON.stringify({ name, email, message, roll }),
-      });
-      const data = await res.json();
+      const res = await addQuery({ name, email, message, roll });
 
-      if (data.success) {
+      if (res.success) {
         window.scrollTo(0, 0);
         setShow(true);
       }
-      toast[data.type](data.message);
+      toast[res.type](res.message);
     } catch (error) {
       toast.error(error.message);
     } finally {

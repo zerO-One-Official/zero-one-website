@@ -1,8 +1,8 @@
-import { getFaqs } from "@/action/faqs";
+import { getFaqs } from "@/action/faq";
 import Faq from "@/components/faqs/Faq";
 
 async function FAQs() {
-  const faqs = await getFaqs();
+  const { faqs } = await getFaqs();
 
   return (
     <section className="container-70 pt-16 sm:pt-8 sm:w-4/5 xs:w-[85%]">

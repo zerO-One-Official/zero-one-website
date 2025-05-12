@@ -1,10 +1,10 @@
 import { OnGoingEvent } from "@/components/events/Ongoing";
 import { Upcoming } from "@/components/events/Upcoming";
 import { Past } from "@/components/events/Past";
-import { getEvents } from "@/action/event";
+import { getContests } from "@/action/contest";
 
 export default async function Events() {
-  const events = await getEvents();
+  const contests = await getContests();
 
   return (
     <div className="container-70">
@@ -24,9 +24,9 @@ export default async function Events() {
         </div>
       </section>
       <div className="flex flex-col gap-10">
-        <OnGoingEvent events={events} />
-        <Upcoming events={events} />
-        <Past events={events} />
+        {/* <OnGoingEvent events={contests} />
+        <Upcoming events={contests} />
+        <Past events={contests} /> */}
       </div>
     </div>
   );

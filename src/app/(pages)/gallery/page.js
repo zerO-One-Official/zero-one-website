@@ -1,22 +1,20 @@
-import { getGallery } from "@/action/gallery";
+import { getGalleryImages } from "@/action/gallery";
 import BottomGlitter from "@/components/StyledText/BottomGlitter";
 import { GalleryImages } from "@/components/gallery/gallery";
 
-
-
 const GalleryPage = async () => {
-  const gallery = await getGallery() || [];
+  const gallery = (await getGalleryImages()) || [];
 
   const groupedGallery = {};
 
-  gallery.forEach(gal => {
+  gallery.forEach((gal) => {
     if (!groupedGallery[gal.eventName]) {
-      groupedGallery[gal.eventName] = []
+      groupedGallery[gal.eventName] = [];
     }
     groupedGallery[gal.eventName].push(gal);
-  })
+  });
 
-  const groupedGal = Object.values(groupedGallery)
+  const groupedGal = Object.values(groupedGallery);
 
   return (
     <>
@@ -26,14 +24,14 @@ const GalleryPage = async () => {
           {/* <AnimatedScrollButton scrollTo="scrolled-to" /> */}
         </div>
         <div id="scrolled-to" className="min-h-screen pt-10">
-          {
-            groupedGal.map((group, index) => {
-              return <div key={index} className="flex flex-col">
+          {groupedGal.map((group, index) => {
+            return (
+              <div key={index} className="flex flex-col">
                 <h2 className="font-semibold text-2xl">{group[0].eventName}</h2>
                 <GalleryImages gallery={JSON.stringify(group)} />
               </div>
-            })
-          }
+            );
+          })}
         </div>
       </div>
     </>

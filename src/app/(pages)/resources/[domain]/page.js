@@ -1,4 +1,4 @@
-import { getTopics } from "@/action/resources";
+import { getTopics } from "@/action/resource";
 import BottomGlitter from "@/components/StyledText/BottomGlitter";
 import Image from "next/image";
 import Link from "next/link";

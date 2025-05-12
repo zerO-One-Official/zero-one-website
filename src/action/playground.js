@@ -1,8 +1,9 @@
 "use server";
 // import dbConnect from "@/lib/dbConnect";
-import Question from "@/models/CodingQuestions";
+import Question from "@/models/CodingQuestion";
+import { cache } from "react";
 
-export const getQuestions = async () => {
+export const getQuestions = cache(async () => {
   try {
     // dbConnect();
     const questions = await Question.find()
@@ -16,9 +17,9 @@ export const getQuestions = async () => {
   } catch (error) {
     throw new Error(error);
   }
-};
+});
 
-export const getQuestion = async (slug) => {
+export const getQuestion = cache(async (slug) => {
   try {
     // dbConnect();
     const question = await Question.findOne({ slug }).lean();
@@ -35,4 +36,4 @@ export const getQuestion = async (slug) => {
   } catch (error) {
     throw new Error(error);
   }
-};
+});

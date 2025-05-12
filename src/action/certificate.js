@@ -1,26 +1,27 @@
 "use server";
-import dbConnect from "@/lib/dbConnect";
 import Certificate from "@/models/Certificate";
 import Template from "@/models/Template";
-import User from "@/models/Users";
+import User from "@/models/User";
+import connect from "@/utils/dbConnect";
 import { convertIdsToString } from "@/utils/helper";
 import { deleteFile, isValidMongooseId } from "@/utils/server";
 import { revalidatePath } from "next/cache";
+import { cache } from "react";
 
-dbConnect();
-
-export const getTemplates = async () => {
+export const getTemplates = cache(async () => {
   try {
+    await connect();
     const templates = await Template.find().lean();
 
-    return templates;
+    return convertIdsToString(templates);
   } catch (error) {
     console.log(error);
     return [];
   }
-};
-export const getTemplate = async (_id) => {
+});
+export const getTemplate = cache(async (_id) => {
   try {
+    await connect();
     if (!isValidMongooseId(_id))
       return {
         template: null,
@@ -30,15 +31,17 @@ export const getTemplate = async (_id) => {
 
     const template = await Template.findOne({ _id }).lean();
 
-    return template;
+    return convertIdsToString(template);
   } catch (error) {
     console.log(error);
     return null;
   }
-};
-export const getCertificates = async () => {
+});
+export const getCertificates = cache(async () => {
   try {
+    await connect();
     const certificates = await Certificate.find({})
+      .sort({ createdAt: -1 })
       .populate([
         {
           model: Template,
@@ -51,15 +54,17 @@ export const getCertificates = async () => {
       ])
       .lean();
 
-    return certificates;
+    return convertIdsToString(certificates);
   } catch (error) {
     console.log(error);
     return [];
   }
-};
-export const getCertificate = async (certificateNumber) => {
+});
+export const getCertificate = cache(async (certificateNumber) => {
   try {
+    await connect();
     const certificate = await Certificate.findOne({ certificateNumber })
+      .sort({ createdAt: -1 })
       .populate([
         {
           model: Template,
@@ -77,9 +82,10 @@ export const getCertificate = async (certificateNumber) => {
     console.log(error);
     return null;
   }
-};
-export const getUserCertificates = async (_id) => {
+});
+export const getUserCertificates = cache(async (_id) => {
   try {
+    await connect();
     if (!isValidMongooseId(_id))
       return {
         template: null,
@@ -100,74 +106,9 @@ export const getUserCertificates = async (_id) => {
       ])
       .lean();
 
-    return certificates;
+    return convertIdsToString(certificates);
   } catch (error) {
     console.log(error);
     return [];
   }
-};
-
-export const uploadCertificateTemplate = async (data) => {
-  try {
-    await Template.create(data);
-    revalidatePath("/misc/certificates/templates");
-    return {
-      type: "success",
-      message: "Template uploaded successfully",
-    };
-  } catch (error) {
-    return {
-      type: "error",
-      message: error.message,
-    };
-  }
-};
-export const uploadCertificate = async (data) => {
-  try {
-    await Certificate.create(data);
-    revalidatePath("/misc/certificates");
-    return {
-      type: "success",
-      message: "Certificate uploaded successfully",
-    };
-  } catch (error) {
-    return {
-      type: "error",
-      message: error.message,
-    };
-  }
-};
-export const deleteCertificate = async (_id) => {
-  try {
-    await Certificate.deleteOne({ _id });
-    revalidatePath("/misc/certificates");
-    return {
-      type: "success",
-      message: "Certificate deleted successfully",
-    };
-  } catch (error) {
-    return {
-      type: "error",
-      message: error.message,
-    };
-  }
-};
-export const deleteTemplate = async (_id) => {
-  try {
-    const template = await Template.findOne({ _id });
-    await deleteFile(template.url);
-    await Template.deleteOne({ _id });
-    await Certificate.deleteMany({ template: _id });
-    revalidatePath("/misc/certificates/templates");
-    revalidatePath("/misc/certificates");
-    return {
-      type: "success",
-      message: "Template deleted successfully",
-    };
-  } catch (error) {
-    return {
-      type: "error",
-      message: error.message,
-    };
-  }
-};
+});
