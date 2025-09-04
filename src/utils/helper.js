@@ -1,3 +1,32 @@
+import { formatInTimeZone } from "date-fns-tz";
+
+export const branchOptions = [
+  {
+    value: "Artificial Intelligence",
+    label: "Artificial Intelligence",
+  },
+  {
+    value: "Computer Science & Engineering",
+    label: "Computer Science & Engineering",
+  },
+  {
+    value: "Electrical & Electronics Engineering",
+    label: " Electrical & Electronics Engineering",
+  },
+  {
+    value: "Civil with Computer Applications",
+    label: "Civil with Computer Applications",
+  },
+  {
+    value: "Mechanical Engineering",
+    label: "Mechanical Engineering",
+  },
+  {
+    value: "Civil Engineering",
+    label: "Civil Engineering",
+  },
+];
+
 export function generateAccessCode() {
   // Define the character set for alphanumeric code
   const charset =
@@ -46,25 +75,91 @@ export const getMonthName = (date) => {
   return months[date.getMonth()];
 };
 
+const KOLKATA_TZ = "Asia/Kolkata";
+
 export function getTime(date) {
-  // Extract hours and minutes from the input string
-  // const [hours, minutes] = time24.split(':');
+  if (!date || !(date instanceof Date)) return date;
+  const kolkataTime = formatInTimeZone(date, KOLKATA_TZ, "h:mm a");
+  return kolkataTime;
+}
 
-  const hours = date.getHours();
-  const minutes = date.getMinutes();
+export function getDate(date) {
+  if (!date || !(date instanceof Date)) return date;
+  const kolkataTime = formatInTimeZone(date, KOLKATA_TZ, "d LLL yyyy");
+  return kolkataTime;
+}
+export const distanceTime = (date) => {
+  const now = new Date();
+  const targetDate = new Date(date);
 
-  // Convert hours to a number
-  let hours12 = parseInt(hours, 10);
+  // Calculate the difference in milliseconds
+  const diff = targetDate - now;
+  const isPast = diff < 0; // Whether the time is in the past or future
 
-  // Determine AM or PM
-  const meridiem = hours12 >= 12 ? "PM" : "AM";
+  // Get the absolute values for calculations
+  const absDiff = Math.abs(diff);
 
-  // Convert to 12-hour format
-  hours12 = hours12 % 12 || 12;
+  // Convert milliseconds into days, hours, and minutes
+  const days = Math.floor(absDiff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor(
+    (absDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+  );
+  const minutes = Math.floor((absDiff % (1000 * 60 * 60)) / (1000 * 60));
 
-  // Add leading zero to minutes if necessary
-  const minutesWithLeadingZero = minutes.toString().padStart(2, "0");
+  // Create the detailed string
+  let timeString = "";
+  timeString += `${days} day${days > 1 ? "s" : ""} `;
+  timeString += `${hours} hour `;
+  timeString += `${minutes} min`;
 
-  // Return the formatted time
-  return `${hours12}:${minutesWithLeadingZero} ${meridiem}`;
+  // Append "ago" or "in" based on whether it's past or future
+  if (isPast) {
+    return `${timeString} ago`;
+  } else {
+    return `in ${timeString}`;
+  }
+};
+
+export const generateSlug = (text) => {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-") // Replace non-alphanumeric characters with "-"
+    .replace(/^-+|-+$/g, ""); // Trim "-" from start and end
+};
+
+export const capitalizeFirstLetter = (string) => {
+  if (!string) return string; // Check if the string is empty or null
+  if (typeof string !== "string") return string; // Check if the input is a string
+  let str = string.toLowerCase();
+  return str
+    .split(" ")
+    .map((word) => {
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    })
+    .join(" ");
+};
+
+export function convertIdsToString(data) {
+  if (Array.isArray(data)) {
+    return data.map((item) => convertIdsToString(item));
+  } else if (data instanceof Date) {
+    return data; // ✅ Preserve Date objects
+  } else if (data !== null && typeof data === "object") {
+    const newObj = {};
+    for (const key in data) {
+      if (Object.prototype.hasOwnProperty.call(data, key)) {
+        if (
+          key === "_id" &&
+          typeof data[key] === "object" &&
+          data[key].toString
+        ) {
+          newObj[key] = data[key].toString();
+        } else {
+          newObj[key] = convertIdsToString(data[key]);
+        }
+      }
+    }
+    return newObj;
+  }
+  return data;
 }

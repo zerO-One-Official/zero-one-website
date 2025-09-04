@@ -1,5 +1,10 @@
 import BottomGlitter from "@/components/StyledText/BottomGlitter";
 
+export const metadata = {
+  title: "About",
+  description:
+    "Zero-one Coding Club of Motihari College of Engineering, Motihari",
+};
 const AboutPage = () => {
   return (
     <section className="container-70 pt-28 md:pt-16 sm:pt-12">

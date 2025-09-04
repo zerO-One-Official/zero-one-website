@@ -8,25 +8,20 @@ import { DiCodeigniter } from "react-icons/di";
 import { getServerSession } from "next-auth";
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import Link from "next/link";
-import { getUser } from "@/action/user";
+import { getUser, getUserContests, getUsers } from "@/action/user";
 import BottomGlitter from "@/components/StyledText/BottomGlitter";
 import { getUserCertificates } from "@/action/certificate";
 import FilledCertificate from "@/components/certificates/FilledCertificate";
-import { getUserEvents } from "@/action/event";
-
-function capitalizeFirstChar(str) {
-  if (str.length === 0) return str; // Handle empty string case
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
+import { capitalizeFirstLetter } from "@/utils/helper";
+import { notFound } from "next/navigation";
+import { UserCircle2 } from "lucide-react";
 
 export async function generateMetadata({ params }) {
   // read route params
-  const username = params.username;
+  const { username } = await params;
   const user = await getUser(username);
   const name = user
-    ? `${capitalizeFirstChar(user.firstName)} ${capitalizeFirstChar(
-        user.lastName
-      )}`
+    ? capitalizeFirstLetter(`${user.firstName} ${user.lastName}`)
     : "User not Found";
 
   return {
@@ -34,16 +29,27 @@ export async function generateMetadata({ params }) {
   };
 }
 
+export const generateStaticParams = async () => {
+  const users = await getUsers();
+  return users?.map((user) => {
+    return {
+      username: user.username,
+    };
+  });
+};
+
 const UserPage = async ({ params }) => {
+  const { username } = await params;
+
+  if (!username) notFound();
+
   const session = await getServerSession(options);
 
   const loggedInUser = session?.user.username;
 
-  const username = params.username;
-
   const user = await getUser(username);
 
-  const userEvents = await getUserEvents(user?._id);
+  const userEvents = await getUserContests(user?._id);
 
   const certificates = await getUserCertificates(user?._id);
 
@@ -52,13 +58,17 @@ const UserPage = async ({ params }) => {
       <section className="flex flex-col items-center gap-6 border border-l-white/5 border-t-white/5 border-r-black/25 border-b-black/25 shadow-cus  p-6 rounded-3xl relative">
         <div className="flex w-full md:gap-6 gap-10 items-center sm:flex-col">
           <div className="p-2 border-4 md:border-2 border-accent rounded-full shrink-0">
-            <Image
-              src={user?.profilePic}
-              width={160}
-              height={160}
-              alt={user?.firstName}
-              className="md:w-20 md:h-20 lg:w-32 lg:h-32 w-36 h-36 object-cover rounded-full shadow"
-            />
+            {user?.profilePic && user?.profilePic !== "" ? (
+              <Image
+                src={user?.profilePic}
+                width={160}
+                height={160}
+                alt={user?.firstName}
+                className="md:w-20 md:h-20 lg:w-32 lg:h-32 w-36 h-36 object-cover rounded-full shadow"
+              />
+            ) : (
+              <UserCircle2 className="w-20 h-20 md:w-32 md:h-32 lg:w-36 lg:h-36 rounded-full shadow" />
+            )}
           </div>
           <div className="p-4 ">
             <h1 className="capitalize text-4xl md:text-3xl font-semibold sm:text-center">
@@ -73,7 +83,7 @@ const UserPage = async ({ params }) => {
             </p>
 
             <p className="capitalize text-accent text-lg font-bold flex items-center sm:justify-center">
-              {user.position}
+              {user.designation}
             </p>
           </div>
           {username === loggedInUser ? (
@@ -166,9 +176,7 @@ const UserPage = async ({ params }) => {
                     className="flex flex-col card p-4"
                     key={index}
                   >
-                    <FilledCertificate
-                      certificate={JSON.stringify(certificate)}
-                    />
+                    <FilledCertificate certificate={certificate} />
                     <h3 className="text-lg pt-2 font-semibold ">
                       {certificate.template.eventName}
                     </h3>

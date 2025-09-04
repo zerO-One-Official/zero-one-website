@@ -1,52 +1,77 @@
-import { getToken } from 'next-auth/jwt';
-import { NextResponse } from 'next/server';
+import { getToken } from "next-auth/jwt";
+import { NextResponse } from "next/server";
 
-export default async function middleware(req, event) {
-    const token = await getToken({ req });
-    const isAuthenticated = !!token;
+const PUBLIC_FILE = /\.(.*)$/;
 
+export default async function middleware(req) {
+  const token = await getToken({ req });
+  const isAuthenticated = !!token;
 
-    const { pathname, params } = req.nextUrl;
-    const publicUrl = ['/login', '/signup', '/recoverPassword', '/setPassword', '/user'];
-    // const publicUrl = ['/login', '/signup', '/recoverPassword', '/setPassword'];
+  const { pathname } = req.nextUrl;
 
-    // Simplify first condition to avoid redundancy
-    if (publicUrl.includes(pathname) && isAuthenticated && !pathname.startsWith('/user')) {
-        return NextResponse.redirect(new URL('/', req.url));
-    }
+  const authenticationUrl = [
+    "/login",
+    "/signup",
+    "/recoverPassword",
+    "/setPassword",
+    "/activateAccount",
+  ];
 
-    if (pathname.endsWith('/edit')) {
-
-        if (!token) {
-            const username = req.nextUrl.pathname.split('/')[2]
-            return NextResponse.redirect(new URL(`${username ? `/user/${username}` : '/'}`, req.url));
-        }
-        else {
-            if (pathname !== `/user/${token.username}/edit`)
-                return NextResponse.redirect(new URL(`/user/${token.username}/edit`, req.url));
-        }
-    }
-
-    // Combine negative checks and simplify logic
-    if (!publicUrl.includes(pathname) && !pathname.startsWith('/activateAccount') && !isAuthenticated && !pathname.startsWith('/user')) {
-        return NextResponse.redirect(new URL('/login', req.url));
-    }
-
-    // Check token role and redirect only if not admin
-    if (pathname.includes('/admin') && token?.role !== 'admin') {
-        return NextResponse.redirect(new URL('/', req.url));
-    }
-
-    // Only redirect nested paths if intended
-    if (pathname.startsWith('/activateAccount') && isAuthenticated) {
-        // Construct redirect URL to desired nested path
-        return NextResponse.redirect(new URL('/', req.url));
-    }
-
-    // No redirect needed, continue processing request
+  const publicUrl = [
+    "/",
+    "/faqs",
+    "/user",
+    "/teams",
+    "/contact",
+    "/about",
+    "/contest",
+    "/gallery",
+    "/resources",
+    "/resources",
+    "/certificate",
+    "/events",
+  ];
+  if (
+    pathname.startsWith("/_next") || // exclude Next.js internals
+    pathname.startsWith("/api") || //  exclude all API routes
+    pathname.startsWith("/static") || // exclude static files
+    PUBLIC_FILE.test(pathname) // exclude all files in the public folder
+  )
     return NextResponse.next();
+
+  if (pathname.endsWith("/edit") && pathname.startsWith("/user")) {
+    // If the user is not authenticated and trying to access the edit page
+    if (!token) {
+      const username = req.nextUrl.pathname.split("/")[2];
+      return NextResponse.redirect(
+        new URL(`${username ? `/user/${username}` : "/"}`, req.url)
+      );
+    } else {
+      if (pathname !== `/user/${token.username}/edit`)
+        return NextResponse.redirect(
+          new URL(`/user/${token.username}/edit`, req.url)
+        );
+    }
+  }
+
+  // IF the user is authenticated and trying to access the login page, redirect to home page
+  if (
+    isAuthenticated &&
+    authenticationUrl.some((url) => pathname.startsWith(url))
+  ) {
+    return NextResponse.redirect(new URL("/", req.url));
+  }
+
+  // If the user is not authenticated and trying to access a protected route, redirect to login page
+  if (!isAuthenticated && !publicUrl.some((url) => pathname.startsWith(url))) {
+    return NextResponse.redirect(new URL("/login", req.url));
+  }
+
+  return NextResponse.next();
 }
 
-export const config = {
-    matcher: ["/login", '/activateAccount', '/admin/:path*', '/profile', '/recoverPassword', '/setPassword', '/user/:path*'],
-};
+// export const config = {
+//   matcher: [
+//     "/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|.*\\.(?:ico|png|jpg|jpeg|svg|json|txt|otf)).*)",
+//   ],
+// };

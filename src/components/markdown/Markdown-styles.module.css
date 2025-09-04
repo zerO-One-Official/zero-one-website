@@ -1,0 +1,55 @@
+.reactMarkDown {
+  @apply text-base text-inherit leading-relaxed space-y-4 font-medium;
+}
+
+.reactMarkDown h1 {
+  @apply text-2xl font-bold text-inherit mt-4 mb-2;
+}
+
+.reactMarkDown h2 {
+  @apply text-xl font-semibold text-inherit mt-3 mb-2;
+}
+
+.reactMarkDown h3 {
+  @apply text-lg font-semibold text-inherit mt-2 mb-1;
+}
+
+.reactMarkDown p {
+  @apply text-base text-inherit whitespace-pre-wrap;
+}
+
+.reactMarkDown ul {
+  @apply list-disc pl-6 space-y-1 text-inherit;
+}
+
+.reactMarkDown ol {
+  @apply list-decimal pl-6 space-y-1 text-inherit;
+}
+
+.reactMarkDown li {
+  @apply ml-2 text-inherit;
+}
+
+.reactMarkDown blockquote {
+  @apply border-l-4 border-border pl-4 italic text-muted-foreground;
+}
+
+.reactMarkDown pre {
+  @apply bg-muted text-inherit rounded-lg p-4 px-2 overflow-x-auto text-base;
+}
+
+.reactMarkDown code {
+  @apply font-mono bg-muted px-1 py-0.5 rounded text-base text-inherit;
+}
+
+.reactMarkDown a {
+  @apply text-accent  underline-offset-4 hover:underline transition-colors;
+}
+
+.reactMarkDown hr {
+  @apply border-t border-border my-6;
+}
+
+.reactMarkDown img {
+  @apply rounded-xl max-w-full h-auto my-4;
+}

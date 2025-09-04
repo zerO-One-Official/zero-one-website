@@ -1,9 +1,9 @@
 "use client";
 
+import { UserCircle2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useMemo } from "react";
-import { HiOutlineUserCircle } from "react-icons/hi2";
 
 const ProfilePic = ({ quality = 80 }) => {
   const { data } = useSession();
@@ -13,16 +13,17 @@ const ProfilePic = ({ quality = 80 }) => {
     [data]
   );
 
-  return image ? (
+  return image && image !== "" ? (
     <Image
       src={image}
       quality={quality}
-      fill={true}
+      width={48}
+      height={48}
       alt={data.user.name}
-      className="rounded-full object-cover object-center"
+      className="object-cover object-center w-10 h-10 rounded-full"
     />
   ) : (
-    <HiOutlineUserCircle className="w-full h-full" />
+    <UserCircle2 className="w-full h-full" />
   );
 };
 

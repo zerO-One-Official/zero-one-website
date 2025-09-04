@@ -1,11 +1,16 @@
-import { getTeams } from "@/action/teams";
+import { getTeams } from "@/action/team";
 import BottomGlitter from "@/components/StyledText/BottomGlitter";
 import Styles from "@/components/teams/Team.module.css";
 import TeamCard from "@/components/teams/TeamsCard";
 
+export const metadata = {
+  title: "Teams",
+  description:
+    "Zero-one Coding Club of Motihari College of Engineering, Motihari",
+};
 
 async function Teams() {
-  const teams = (await getTeams())
+  const { teams } = await getTeams();
 
   const groupedData = teams.reduce((result, current) => {
     if (!result[current.group]) {

@@ -1,12 +1,37 @@
-
 import { OnGoingEvent } from "@/components/events/Ongoing";
 import { Upcoming } from "@/components/events/Upcoming";
 import { Past } from "@/components/events/Past";
-import { getEvents } from "@/action/event";
+import { getContests } from "@/action/contest";
+import { getEvents } from "@/action/events";
+
+export const dynamic = "force-dynamic";
 
 export default async function Events() {
+  const { events } = await getEvents();
 
-  const events = await getEvents()
+  const pastEvents = events.filter((event) => {
+    const currentDate = new Date();
+    const eventStartDate = new Date(event.startDate);
+    const eventEndDate = new Date(
+      eventStartDate.getTime() + event.durationMinutes * 60 * 1000
+    );
+    return eventEndDate < currentDate;
+  });
+  const ongoingEvents = events.filter((event) => {
+    const currentDate = new Date(); // Always get the latest time
+    const eventStartDate = new Date(event.startDate);
+    const eventEndDate = new Date(
+      eventStartDate.getTime() + event.durationMinutes * 60 * 1000
+    );
+
+    return eventStartDate <= currentDate && currentDate <= eventEndDate;
+  });
+
+  const upcomingEvents = events.filter((event) => {
+    const currentDate = new Date();
+    const eventStartDate = new Date(event.startDate);
+    return eventStartDate > currentDate;
+  });
 
   return (
     <div className="container-70">
@@ -25,10 +50,10 @@ export default async function Events() {
           contests. It&apos;s a cool place for both beginners and coding fans!
         </div>
       </section>
-      <div className="flex flex-col gap-10">
-        <OnGoingEvent events={JSON.stringify(events)} />
-        <Upcoming events={JSON.stringify(events)} />
-        <Past events={JSON.stringify(events)} />
+      <div className="flex flex-col gap-10 min-h-screen">
+        <OnGoingEvent events={ongoingEvents} />
+        <Upcoming events={upcomingEvents} />
+        <Past events={pastEvents} />
       </div>
     </div>
   );

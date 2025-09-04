@@ -10,13 +10,14 @@ export const ourFileRouter = {
     .middleware(async ({ req }) => {
       const session = await getServerSession(options);
       const id = session?.user?._id;
-      if (!session || !id) throw new UploadThingError("Unauthorized");
+      if (!session || !id)
+        throw new UploadThingError("Unauthorized to upload profile pic");
       return { userId: id };
     })
     .onUploadComplete(async ({ metadata, file }) => {
       console.log("Upload complete for userId:", metadata.userId);
 
-      console.log("file url", file.url);
+      console.log("file url", file.ufsUrl);
 
       return { uploadedBy: metadata.userId };
     }),
