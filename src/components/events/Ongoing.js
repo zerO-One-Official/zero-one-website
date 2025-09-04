@@ -6,102 +6,94 @@ import { useEffect, useRef, useState } from "react";
 
 export const OnGoingEvent = ({ events }) => {
   const ref = useRef();
-
   useScroll(ref);
 
-  const [timers, setTimers] = useState([]);
-  const [remainingTime, setRemainingTime] = useState({
-    hours: "",
-    minutes: "",
-    seconds: "",
-  });
+  const [timers, setTimers] = useState({});
+  const intervalRefs = useRef({});
 
-  const currentDate = new Date();
   useEffect(() => {
-    // Clear existing timers
-    timers.forEach((timer) => clearInterval(timer));
+    // Clear previous intervals
+    Object.values(intervalRefs.current).forEach(clearInterval);
+    intervalRefs.current = {};
 
-    // Create new timers for ongoing events
-    const newTimers = events
-      ?.map((event) => {
-        const eventStartDate = new Date(event.date);
-        const eventEndDate = new Date(
-          eventStartDate.getTime() + event.duration * 60 * 60 * 1000
-        );
+    const now = new Date();
 
-        // Calculate remaining time only if the event hasn't ended
-        if (eventEndDate > currentDate) {
-          return setInterval(() => {
-            const timeRemaining = eventEndDate - new Date();
-
-            const hours = Math.max(
-              0,
-              Math.floor(timeRemaining / (60 * 60 * 1000))
-            );
-            const minutes = Math.max(
-              0,
-              Math.floor((timeRemaining % (60 * 60 * 1000)) / (60 * 1000))
-            );
-            const seconds = Math.max(
-              0,
-              Math.floor((timeRemaining % (60 * 1000)) / 1000)
-            );
-
-            setRemainingTime({ hours, minutes, seconds });
-          }, 1000);
-        } else {
-          return null; // Return null for ended events
-        }
-      })
-      .filter((timer) => timer !== null); // Filter out null timers
-
-    // Set the new timers in state
-    setTimers(newTimers);
-
-    // Clear the timers when the component unmounts
-    return () => {
-      newTimers.forEach((timer) => clearInterval(timer));
-    };
-  }, []);
-
-  const onGoingEvents =
-    events &&
-    events.filter((event) => {
-      const eventStartDate = new Date(event.date);
+    events?.forEach((event) => {
+      const eventStartDate = new Date(event.startDate);
       const eventEndDate = new Date(
-        eventStartDate.getTime() + event.duration * 60 * 60 * 1000
+        eventStartDate.getTime() + event.durationMinutes * 60 * 1000
       );
 
-      return eventStartDate <= currentDate && currentDate <= eventEndDate;
+      if (eventEndDate > now) {
+        const updateTimer = () => {
+          const timeRemaining = eventEndDate - new Date();
+
+          const hours = Math.max(
+            0,
+            Math.floor(timeRemaining / (60 * 60 * 1000))
+          );
+          const minutes = Math.max(
+            0,
+            Math.floor((timeRemaining % (60 * 60 * 1000)) / (60 * 1000))
+          );
+          const seconds = Math.max(
+            0,
+            Math.floor((timeRemaining % (60 * 1000)) / 1000)
+          );
+
+          setTimers((prev) => ({
+            ...prev,
+            [event._id]: { hours, minutes, seconds },
+          }));
+        };
+
+        updateTimer(); // Initialize immediately
+        intervalRefs.current[event._id] = setInterval(updateTimer, 1000);
+      }
     });
 
-  return onGoingEvents.length ? (
+    return () => {
+      // Cleanup all intervals on unmount
+      Object.values(intervalRefs.current).forEach(clearInterval);
+    };
+  }, [events]);
+
+  return events.length ? (
     <section
       ref={ref}
-      className={`flex xl:flex-col flex-auto mt-40 sm:mt-20 fadeonscroll shadow-cus border border-white/5 p-6 rounded-3xl`}
+      className="flex xl:flex-col flex-auto mt-40 sm:mt-20 fadeonscroll shadow-cus border border-white/5 p-6 rounded-3xl"
     >
-      <div className={`mt-0 sm:mt-10 pr-11 box-border w-2/5 xl:w-full`}>
-        <h2 className={`sticky top-36 text-6xl sm:text-5xl font-semibold`}>
+      <div className="mt-0 sm:mt-10 pr-11 box-border w-2/5 xl:w-full">
+        <h2 className="sticky top-36 text-6xl sm:text-5xl font-semibold">
           Ongoing
         </h2>
       </div>
 
       <div className="text-2xl mb-10 sm:mb-7 xl:mt-16 sm:text-lg mt-0 sm:mt-10 pl-11 box-border w-3/5 xl:w-full xl:pl-0">
-        {onGoingEvents.map((event) => (
-          <Link
-            href={`/events/${event.slug}?tab=info`}
-            key={event._id}
-            className="flex flex-1 justify-between items-center p-4 w-full gap-6 sm:gap-2 "
-          >
-            <h2 className=" text-accent font-semibold text-4xl sm:text-xl">
-              {event.name}
-            </h2>
-            <h2 className="flex gap-6 sm:gap-2">
-              {remainingTime.hours}:{remainingTime.minutes}:
-              {remainingTime.seconds}
-            </h2>
-          </Link>
-        ))}
+        {events.map((event) => {
+          const time = timers[event._id] || {
+            hours: "00",
+            minutes: "00",
+            seconds: "00",
+          };
+
+          return (
+            <Link
+              href={`/events/${event.slug}?type=${event.type}&tab=info`}
+              key={event._id}
+              className="flex flex-1 justify-between items-center p-4 w-full gap-6 sm:gap-2"
+            >
+              <h2 className="text-accent font-semibold text-4xl sm:text-xl">
+                {event.name}
+              </h2>
+              <h2 className="flex gap-6 sm:gap-2">
+                {String(time.hours).padStart(2, "0")}:
+                {String(time.minutes).padStart(2, "0")}:
+                {String(time.seconds).padStart(2, "0")}
+              </h2>
+            </Link>
+          );
+        })}
       </div>
     </section>
   ) : null;

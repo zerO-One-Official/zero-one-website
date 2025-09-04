@@ -1,12 +1,24 @@
 import { getUser } from "@/action/user";
 import ProfileForm from "@/components/Profile/ProfileForm";
 import ProfilePhotoUpload from "@/components/Profile/ProfilePhotoUpload";
-import Skeleton from "@/components/skeleton/skeleton";
+import { capitalizeFirstLetter } from "@/utils/helper";
 import { IoSchool } from "react-icons/io5";
+export async function generateMetadata({ params }) {
+  // read route params
+  const { username } = await params;
+  const user = await getUser(username);
+  const name = user
+    ? capitalizeFirstLetter(`${user.firstName} ${user.lastName}`)
+    : "User not Found";
 
+  return {
+    title: `Edit ${name}`,
+  };
+}
 const EditProfile = async ({ params }) => {
   const { username } = await params;
-  const user = await getUser();
+  const user = await getUser(username);
+  console.log(user);
   const { email, phone, profilePic, gitHub, otherLinks, linkedIn, bio } = user;
 
   return (

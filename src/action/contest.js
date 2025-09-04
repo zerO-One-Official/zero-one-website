@@ -14,12 +14,12 @@ export const getContests = cache(async () => {
   try {
     await connect();
 
-    const contests = await Contest.find({})
+    const contests = await Contest.find({ status: { $ne: "DRAFT" } })
       .select(
         "name slug description status startDate lastRegistrationDate durationMinutes"
       )
       .lean()
-      .sort({ createdAt: -1 });
+      .sort({ startDate: -1 });
 
     return {
       contests: convertIdsToString(contests),

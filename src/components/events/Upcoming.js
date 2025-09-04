@@ -1,7 +1,7 @@
 "use client";
 
 import useScroll from "@/hooks/useScroll";
-import { getDate, getMonthName, getTime } from "@/utils/helper";
+import { getDate, getTime } from "@/utils/helper";
 import Link from "next/link";
 import { useRef } from "react";
 
@@ -9,11 +9,6 @@ export const Upcoming = ({ events }) => {
   const ref = useRef();
 
   useScroll(ref);
-
-  const currentDate = new Date();
-
-  const upcomingEvents =
-    events && events?.filter((event) => new Date(event.date) > currentDate);
 
   return (
     <section
@@ -26,13 +21,13 @@ export const Upcoming = ({ events }) => {
         </h2>
       </div>
 
-      {upcomingEvents.length ? (
+      {events.length ? (
         <div className="text-2xl mb-10 sm:mb-7 xl:mt-16 sm:text-lg mt-0 sm:mt-10 pl-11 box-border w-3/5 xl:w-full xl:pl-0">
-          {upcomingEvents.map((event) => {
-            const eventDate = new Date(event.date);
+          {events.map((event) => {
+            const eventDate = new Date(event.startDate);
             return (
               <Link
-                href={`/events/${event.slug}?tab=info`}
+                href={`/events/${event.slug}?type=${event.type}&tab=info`}
                 key={event._id}
                 className="group border-b border-white/5 hover:scale-105 transition-all rounded flex flex-1 justify-between items-center p-4 w-full gap-6 sm:gap-2 flex-wrap"
               >

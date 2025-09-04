@@ -100,7 +100,7 @@ export default async function RootLayout({ children }) {
           position="bottom-right"
           toastOptions={{
             style: {
-              background: "var(--background)",
+              background: "#000",
               color: "#fff",
               border: "1px solid rgba(255,255,255,0.25)",
               borderRadius: "10px",

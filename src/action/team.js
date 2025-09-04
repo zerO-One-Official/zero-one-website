@@ -3,7 +3,6 @@
 import connect from "@/utils/dbConnect";
 import { convertIdsToString } from "@/utils/helper";
 import { cache } from "react";
-
 import { revalidatePath } from "next/cache";
 import Team from "@/models/Team";
 import User from "@/models/User";

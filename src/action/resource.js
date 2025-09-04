@@ -89,7 +89,7 @@ export const getResource = cache(async (slug) => {
   }
 });
 
-export async function getTopics(slug) {
+export const getTopics = cache(async (slug) => {
   try {
     await connect();
     const domain = await Resource.findOne({ slug }).lean();
@@ -97,9 +97,9 @@ export async function getTopics(slug) {
   } catch (error) {
     throw new Error(error.message);
   }
-}
+});
 
-export async function getSubTopics(domainSlug, topicSlug) {
+export const getSubTopics = cache(async (domainSlug, topicSlug) => {
   try {
     await connect();
     // Find the domain and get only the specific topic's data
@@ -107,8 +107,6 @@ export async function getSubTopics(domainSlug, topicSlug) {
       { slug: domainSlug, "topics.slug": topicSlug }, // Find matching domain & topic
       { "topics.$": 1 } // Retrieve only the matched topic
     ).lean();
-
-    console.log("Filtered Domain Data:", domain); // Debugging
 
     if (!domain || !domain.topics?.length) {
       return []; // If no data found, return empty array
@@ -119,12 +117,12 @@ export async function getSubTopics(domainSlug, topicSlug) {
 
     // **Ensure only subtopics belonging to the requested topicSlug are sent**
 
-    return matchedTopic;
+    return convertIdsToString(matchedTopic);
   } catch (error) {
     console.error("Error fetching subtopics:", error);
     return [];
   }
-}
+});
 
 export async function addTopics(topicdata) {
   try {

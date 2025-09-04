@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import Link from "next/link";
 import generateCertificate from "@/utils/generateCertificate";
-import Skeleton from "../skeleton/skeleton";
 import { usePathname } from "next/navigation";
 import Button from "../button/Button";
 import dynamic from "next/dynamic";
+import { Skeleton } from "../ui/skeleton";
 
 const RenderPdf = dynamic(() => import("./RenderPdf"), {
   ssr: false,

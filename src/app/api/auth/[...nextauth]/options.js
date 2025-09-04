@@ -11,6 +11,7 @@ export const options = {
         const { emailOrRoll, password } = credentials;
 
         let user = null;
+
         if (isNaN(parseInt(emailOrRoll))) {
           user = await User.findOne({ email: emailOrRoll }).select([
             "password",

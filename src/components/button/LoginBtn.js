@@ -6,14 +6,15 @@ import { signOut, useSession } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
 import { MdLogin } from "react-icons/md";
 import ProfilePic from "../Profile/ProfilePic";
+import { UserCircle2 } from "lucide-react";
+import Image from "next/image";
 
-const LoginBtn = ({ unmount = () => { } }) => {
+const LoginBtn = ({ unmount = () => {} }) => {
   const [active, setActive] = useState(false);
-
 
   const path = usePathname();
   const { data } = useSession();
-  const username = data?.user?.username
+  const username = data?.user?.username;
 
   const popUpRef = useRef(null);
 
@@ -31,7 +32,7 @@ const LoginBtn = ({ unmount = () => { } }) => {
   return path === "/login" ? null : data?.user ? (
     <div className="relative w-10 h-10">
       <button
-        className="w-full h-full relative rounded-full  border border-white/20 cursor-pointer flex items-center justify-center overflow-hidden"
+        className="w-full h-full rounded-full  border border-white/20 cursor-pointer flex items-center justify-center overflow-hidden"
         onClick={() => setActive((prev) => !prev)}
       >
         <ProfilePic />
@@ -43,8 +44,19 @@ const LoginBtn = ({ unmount = () => { } }) => {
         >
           <h3 className="font-semibold">{data.user.email}</h3>
           <div className="flex flex-col items-center mx-auto gap-2">
-            <div className="relative w-32 h-32 border border-white/10 rounded-full flex items-center justify-center">
-              <ProfilePic />
+            <div className="w-32 h-32 border border-white/10 rounded-full flex items-center justify-center">
+              {data?.user?.profilePic && data.user.profilePic !== "" ? (
+                <Image
+                  src={data.user.profilePic}
+                  quality={80}
+                  width={128}
+                  height={128}
+                  alt={data.user.name}
+                  className="object-cover object-center w-32 h-32 rounded-full"
+                />
+              ) : (
+                <UserCircle2 className="w-full h-full" />
+              )}
             </div>
             <h2 className="capitalize text-lg font-bold">
               Hi, {data.user.name}

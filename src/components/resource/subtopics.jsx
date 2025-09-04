@@ -4,8 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Button from "../button/Button";
 
-export default function Subtopic({ data,domain,topic }) {
-  console.log("data:", data);
+export default function Subtopic({ data, domain, topic }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const titleFromUrl = searchParams.get("title");
@@ -27,13 +26,15 @@ export default function Subtopic({ data,domain,topic }) {
 
   useEffect(() => {
     if (titleFromUrl) {
-      const matchedItem = data.subtopics?.find((item) => item.title === titleFromUrl);
+      const matchedItem = data.subtopics?.find(
+        (item) => item.title === titleFromUrl
+      );
       if (matchedItem) {
         setSelectedResource(matchedItem.resourceUrl);
         setSelectedTitle(matchedItem.title);
         setShowPreview(true);
       }
-    }else if (data.subtopics?.length > 0) {
+    } else if (data.subtopics?.length > 0) {
       // Set default first PDF if no title is in URL
       setSelectedResource(data.subtopics[0].resourceUrl);
       setSelectedTitle(data.subtopics[0].title);
@@ -61,9 +62,15 @@ export default function Subtopic({ data,domain,topic }) {
             >
               Back to Topics
             </Button>
-            <h2 className="text-2xl font-semibold text-center mb-4 text-white ">{selectedTitle}</h2>
+            <h2 className="text-2xl font-semibold text-center mb-4 text-white ">
+              {selectedTitle}
+            </h2>
             <div className="w-full max-w-4xl h-[500px] bg-black rounded-lg flex items-center justify-center shadow-md border border-white">
-              <iframe src={selectedResource} className="w-full h-full rounded-lg" title="Resource Preview" />
+              <iframe
+                src={selectedResource}
+                className="w-full h-full rounded-lg"
+                title="Resource Preview"
+              />
             </div>
             <a
               href={selectedResource}
@@ -75,7 +82,9 @@ export default function Subtopic({ data,domain,topic }) {
           </div>
         ) : (
           <div className="w-full flex flex-col items-center p-5">
-            <h2 className="text-xl font-semibold text-center mb-4 text-white">Resources</h2>
+            <h2 className="text-xl font-semibold text-center mb-4 text-white">
+              Resources
+            </h2>
             <div className="space-y-3 w-full max-w-sm">
               {data.subtopics?.length === 0 ? (
                 <p className="text-red-600 text-center">No Resources Found</p>
@@ -84,7 +93,7 @@ export default function Subtopic({ data,domain,topic }) {
                   <Button
                     onClick={() => handleClick(item)}
                     key={`${item._id}-${subIdx}`}
-                   className='text-center'
+                    className="text-center"
                   >
                     {item.title}
                   </Button>
@@ -96,7 +105,9 @@ export default function Subtopic({ data,domain,topic }) {
       ) : (
         <>
           <div className="w-1/4 min-w-[270px] bg-black text-white shadow-lg p-4 overflow-y-auto">
-            <h2 className="text-xl font-semibold text-center mb-4 border-b-2 border-red-500  border-spacing-3">Resources</h2>
+            <h2 className="text-xl font-semibold text-center mb-4 border-b-2 border-red-500  border-spacing-3">
+              Resources
+            </h2>
             <div className="space-y-3">
               {data.subtopics?.length === 0 ? (
                 <p className="text-red-600 text-center">No Resources Found</p>
@@ -118,19 +129,22 @@ export default function Subtopic({ data,domain,topic }) {
           <div className="flex-1 flex flex-col items-center justify-center bg-black">
             {selectedResource ? (
               <>
-                <h2 className="text-2xl font-semibold text-center mb-4 text-white">{selectedTitle}</h2>
+                <h2 className="text-2xl font-semibold text-center mb-4 text-white">
+                  {selectedTitle}
+                </h2>
                 <div className="w-full max-w-5xl h-[600px] bg-black rounded-lg flex items-center justify-center shadow-md border border-white">
-                  <iframe src={selectedResource} className="w-full h-full rounded-lg" title="Resource Preview" />
+                  <iframe
+                    src={selectedResource}
+                    className="w-full h-full rounded-lg"
+                    title="Resource Preview"
+                  />
                 </div>
-                <Button className="mt-4">                <a
-                  href={selectedResource}
-                  download
-                
-                >
-                  Download Resource
-                </a>
+                <Button className="mt-4">
+                  {" "}
+                  <a href={selectedResource} download>
+                    Download Resource
+                  </a>
                 </Button>
-
               </>
             ) : (
               <p className="text-gray-400">Select a resource to preview</p>

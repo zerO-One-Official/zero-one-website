@@ -10,20 +10,6 @@ export const Past = ({ events }) => {
 
   useScroll(ref);
 
-  const currentDate = new Date();
-
-  const pastEvents =
-    events &&
-    events
-      ?.filter((event) => {
-        const eventStartDate = new Date(event.date);
-        const eventEndDate = new Date(
-          eventStartDate.getTime() + event.duration * 60 * 60 * 1000
-        );
-        return eventEndDate < currentDate;
-      })
-      .sort((a, b) => new Date(b.date) - new Date(a.date));
-
   return (
     <section
       ref={ref}
@@ -34,13 +20,13 @@ export const Past = ({ events }) => {
           Past
         </h2>
       </div>
-      {pastEvents.length ? (
+      {events.length ? (
         <div className="space-y-2 text-2xl mb-10 sm:mb-7 xl:mt-16 sm:text-lg mt-0 sm:mt-10 pl-11 box-border w-3/5 xl:w-full xl:pl-0">
-          {pastEvents.map((event) => {
-            const eventDate = new Date(event.date);
+          {events.map((event) => {
+            const eventDate = new Date(event.startDate);
             return (
               <Link
-                href={`/events/${event.slug}?tab=info`}
+                href={`/events/${event.slug}?type=${event.type}&tab=info`}
                 key={event._id}
                 className="group border-b border-white/10 hover:scale-105 transition-all rounded flex flex-1 justify-between items-center p-4 w-full gap-6 sm:gap-2 "
               >

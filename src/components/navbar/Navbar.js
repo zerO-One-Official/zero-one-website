@@ -75,7 +75,7 @@ function Navbar() {
     >
       <Logo size={`${isPlaygroundPath ? "icon" : "default"}`} />
       <nav id="navList" className={styles.navbarList}>
-        {data && data.user && data.user.role === "admin" ? (
+        {data && data.user && data.user.role === "ADMIN" ? (
           <a href="https://admin.zeroonemce.com" className={styles.navLink}>
             Admin
           </a>
@@ -94,9 +94,9 @@ function Navbar() {
 
         {data && data.user && !isPlaygroundPath ? (
           <>
-            <Link href="/playground" className={styles.navLink}>
+            {/*<Link href="/playground" className={styles.navLink}>
               Code
-            </Link>
+            </Link>*/}
             <Link href="/resources" className={styles.navLink}>
               Resources
             </Link>

@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "ZERO ONE | Events",
+  title: "Events",
   description:
     "Zero-one Coding Club of Motihari College of Engineering, Motihari",
 };

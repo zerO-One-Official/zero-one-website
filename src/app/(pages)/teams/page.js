@@ -3,6 +3,12 @@ import BottomGlitter from "@/components/StyledText/BottomGlitter";
 import Styles from "@/components/teams/Team.module.css";
 import TeamCard from "@/components/teams/TeamsCard";
 
+export const metadata = {
+  title: "Teams",
+  description:
+    "Zero-one Coding Club of Motihari College of Engineering, Motihari",
+};
+
 async function Teams() {
   const { teams } = await getTeams();
 
