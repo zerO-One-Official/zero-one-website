@@ -1,18 +1,7 @@
-import { getCodingQuestion } from "@/action/codingQuestion";
-import QuestionTable from "@/components/Playground/questionTable";
+import { Playground } from "@/components/codeEditor";
 
-const Playground = async () => {
-  const questions = await getCodingQuestion();
-
-  return (
-    <div className="container-70 py-4 h-auto">
-      {questions?.length > 0 ? (
-        <QuestionTable data={questions} />
-      ) : (
-        <h2 className="text-xl font-bold">No questions found</h2>
-      )}
-    </div>
-  );
+const PlaygroundPage = async () => {
+  return <Playground />;
 };
 
-export default Playground;
+export default PlaygroundPage;

@@ -6,6 +6,14 @@ import { useEffect, useRef, useState } from "react";
 
 const ICON_SIZE = 30;
 
+const hiddenSocialsPaths = [
+  "/login",
+  "/recoverPassword",
+  "/setPassword",
+  "/playground",
+  "/practice",
+];
+
 function SocialsBarUI() {
   const pathname = usePathname();
 
@@ -33,6 +41,9 @@ function SocialsBarUI() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [prevScrollY]);
 
+  if (hiddenSocialsPaths.some((path) => pathname.startsWith(path))) {
+    return null;
+  }
   return (
     <section ref={socialRef} className={Styles.socialsBar}>
       <a href="#" target="_blank" rel="noreferrer">
