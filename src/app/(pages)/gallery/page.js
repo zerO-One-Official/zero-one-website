@@ -20,7 +20,7 @@ const GalleryPage = async () => {
     <>
       <div className="mt-10 mb-8 sm:my-8 px-20 2xl:px-10 xl:px-8 sm:px-6 xs:px-3">
         <div className="flex flex-col justify-between items-center">
-          <BottomGlitter text="Our Gallery" />
+          {/* <BottomGlitter text="Our Gallery" /> */}
           {/* <AnimatedScrollButton scrollTo="scrolled-to" /> */}
         </div>
         <div id="scrolled-to" className="min-h-screen pt-10">
