@@ -37,7 +37,16 @@ const LoginPage = () => {
       })
         .then(({ ok, error }) => {
           if (ok) {
-            router.push("/");
+            const callbackUrl = new URLSearchParams(
+              window.location.search
+            ).get("callbackUrl");
+            const safeCallbackUrl =
+              callbackUrl?.startsWith("/") &&
+              !callbackUrl.startsWith("//") &&
+              !callbackUrl.includes("\\")
+                ? callbackUrl
+                : "/";
+            router.push(safeCallbackUrl);
           } else {
             toast.error(error);
           }

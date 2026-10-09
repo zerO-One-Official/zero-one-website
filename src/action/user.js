@@ -1,6 +1,7 @@
 "use server";
 
 import Contest from "@/models/Contest";
+import ContestAttempt from "@/models/ContestAttempt";
 import User from "@/models/User";
 import connect from "@/utils/dbConnect";
 import { convertIdsToString, generateAccessCode } from "@/utils/helper";
@@ -43,9 +44,32 @@ export const getUserContests = cache(async (userId) => {
     const contests = await Contest.find({
       participants: { $elemMatch: { user: userId } },
     })
-      .select("name slug startDate durationMinutes")
+      .select(
+        "name slug description status startDate lastRegistrationDate durationMinutes"
+      )
+      .sort({ startDate: 1 })
       .lean();
-    return convertIdsToString(contests);
+    const attempts = await ContestAttempt.find({
+      user: userId,
+      contest: { $in: contests.map((contest) => contest._id) },
+    })
+      .select("contest status")
+      .lean();
+    const attemptsByContest = new Map(
+      attempts.map((attempt) => [String(attempt.contest), attempt])
+    );
+    return contests.map((contest) => {
+      const attempt = attemptsByContest.get(String(contest._id));
+
+      return {
+        ...convertIdsToString(contest),
+        attempt: attempt
+          ? {
+              status: attempt.status,
+            }
+          : null,
+      };
+    });
   } catch (error) {
     console.log("Error fetching user contests:", error);
     return [];

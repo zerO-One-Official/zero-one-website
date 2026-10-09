@@ -1,14 +1,46 @@
 "use client";
 
 import useScroll from "@/hooks/useScroll";
+import { getEventHref } from "@/components/contests/eventUtils";
 import { getDate, getTime } from "@/utils/helper";
 import Link from "next/link";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export const Upcoming = ({ events }) => {
   const ref = useRef();
+  const [timers, setTimers] = useState({});
 
   useScroll(ref);
+
+  useEffect(() => {
+    const updateTimers = () => {
+      const now = Date.now();
+      setTimers(
+        Object.fromEntries(
+          events.map((event) => [
+            event._id,
+            Math.max(0, new Date(event.startDate).getTime() - now),
+          ])
+        )
+      );
+    };
+
+    updateTimers();
+    const interval = setInterval(updateTimers, 1000);
+    return () => clearInterval(interval);
+  }, [events]);
+
+  const formatCountdown = (milliseconds) => {
+    const seconds = Math.floor(milliseconds / 1000);
+    const days = Math.floor(seconds / 86400);
+    const hours = Math.floor((seconds % 86400) / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const remainingSeconds = seconds % 60;
+
+    return `${days ? `${days}d ` : ""}${String(hours).padStart(2, "0")}:${String(
+      minutes
+    ).padStart(2, "0")}:${String(remainingSeconds).padStart(2, "0")}`;
+  };
 
   return (
     <section
@@ -27,7 +59,7 @@ export const Upcoming = ({ events }) => {
             const eventDate = new Date(event.startDate);
             return (
               <Link
-                href={`/events/${event.slug}?type=${event.type}&tab=info`}
+                href={getEventHref(event)}
                 key={event._id}
                 className="group border-b border-white/5 hover:scale-105 transition-all rounded flex flex-1 justify-between items-center p-4 w-full gap-6 sm:gap-2 flex-wrap"
               >
@@ -37,6 +69,12 @@ export const Upcoming = ({ events }) => {
                 <h2 className="flex gap-6 sm:gap-2 flex-wrap">
                   <span>{getDate(eventDate)} </span>
                   <span>{`${getTime(eventDate)}`}</span>
+                  <span className="text-accent">
+                    Starts in{" "}
+                    {timers[event._id] === undefined
+                      ? "--:--:--"
+                      : formatCountdown(timers[event._id])}
+                  </span>
                 </h2>
               </Link>
             );

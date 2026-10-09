@@ -1,11 +1,11 @@
 import { redirect } from "next/navigation";
 import { AiOutlineInfoCircle, AiOutlineQuestionCircle } from "react-icons/ai";
 import { HiOutlineUserGroup } from "react-icons/hi";
-import { Participant } from "@/components/events/Participants";
-import { InfoTab } from "@/components/events/InfoTab";
+import { Participant } from "@/components/contests/Participants";
+import { InfoTab } from "@/components/contests/InfoTab";
 import Link from "next/link";
-import TeamParticipant from "@/components/events/TeamParticipant";
-import { Question } from "@/components/events/Question";
+import TeamParticipant from "@/components/contests/TeamParticipant";
+import { Question } from "@/components/contests/Question";
 
 const QuizPage = async ({ event, searchParams }) => {
   // Check if participants array exists and contains 'team' property
@@ -109,6 +109,7 @@ const QuizPage = async ({ event, searchParams }) => {
                   <Question
                     key={question._id}
                     question={question}
+                    questionDomain="QuizQuestion"
                     eventEndDate={eventEndDate}
                   />
                 );

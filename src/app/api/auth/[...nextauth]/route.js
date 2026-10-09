@@ -1,8 +1,5 @@
-import connect from "@/utils/dbConnect";
 import NextAuth from "next-auth";
 import { options } from "./options";
-
-connect();
 
 const handler = NextAuth(options);
 

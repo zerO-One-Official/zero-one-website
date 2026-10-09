@@ -4,6 +4,18 @@ import { decodeBase64 } from "@/utils/helper";
 
 const JUDGE0_API_URL = process.env.JUDGE0_URI;
 
+const fetchWithNetworkRetry = async (url, options) => {
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    try {
+      return await fetch(url, options);
+    } catch (error) {
+      if (attempt > 0 || !(error instanceof TypeError)) throw error;
+      await new Promise((resolve) => setTimeout(resolve, 500));
+    }
+  }
+  throw new Error("Unable to reach the code grading service.");
+};
+
 const createSubmission = async ({
   source_code,
   language_id,
@@ -12,6 +24,12 @@ const createSubmission = async ({
   try {
     if (!source_code || !language_id) {
       throw new Error("Code and Language ID are required");
+    }
+    if (!JUDGE0_API_URL) {
+      return {
+        success: false,
+        message: "Code grading service is not configured.",
+      };
     }
 
     // If no testcases provided, create a single submission without input/output
@@ -26,7 +44,7 @@ const createSubmission = async ({
 
     const requestBody = { submissions: submissionBody };
 
-    const response = await fetch(
+    const response = await fetchWithNetworkRetry(
       `${JUDGE0_API_URL}/submissions/batch?base64_encoded=false&wait=false`,
       {
         method: "POST",
@@ -54,7 +72,14 @@ const createSubmission = async ({
 
 const getSubmissionResult = async (token) => {
   try {
-    const response = await fetch(
+    if (!JUDGE0_API_URL) {
+      return {
+        success: false,
+        message: "Code grading service is not configured.",
+      };
+    }
+
+    const response = await fetchWithNetworkRetry(
       `${JUDGE0_API_URL}/submissions/${token}?base64_encoded=true&fields=stdout,stderr,status,time,memory,expected_output,compile_output,finished_at,message`,
       {
         method: "GET",
@@ -224,7 +249,7 @@ const getSubmissionResult = async (token) => {
       text: message,
     }));
 
-    decodedData.markers = parsed.map(({ row, column }) => ({
+    decodedData.markers = parsed.map(({ row }) => ({
       startRow: Math.max(0, row - 1),
       startCol: 0, // Always start from beginning of line
       endRow: Math.max(0, row - 1),

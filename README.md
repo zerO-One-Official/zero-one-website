@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# ZERO ONE Website
 
-## Getting Started
+The public ZERO ONE website and participant-facing contest experience, built
+with Next.js.
 
-First, run the development server:
+## Requirements
+
+- Node.js and npm
+- MongoDB available at the URI in `.env.local`
+- A reachable Judge0 API for running and grading code
+
+## Local setup
+
+1. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+2. Copy `.env.example` to `.env.local`:
+
+   ```powershell
+   Copy-Item .env.example .env.local
+   ```
+
+   On macOS or Linux, use `cp .env.example .env.local`.
+
+3. Set the values in `.env.local`. The example file uses local defaults for
+   MongoDB, the website, the admin panel, and Judge0. Replace the secret
+   placeholders with development-only values. For a connected admin panel,
+   configure the same MongoDB database and `NEXTAUTH_SECRET` in both apps.
+
+   `JUDGE0_URI` should be the base URL of a running Judge0 API. The example
+   points to `http://localhost:2358`; starting Judge0 is a separate
+   prerequisite for code execution and grading.
+
+   Email and UploadThing credentials are needed only for features that use
+   those services.
+
+4. Start the website:
+
+   ```bash
+   npm run dev
+   ```
+
+   Open [http://localhost:3000](http://localhost:3000).
+
+## Other commands
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run lint
+npm run build
+npm start
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.

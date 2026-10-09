@@ -40,7 +40,7 @@ const TeamParticipant = ({ team, contestId }) => {
             return (
               <Participant
                 contestId={contestId}
-                participant={JSON.stringify(participant?.user)}
+                participant={participant?.user}
                 team={participant?.team}
                 key={participant?._id}
               />

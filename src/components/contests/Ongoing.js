@@ -1,6 +1,8 @@
 "use client";
 
 import useScroll from "@/hooks/useScroll";
+import { getEventHref } from "@/components/contests/eventUtils";
+import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
@@ -28,9 +30,10 @@ export const OnGoingEvent = ({ events }) => {
         const updateTimer = () => {
           const timeRemaining = eventEndDate - new Date();
 
+          const days = Math.max(0, Math.floor(timeRemaining / (24 * 60 * 60 * 1000)));
           const hours = Math.max(
             0,
-            Math.floor(timeRemaining / (60 * 60 * 1000))
+            Math.floor((timeRemaining % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000))
           );
           const minutes = Math.max(
             0,
@@ -43,7 +46,7 @@ export const OnGoingEvent = ({ events }) => {
 
           setTimers((prev) => ({
             ...prev,
-            [event._id]: { hours, minutes, seconds },
+            [event._id]: { days, hours, minutes, seconds },
           }));
         };
 
@@ -72,25 +75,49 @@ export const OnGoingEvent = ({ events }) => {
       <div className="text-2xl mb-10 sm:mb-7 xl:mt-16 sm:text-lg mt-0 sm:mt-10 pl-11 box-border w-3/5 xl:w-full xl:pl-0">
         {events.map((event) => {
           const time = timers[event._id] || {
+            days: 0,
             hours: "00",
             minutes: "00",
             seconds: "00",
           };
+          const eventEndDate = new Date(
+            new Date(event.startDate).getTime() +
+              Number(event.durationMinutes) * 60 * 1000
+          );
+          const isLive = event.status?.toUpperCase() === "LIVE";
+          const hasTimeRemaining =
+            Number.isFinite(eventEndDate.getTime()) &&
+            eventEndDate.getTime() > Date.now();
 
           return (
             <Link
-              href={`/events/${event.slug}?type=${event.type}&tab=info`}
+              href={getEventHref(event)}
               key={event._id}
-              className="flex flex-1 justify-between items-center p-4 w-full gap-6 sm:gap-2"
+              className="flex flex-1 justify-between items-center p-4 w-full gap-6 sm:gap-2 rounded-2xl transition-colors hover:bg-white/5"
             >
               <h2 className="text-accent font-semibold text-4xl sm:text-xl">
                 {event.name}
               </h2>
-              <h2 className="flex gap-6 sm:gap-2">
-                {String(time.hours).padStart(2, "0")}:
-                {String(time.minutes).padStart(2, "0")}:
-                {String(time.seconds).padStart(2, "0")}
-              </h2>
+              <div className="flex flex-wrap items-center justify-end gap-3">
+                {isLive ? (
+                  <Badge className="border-red-400/30 bg-red-400/10 text-red-300">
+                    LIVE
+                  </Badge>
+                ) : null}
+                <span className="flex gap-2 sm:gap-1">
+                  {hasTimeRemaining ? (
+                    <>
+                      <span>Ending in</span>
+                      {time.days ? `${time.days}d ` : ""}
+                      {String(time.hours).padStart(2, "0")}:
+                      {String(time.minutes).padStart(2, "0")}:
+                      {String(time.seconds).padStart(2, "0")}
+                    </>
+                  ) : isLive ? (
+                    "Marked live by admin"
+                  ) : null}
+                </span>
+              </div>
             </Link>
           );
         })}

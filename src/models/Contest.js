@@ -103,6 +103,21 @@ const ContestSchema = new mongoose.Schema(
         },
       },
     ],
+    winners: [
+      {
+        _id: false,
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+          required: true,
+        },
+        rank: {
+          type: Number,
+          required: true,
+          min: [1, "Winner rank must be at least 1."],
+        },
+      },
+    ],
   },
   { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }
 );
@@ -125,6 +140,13 @@ ContestSchema.pre("findOneAndUpdate", function (next) {
   }
   next();
 });
+
+if (
+  mongoose.models.Contest &&
+  !mongoose.models.Contest.schema.path("winners")
+) {
+  mongoose.deleteModel("Contest");
+}
 
 const Contest =
   mongoose.models.Contest || mongoose.model("Contest", ContestSchema);
