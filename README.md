@@ -5,7 +5,7 @@ with Next.js.
 
 ## Requirements
 
-- Node.js and npm
+- Node.js 22 and npm
 - MongoDB available at the URI in `.env.local`
 - A reachable Judge0 API for running and grading code
 
