@@ -72,7 +72,5 @@
     "eslint-config-next": "15.5.27",
     "postcss": "latest",
     "tailwindcss": "^3.4.17"
-  },   "engines": {
-    "node": "22.x"
   }
 }
