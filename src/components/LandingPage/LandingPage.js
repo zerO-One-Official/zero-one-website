@@ -1,6 +1,6 @@
 "use client"
 import { useCallback } from 'react';
-import styles from './landingPage.module.css';
+import styles from './LandingPage.module.css';
 import Link from 'next/link';
 
 function LandingPage() {
