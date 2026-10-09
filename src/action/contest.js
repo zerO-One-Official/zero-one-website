@@ -44,6 +44,11 @@ export const getContest = cache(async (slug) => {
         select: "firstName lastName profilePic username branch roll",
       })
       .populate({
+        path: "winners.user",
+        model: User,
+        select: "firstName lastName profilePic username branch roll",
+      })
+      .populate({
         path: "sections.questions.question",
       })
       .lean()
