@@ -1,21 +1,17 @@
 "use client";
 import Button from "../button/Button";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
 import { MdLogin } from "react-icons/md";
 import ProfilePic from "../Profile/ProfilePic";
-import { UserCircle2 } from "lucide-react";
 import Image from "next/image";
 import { FaCircleUser } from "react-icons/fa6";
 
 const LoginBtn = ({ unmount = () => {} }) => {
   const [active, setActive] = useState(false);
 
-  const path = usePathname();
   const { data } = useSession();
-  const username = data?.user?.username;
 
   const popUpRef = useRef(null);
 
@@ -70,7 +66,7 @@ const LoginBtn = ({ unmount = () => {} }) => {
             <div className="flex flex-row gap-1">
               {data && data.user && data.user.role === "ADMIN" ? (
                 <Link
-                  href="https://admin.zeroonemce.com"
+                  href={process.env.NEXT_PUBLIC_ADMIN_URL || "http://localhost:3001"}
                   className="flex-1 bg-white/5 p-2 py-3 flex justify-center hover:bg-white/10 transition-all items-center rounded-r-none rounded-full"
                 >
                   Admin

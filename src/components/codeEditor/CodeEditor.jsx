@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import AceEditor from "react-ace";
 import { languageConfigs } from "./editorConfigs";
 import "./editorConfigs";
@@ -28,6 +28,8 @@ import "ace-builds/src-noconflict/mode-c_cpp";
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/mode-sql";
+import "ace-builds/src-noconflict/mode-html";
+import "ace-builds/src-noconflict/mode-css";
 
 // Import extensions
 import "ace-builds/src-noconflict/ext-language_tools";
@@ -41,6 +43,9 @@ const CodeEditor = ({
   fontSize = 14,
   readOnly = false,
   autoComplete = true,
+  value,
+  onChange,
+  language: languageOverride,
   // Styling
   className = "",
   height = "100%",
@@ -64,15 +69,26 @@ const CodeEditor = ({
   const submitCode = useCodeEditorSubmitCode();
   const resetCode = useCodeEditorResetCode();
   const initializeEditor = useCodeEditorInitialize();
+  const isControlled = typeof value === "string" && typeof onChange === "function";
+  const allowedLanguagesKey = JSON.stringify(allowedLanguages);
+  const allowedLanguagesRef = useRef(allowedLanguages);
+  allowedLanguagesRef.current = allowedLanguages;
+  const editorLanguage = languageOverride || language;
+  const editorMode =
+    languageConfigs[editorLanguage]?.mode ||
+    (editorLanguage === "html" || editorLanguage === "css"
+      ? editorLanguage
+      : "javascript");
 
   // Initialize the editor store when component mounts or props change
   useEffect(() => {
-    initializeEditor(initialCode, allowedLanguages);
+    if (!isControlled) initializeEditor(initialCode, allowedLanguagesRef.current);
   }, [
     initialCode,
-    JSON.stringify(allowedLanguages),
+    allowedLanguagesKey,
     initializeEditor,
     language,
+    isControlled,
   ]);
 
   return (
@@ -80,22 +96,28 @@ const CodeEditor = ({
       className={`border border-border/30 bg-background rounded-lg overflow-hidden ${className}`}
     >
       <AceEditor
-        mode={languageConfigs[language]?.mode || "javascript"}
+        mode={editorMode}
         theme="ZERO_ONE"
-        value={code}
-        onChange={setCode}
+        value={isControlled ? value : code}
+        onChange={isControlled ? onChange : setCode}
         name="code-editor"
         editorProps={{ $blockScrolling: true }}
+        onLoad={(editor) => {
+          if (!autoComplete) {
+            editor.completers = [];
+            editor.commands.removeCommand("startAutocomplete");
+          }
+        }}
         fontSize={fontSize}
         width="100%"
         height={height}
-        readOnly={readOnly || loading}
-        annotations={annotations}
-        markers={markers}
+        readOnly={readOnly || (!isControlled && loading)}
+        annotations={isControlled ? [] : annotations}
+        markers={isControlled ? [] : markers}
         setOptions={{
-          enableBasicAutocompletion: autoComplete,
-          enableLiveAutocompletion: autoComplete,
-          enableSnippets: autoComplete,
+          enableBasicAutocompletion: autoComplete && !readOnly,
+          enableLiveAutocompletion: autoComplete && !readOnly,
+          enableSnippets: autoComplete && !readOnly,
           showLineNumbers: showLineNumbers,
           tabSize: 4,
           useWorker: false,
@@ -109,7 +131,7 @@ const CodeEditor = ({
           printMargin: showPrintMargin,
         }}
         showGutter={showGutter}
-        commands={[
+        commands={isControlled ? [] : [
           {
             name: "runCode",
             bindKey: { win: "Ctrl-R", mac: "Cmd-R" },

@@ -27,28 +27,32 @@ export const getCodingQuestions = cache(async () => {
   }
 });
 
-export const getCodingQuestion = cache(
-  async (slug, privateTestCases = false) => {
-    try {
-      await connect();
+export const getCodingQuestion = cache(async (slug) => {
+  try {
+    await connect();
 
-      const question = await CodingQuestion.findOne({ slug }).lean();
-      let questionWithTestCases = question;
-
-      if (!privateTestCases) {
-        const publicTestCases = question?.testCases?.filter(
-          (testCase) => testCase.isPublic
-        );
-        questionWithTestCases = { ...question, testCases: publicTestCases };
-      }
+    const question = await CodingQuestion.findOne({ slug }).lean();
+    if (!question) {
       return {
-        question: convertIdsToString(questionWithTestCases),
-        type: "success",
-        success: true,
+        message: "Question not found",
+        type: "error",
+        success: false,
       };
-    } catch (error) {
-      console.log(`Error in fetching questions: ${error}`);
-      return { message: error.message, type: "error", success: false };
     }
+    const publicTestCases = question?.testCases?.filter(
+      (testCase) => testCase.isPublic
+    );
+    const questionWithTestCases = {
+      ...question,
+      testCases: publicTestCases,
+    };
+    return {
+      question: convertIdsToString(questionWithTestCases),
+      type: "success",
+      success: true,
+    };
+  } catch (error) {
+    console.log(`Error in fetching questions: ${error}`);
+    return { message: error.message, type: "error", success: false };
   }
-);
+});

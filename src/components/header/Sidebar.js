@@ -108,7 +108,7 @@ function Sidebar({ isMounted, unmount }) {
                 <div className="flex xs:flex-row flex-col gap-1">
                   {data && data.user && data.user.role === "ADMIN" ? (
                     <Link
-                      href="https://admin.zeroonemce.com"
+                      href={process.env.NEXT_PUBLIC_ADMIN_URL || "http://localhost:3001"}
                       className="flex-1 bg-white/5 p-2 py-3 flex justify-center hover:bg-white/10 transition-all items-center xs:rounded-r-none rounded-full"
                     >
                       Admin
@@ -196,7 +196,7 @@ function Sidebar({ isMounted, unmount }) {
                 Resources
               </Link>
               <Link
-                href="/playground"
+                href="/practice"
                 className="block w-fit px-4 py-3 text-lg font-medium text-white hover:bg-secondary rounded-full transition-all duration-200 ease-in-out"
                 onClick={unmount}
               >
@@ -219,18 +219,18 @@ function Sidebar({ isMounted, unmount }) {
             </h3>
             <div className="space-y-2">
               <Link
-                href="/ongoing-contests"
+                href="/contests"
                 className="block w-fit px-4 py-3 text-lg font-medium text-white hover:bg-secondary rounded-full transition-all duration-200 ease-in-out"
                 onClick={unmount}
               >
-                Ongoing Contests
+                All Contests
               </Link>
               <Link
-                href="/past-contests"
+                href="/my-contests"
                 className="block w-fit px-4 py-3 text-lg font-medium text-white hover:bg-secondary rounded-full transition-all duration-200 ease-in-out"
                 onClick={unmount}
               >
-                Past Contests
+                My Contests
               </Link>
               <Link
                 href="/gallery"

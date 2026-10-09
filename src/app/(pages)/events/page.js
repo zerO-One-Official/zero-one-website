@@ -1,51 +1,19 @@
-import { OnGoingEvent } from "@/components/events/Ongoing";
-import { Upcoming } from "@/components/events/Upcoming";
-import { Past } from "@/components/events/Past";
+import { OnGoingEvent } from "@/components/contests/Ongoing";
+import { Upcoming } from "@/components/contests/Upcoming";
+import { Past } from "@/components/contests/Past";
+import { splitEventsByStatus } from "@/components/contests/eventUtils";
 import { getEvents } from "@/action/events";
 import { Trophy } from "lucide-react";
-import Link from "next/link";
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 
 export const dynamic = "force-dynamic";
 
 export default async function Events() {
-  const { events } = await getEvents();
-
-  const pastEvents = events.filter((event) => {
-    const currentDate = new Date();
-    const eventStartDate = new Date(event.startDate);
-    const eventEndDate = new Date(
-      eventStartDate.getTime() + event.durationMinutes * 60 * 1000
-    );
-    return eventEndDate < currentDate;
-  });
-
-  const ongoingEvents = events.filter((event) => {
-    const currentDate = new Date(); // Always get the latest time
-    const eventStartDate = new Date(event.startDate);
-    const eventEndDate = new Date(
-      eventStartDate.getTime() + event.durationMinutes * 60 * 1000
-    );
-
-    return eventStartDate <= currentDate && currentDate <= eventEndDate;
-  });
-
-  const upcomingEvents = events.filter((event) => {
-    const currentDate = new Date();
-    const eventStartDate = new Date(event.startDate);
-    return eventStartDate > currentDate;
-  });
-
-  console.log(pastEvents[0]);
+  const { events = [] } = await getEvents();
+  const { ongoing, upcoming, past } = splitEventsByStatus(events);
 
   return (
-    <section className="mt-10 mb-8 sm:my-8 px-20 2xl:px-10 xl:px-8 sm:px-6 xs:px-3">
-      <div className={`flex flex-col gap-10 items-center min-h-screen`}>
+    <main className="mt-10 mb-8 sm:my-8 px-20 2xl:px-10 xl:px-8 sm:px-6 xs:px-3">
+      <section className="flex flex-col gap-10 items-center">
         <Trophy className="text-accent size-36" />
         <h2 className={`text-6xl sm:text-5xl font-semibold`}>
           ZERO ONE Events
@@ -58,37 +26,17 @@ export default async function Events() {
           our coding skills, be creative in hackathons, and enjoy friendly
           contests. It&apos;s a cool place for both beginners and coding fans!
         </div>
-        <div className="grid grid-cols-2">
-          {pastEvents.length ? (
-            <Link
-              href="/"
-              className="flex flex-col items-center hover:scale-105 transition-all ease-in-out duration-300 shadow-cus border border-white/5 rounded-3xl w-full"
-            >
-              <Card className="w-full">
-                <CardHeader>
-                  <CardTitle>{pastEvents[0].name}</CardTitle>
-                </CardHeader>
-              </Card>
-            </Link>
-          ) : null}
-          {upcomingEvents.length ? (
-            <Link
-              href={`/contest/${upcomingEvents[0].slug}`}
-              className="flex flex-col items-center hover:scale-105 transition-all ease-in-out duration-300 shadow-cus border border-white/5 rounded-3xl w-full"
-            >
-              <Card className="w-full">
-                <CardHeader>
-                  <CardTitle>{upcomingEvents[0].name}</CardTitle>
-                  <CardDescription>
-                    {upcomingEvents[0].description}
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-            </Link>
-          ) : null}
-        </div>
-      </div>
-      {/* <div className="flex flex-col gap-10 min-h-screen"></div> */}
-    </section>
+      </section>
+      <section className="flex flex-col">
+        {ongoing.length ? <OnGoingEvent events={ongoing} /> : null}
+        {upcoming.length ? <Upcoming events={upcoming} /> : null}
+        {past.length ? <Past events={past} /> : null}
+        {!events.length ? (
+          <p className="py-16 text-center text-xl text-foreground/60">
+            No events are scheduled right now.
+          </p>
+        ) : null}
+      </section>
+    </main>
   );
 }

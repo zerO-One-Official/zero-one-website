@@ -1,6 +1,7 @@
 "use client";
 
 import useScroll from "@/hooks/useScroll";
+import { getEventHref } from "@/components/contests/eventUtils";
 import { getMonthName } from "@/utils/helper";
 import Link from "next/link";
 import { useRef } from "react";
@@ -26,7 +27,7 @@ export const Past = ({ events }) => {
             const eventDate = new Date(event.startDate);
             return (
               <Link
-                href={`/events/${event.slug}?type=${event.type}&tab=info`}
+                href={getEventHref(event)}
                 key={event._id}
                 className="group border-b border-white/10 hover:scale-105 transition-all rounded flex flex-1 justify-between items-center p-4 w-full gap-6 sm:gap-2 "
               >

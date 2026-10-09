@@ -1,6 +1,4 @@
-"use client";
-
-import { getDate, getMonthName, getTime } from "@/utils/helper";
+import { getDate, getTime } from "@/utils/helper";
 import Markdown from "../markdown/Markdown";
 import { MapPin, NotebookText } from "lucide-react";
 
