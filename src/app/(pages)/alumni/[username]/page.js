@@ -6,7 +6,7 @@ import { getUser } from "@/action/user";
 import AlumniJourneyView from "@/components/alumni/AlumniJourneyView";
 import { normalizeDesignations } from "@/lib/designations";
 import { getUserBatch } from "@/lib/userBatch";
-import ProfilePhotoPreview from "@/components/profile/ProfilePhotoPreview";
+import ProfilePhotoPreview from "@/components/Profile/ProfilePhotoPreview";
 import { getServerSession } from "next-auth";
 import { options } from "@/app/api/auth/[...nextauth]/options";
 
