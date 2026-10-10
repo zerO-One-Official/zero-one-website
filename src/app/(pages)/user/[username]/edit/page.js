@@ -1,6 +1,6 @@
 import { getUser } from "@/action/user";
-import ProfileForm from "@/components/Profile/ProfileForm";
-import ProfilePhotoUpload from "@/components/Profile/ProfilePhotoUpload";
+import ProfileForm from "@/components/profile/ProfileForm";
+import ProfilePhotoUpload from "@/components/profile/ProfilePhotoUpload";
 import { capitalizeFirstLetter } from "@/utils/helper";
 import { IoSchool } from "react-icons/io5";
 export async function generateMetadata({ params }) {
