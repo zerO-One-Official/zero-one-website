@@ -1,6 +1,6 @@
 import { normalizeDesignations } from "@/lib/designations";
 import { getUserBatch } from "@/lib/userBatch";
-import ProfilePhotoPreview from "@/components/profile/ProfilePhotoPreview";
+import ProfilePhotoPreview from "@/components/Profile/ProfilePhotoPreview";
 import { BiEdit, BiLogoLinkedinSquare } from "react-icons/bi";
 import { HiEnvelope } from "react-icons/hi2";
 import { IoLogoGithub, IoSchool } from "react-icons/io5";
