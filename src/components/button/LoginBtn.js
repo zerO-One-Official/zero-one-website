@@ -4,7 +4,7 @@ import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
 import { MdLogin } from "react-icons/md";
-import ProfilePic from "../Profile/ProfilePic";
+import ProfilePic from "../profile/ProfilePic";
 import Image from "next/image";
 import { FaCircleUser } from "react-icons/fa6";
 
