@@ -9,6 +9,7 @@ import "./polyfills";
 import localFont from "next/font/local";
 import { Toaster } from "sonner";
 import BackButton from "@/components/navigation/BackButton";
+import { Analytics } from "@vercel/analytics/next";
 
 const gilroy = localFont({
   src: [
@@ -99,6 +100,7 @@ export default async function RootLayout({ children }) {
           <Footer />
         </Providers>
         <Toaster theme="dark" richColors={true} position="top-right" />
+        <Analytics />
       </body>
     </html>
   );
