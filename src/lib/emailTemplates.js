@@ -177,7 +177,7 @@ export const joiningEmail = (token) => {
                                                                   <div align="center" class="alignment"
                                                                       style="line-height:10px">
                                                                       <div style="max-width: 204px;"><a
-                                                                              href="https://zero-one-mce.vercel.app/"
+                                                                              href="https://zeroonemce.com/"
                                                                               style="outline:none" tabindex="-1"
                                                                               target="_blank"><img
                                                                                   src="${baseUrl}/static/images/fullLogo.png"

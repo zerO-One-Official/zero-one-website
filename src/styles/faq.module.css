@@ -5,7 +5,7 @@
 .title {
   @apply flex w-full justify-between items-center py-3 pr-1 pl-0 cursor-pointer;
   border-bottom: 1px solid #bababa3d;
-  @apply sm:py-2 sm:px-0;
+  @apply py-2 px-0 sm:py-3 sm:px-0;
 }
 
 .title:hover {
@@ -19,7 +19,7 @@
 
 .body {
   @apply py-3 pr-1 pl-0 border-none;
-  @apply sm:py-2;
+  @apply py-2 sm:py-3;
 }
 
 .body ul {

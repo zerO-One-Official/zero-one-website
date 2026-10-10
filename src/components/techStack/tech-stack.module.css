@@ -21,7 +21,7 @@
 }
 
 .col {
-  @apply sm:mt-10 mt-0;
+  @apply mt-10 sm:mt-0;
   padding: 0 45px;
   box-sizing: border-box;
   --col-size: 100%;
@@ -40,30 +40,30 @@
 .col>.header {
   position: sticky;
   top: calc(150px);
-  @apply text-6xl sm:text-5xl font-semibold;
+  @apply text-5xl sm:text-6xl font-semibold;
 }
 
 .headDescription {
-  @apply text-2xl mb-10 sm:mb-7 md:mt-16 sm:text-lg;
+  @apply text-lg sm:text-2xl mb-7 sm:mb-10 mt-16;
 }
 
 .contentContainer {
-  @apply flex flex-wrap justify-between items-stretch my-6 mt-36 md:mt-24;
+  @apply flex flex-wrap justify-between items-stretch my-6 mt-24 md:mt-36;
 }
 
 .content {
   flex: 1;
   min-width: 50%;
-  @apply pr-4 py-4 mb-20 sm:mb-12;
+  @apply pr-4 py-4 mb-12 sm:mb-20;
 }
 
 .content>h2 {
-  @apply text-4xl font-semibold mb-6 sm:text-2xl;
+  @apply text-2xl font-semibold mb-6 sm:text-4xl;
   word-break: normal;
 }
 
 .content>p {
-  @apply text-lg pr-4 font-extralight sm:text-base leading-8 text-stone-300;
+  @apply text-base pr-4 font-extralight sm:text-lg leading-8 text-stone-300;
 }
 
 .scrollContent {

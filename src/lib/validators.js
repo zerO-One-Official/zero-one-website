@@ -1,4 +1,5 @@
 import { branchOptions } from "@/utils/helper";
+import { DESIGNATIONS, normalizeDesignations } from "@/lib/designations";
 
 export const validateSignup = (form) => {
   const {
@@ -18,18 +19,11 @@ export const validateSignup = (form) => {
   if (role !== "ADMIN" && role !== "USER") {
     throw new Error("Role must be either ADMIN or USER.");
   }
+  const designations = normalizeDesignations(designation);
   if (
-    ![
-      "STUDENT",
-      "ALUMNI",
-      "FACULTY",
-      "STAFF",
-      "CLUB LEAD",
-      "CLUB MEMBER",
-      "CLUB COORDINATOR",
-      "HOD",
-      "FACULTY COORDINATOR",
-    ].includes(designation)
+    !designations.length ||
+    designations.some((value) => !DESIGNATIONS.includes(value)) ||
+    new Set(designations).size !== designations.length
   )
     throw new Error("enter a valid designation.");
   if (!["MALE", "FEMALE", "OTHER"].includes(gender))
@@ -56,7 +50,7 @@ export const validateSignup = (form) => {
     "FACULTY COORDINATOR",
     "HOD",
   ];
-  const isFaculty = facultyDesignations.includes(designation);
+  const isFaculty = designations.some((value) => facultyDesignations.includes(value));
 
   if (!isFaculty) {
     if (!roll || !registrationNumber)

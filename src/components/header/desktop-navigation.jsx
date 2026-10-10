@@ -9,7 +9,14 @@ import {
   NavigationMenuTrigger,
 } from "../ui/navigation-menu";
 import Link from "next/link";
-import { Book, GraduationCap, Home, Image, Trophy } from "lucide-react";
+import {
+  Book,
+  GraduationCap,
+  Home,
+  Image,
+  Trophy,
+  UsersRound,
+} from "lucide-react";
 
 const DesktopNavigation = () => {
   return (
@@ -34,6 +41,20 @@ const DesktopNavigation = () => {
               <ListItem href="/teams" title="Our Teams">
                 Meet the people behind ZERO ONE
               </ListItem>
+              <li className="col-span-full rounded-xl hover:bg-secondary">
+                <Link href="/alumni" className="flex items-start gap-3 p-4">
+                  <UsersRound className="size-20 inline-block pointer-events-none opacity-50" />
+                  <div className="min-w-0">
+                    <div className="text-sm leading-none font-medium mb-2">
+                      Alumni
+                    </div>
+                    <p className="text-muted-foreground line-clamp-2 text-sm leading-snug">
+                      Explore alumni by batch, education, career timeline, and
+                      experience
+                    </p>
+                  </div>
+                </Link>
+              </li>
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>

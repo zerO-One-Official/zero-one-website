@@ -25,7 +25,7 @@ function About() {
   return (
     <section
       ref={ref}
-      className="container-70 mb-16 fadeonscroll sm:transform-none sm:opacity-100"
+      className="container-70 mb-16 fadeonscroll max-sm:transform-none max-sm:opacity-100"
     >
       <BottomGlitter text="About Us" />
       <div className="my-6 py-2">

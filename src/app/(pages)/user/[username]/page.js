@@ -1,4 +1,6 @@
-import Image from "next/image";
+import { normalizeDesignations } from "@/lib/designations";
+import { getUserBatch } from "@/lib/userBatch";
+import ProfilePhotoPreview from "@/components/profile/ProfilePhotoPreview";
 import { BiEdit, BiLogoLinkedinSquare } from "react-icons/bi";
 import { HiEnvelope } from "react-icons/hi2";
 import { IoLogoGithub, IoSchool } from "react-icons/io5";
@@ -15,6 +17,18 @@ import FilledCertificate from "@/components/certificates/FilledCertificate";
 import { capitalizeFirstLetter } from "@/utils/helper";
 import { notFound } from "next/navigation";
 import { UserCircle2 } from "lucide-react";
+
+function ProfileDetail({ icon: Icon, label, children }) {
+  return (
+    <div className="flex min-w-0 items-start gap-3 rounded-xl border border-white/5 bg-white/[0.03] p-3">
+      <Icon className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
+      <div className="min-w-0">
+        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{label}</p>
+        <div className="mt-1 break-words text-sm text-foreground/90">{children}</div>
+      </div>
+    </div>
+  );
+}
 
 export async function generateMetadata({ params }) {
   // read route params
@@ -45,9 +59,11 @@ const UserPage = async ({ params }) => {
 
   const session = await getServerSession(options);
 
-  const loggedInUser = session?.user.username;
+  const loggedInUser = session?.user?.username;
 
   const user = await getUser(username);
+  const isAlumni = normalizeDesignations(user?.designation).includes("ALUMNI");
+  const canViewAlumniProfile = isAlumni && (user.showOnWebsite === true || loggedInUser === username);
 
   const userEvents = await getUserContests(user?._id);
 
@@ -55,116 +71,100 @@ const UserPage = async ({ params }) => {
 
   return user ? (
     <div className="container-70 flex flex-col gap-4 min-h-[calc(100vh-88px)] pt-16">
-      <section className="flex flex-col items-center gap-6 border border-l-white/5 border-t-white/5 border-r-black/25 border-b-black/25 shadow-cus  p-6 rounded-3xl relative">
-        <div className="flex w-full md:gap-6 gap-10 items-center sm:flex-col">
-          <div className="p-2 border-4 md:border-2 border-accent rounded-full shrink-0">
+      <section className="flex flex-col gap-5 rounded-3xl border border-white/10 bg-white/[0.02] p-4 shadow-cus sm:gap-6 sm:p-6">
+        <div className="flex w-full flex-col items-center gap-4 sm:flex-row sm:gap-6">
+          <div className="shrink-0 rounded-full border-2 border-accent p-1.5 sm:border-4 sm:p-2">
             {user?.profilePic && user?.profilePic !== "" ? (
-              <Image
-                src={user?.profilePic}
-                width={160}
-                height={160}
-                alt={user?.firstName}
-                className="md:w-20 md:h-20 lg:w-32 lg:h-32 w-36 h-36 object-cover rounded-full shadow"
+              <ProfilePhotoPreview
+                src={user.profilePic}
+                alt={`${user.firstName} ${user.lastName || ""} profile photo`}
+                className="h-20 w-20 rounded-full object-cover shadow sm:h-28 sm:w-28 lg:h-32 lg:w-32"
               />
             ) : (
-              <UserCircle2 className="w-20 h-20 md:w-32 md:h-32 lg:w-36 lg:h-36 rounded-full shadow" />
+              <UserCircle2 aria-hidden="true" className="h-20 w-20 rounded-full text-muted-foreground sm:h-28 sm:w-28 lg:h-32 lg:w-32" />
             )}
           </div>
-          <div className="p-4 ">
-            <h1 className="capitalize text-4xl md:text-3xl font-semibold sm:text-center">
+          <div className="min-w-0 flex-1 text-center sm:text-left">
+            <h1 className="text-3xl font-semibold capitalize sm:text-4xl">
               {user.firstName} {user.lastName}
             </h1>
-            <p className="text-zinc-500 capitalize text-xl sm:text-lg sm:text-center font-semibold">
-              {user.branch}
-            </p>
-            <p className="text-zinc-500 text-lg font-bold flex items-center sm:justify-center">
-              <MdAlternateEmail className="fill-white/40 md:w-4 md:h-4 w-6 h-6 mr-1" />
+            {user.branch && <p className="mt-1 text-base font-medium text-muted-foreground">{user.branch}</p>}
+            <p className="mt-1 flex items-center justify-center gap-1.5 text-sm text-muted-foreground sm:justify-start">
+              <MdAlternateEmail aria-hidden="true" className="h-4 w-4 shrink-0" />
               {user.username}
             </p>
-
-            <p className="capitalize text-accent text-lg font-bold flex items-center sm:justify-center">
-              {user.designation}
-            </p>
+            <div className="mt-3 flex flex-wrap justify-center gap-2 sm:justify-start">
+              {normalizeDesignations(user.designation).map((designation) => (
+                <span key={designation} className="rounded-full border border-accent/25 bg-accent/10 px-2.5 py-1 text-xs font-semibold text-accent">
+                  {designation}
+                </span>
+              ))}
+            </div>
           </div>
-          {username === loggedInUser ? (
+          <div className="flex shrink-0 flex-wrap justify-center gap-2 sm:justify-end">
+            {canViewAlumniProfile && (
+              <Link
+                href={`/alumni/${username}`}
+                className="inline-flex items-center gap-2 rounded-xl border border-accent/30 bg-accent/10 px-4 py-2.5 text-sm font-semibold text-accent transition-colors hover:bg-accent/20"
+              >
+                <IoSchool aria-hidden="true" className="h-4 w-4 shrink-0" />
+                Alumni profile
+              </Link>
+            )}
+            {username === loggedInUser && (
             <Link
               href={`/user/${loggedInUser}/edit`}
-              className="group block rounded-full absolute top-4 right-4 p-4 shadow-btn border border-l-white/5 border-t-white/5 border-r-black/25 border-b-black/25"
+              className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-white/10"
             >
-              <BiEdit className="w-4 h-4 fill-foreground/50 group-hover:fill-foreground" />
+              <BiEdit aria-hidden="true" className="h-4 w-4 shrink-0" />
+              Edit profile
             </Link>
-          ) : null}
-        </div>
-        <div className="flex gap-6 xl:flex-col w-full">
-          {user?.bio ? (
-            <>
-              <div className="flex-1 p-4 space-y-2">
-                <p className="text-zinc-500 flex items-baseline font-semibold">
-                  <DiCodeigniter className="w-4 h-4 fill-zinc-500 mr-2" />
-                  Bio
-                </p>
-                <p
-                  className="text-foreground/80 flex items-center"
-                  title={user.bio}
-                >
-                  {user.bio.slice(0, 100)}
-                  {user.bio.length > 100 ? "..." : ""}
-                </p>
-              </div>
-
-              <div className="xl:w-full xl:h-[2px] w-[2px] h-inherit bg-white/10 rounded-md" />
-            </>
-          ) : null}
-
-          <div className="flex-1 p-4 space-y-2">
-            <p className="text-zinc-500 flex items-center">
-              <PiGenderIntersexBold className="fill-zinc-500 md:w-4 md:h-4 w-6 h-6 mr-2" />
-              {user.gender}
-            </p>
-            <p className="text-zinc-500 flex items-center">
-              <IoSchool className="fill-zinc-500 md:w-4 md:h-4 w-6 h-6 mr-2" />
-              {user.roll}
-            </p>
+            )}
           </div>
-
-          <div className="xl:w-full xl:h-[2px] w-[2px] h-inherit bg-white/10 rounded-md" />
-
-          <div className="flex-1 p-4 space-y-2">
-            <div className="flex items-center">
-              <HiEnvelope className="fill-zinc-500 text-zinc-500 md:w-4 md:h-4 w-6 h-6 mr-2 shrink-0" />
-              <a
-                href={`mailto:${user.email}`}
-                className="text-zinc-500 overflow-hidden text-ellipsis"
-              >
+        </div>
+        <div className="grid w-full gap-3 border-t border-white/10 pt-5 sm:grid-cols-2 xl:grid-cols-3">
+          {user?.bio ? (
+            <ProfileDetail icon={DiCodeigniter} label="Bio">
+              <span title={user.bio}>
+                {user.bio.slice(0, 140)}{user.bio.length > 140 ? "..." : ""}
+              </span>
+            </ProfileDetail>
+          ) : null}
+          {user.gender && (
+            <ProfileDetail icon={PiGenderIntersexBold} label="Gender">
+              <span className="capitalize">{user.gender.toLowerCase()}</span>
+            </ProfileDetail>
+          )}
+          {user.roll && (
+            <ProfileDetail icon={IoSchool} label="Roll and batch">
+              {user.roll}
+              {getUserBatch(user) && <> · {getUserBatch(user)} batch{user.lateralEntry ? " · Lateral entry" : ""}</>}
+            </ProfileDetail>
+          )}
+          {user.email && (
+            <ProfileDetail icon={HiEnvelope} label="Email">
+              <a href={`mailto:${user.email}`} className="break-all hover:text-accent">
                 {user.email}
               </a>
-            </div>
-            {user.gitHub ? (
-              <div className="flex items-center">
-                <IoLogoGithub className="fill-zinc-500  md:w-4 md:h-4 w-6 h-6 mr-2 shrink-0" />
-                <a
-                  href={user.gitHub}
-                  className="text-zinc-500 overflow-hidden text-ellipsis"
-                >
-                  {user.gitHub}
-                </a>
-              </div>
-            ) : null}
-            {user.linkedIn ? (
-              <div className="flex items-center">
-                <BiLogoLinkedinSquare className="fill-zinc-500  md:w-4 md:h-4 w-6 h-6 mr-2 shrink-0" />
-                <a
-                  href={user.linkedIn}
-                  className="text-zinc-500 overflow-hidden text-ellipsis"
-                >
-                  {user.linkedIn}
-                </a>
-              </div>
-            ) : null}
-          </div>
+            </ProfileDetail>
+          )}
+          {user.gitHub && (
+            <ProfileDetail icon={IoLogoGithub} label="GitHub">
+              <a href={user.gitHub} target="_blank" rel="noopener noreferrer" className="break-all hover:text-accent">
+                {user.gitHub}
+              </a>
+            </ProfileDetail>
+          )}
+          {user.linkedIn && (
+            <ProfileDetail icon={BiLogoLinkedinSquare} label="LinkedIn">
+              <a href={user.linkedIn} target="_blank" rel="noopener noreferrer" className="break-all hover:text-accent">
+                {user.linkedIn}
+              </a>
+            </ProfileDetail>
+          )}
         </div>
       </section>
-      <div className="flex gap-5 xl:gap-2 xl:flex-col flex-row">
+      <div className="flex flex-col xl:flex-row gap-2 xl:gap-5">
         <section className="mt-2 space-y-2 flex-1">
           {certificates.length > 0 ? (
             <>
@@ -186,14 +186,14 @@ const UserPage = async ({ params }) => {
             </>
           ) : null}
         </section>
-        <section className="mt-2 space-y-2 xl:ml-0 ml-auto">
+        <section className="mt-2 ml-0 xl:ml-auto space-y-2">
           {userEvents.length > 0 ? (
             <>
               <BottomGlitter text={"Activities"} className={"max-w-fit"} />
               <div className="gap-2 grid grid-cols-1 xl:grid-cols-[repeat(auto-fill,minmax(230px,1fr))]">
                 {userEvents.map((event, index) => (
                   <Link
-                    href={`/events/${event.name}`}
+                    href={`/contest/${event.slug}`}
                     className="card flex items-center justify-center h-16"
                     key={index}
                   >

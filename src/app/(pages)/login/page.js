@@ -101,7 +101,7 @@ const LoginPage = () => {
           <Button
             variant={"filled"}
             type="submit"
-            className={"w-auto md:w-full mt-6 ml-auto"}
+            className={"w-full md:w-auto mt-6 ml-auto"}
             loading={loading}
           >
             <MdLogin className="fill-inherit" />

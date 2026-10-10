@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import validator from "validator";
 import bcrypt from "bcryptjs";
+import { DESIGNATIONS } from "@/lib/designations";
 
 // Define sub-schema for otherLinks to enforce unique platform entries
 const OtherLinkSchema = new mongoose.Schema(
@@ -70,6 +71,14 @@ const UserSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    showOnWebsite: {
+      type: Boolean,
+      default: false,
+    },
+    lateralEntry: {
+      type: Boolean,
+      default: false,
+    },
     roll: {
       type: String,
       unique: true,
@@ -111,22 +120,19 @@ const UserSchema = new mongoose.Schema(
     role: {
       type: String,
       enum: ["USER", "ADMIN"],
-      default: "STUDENT",
+      default: "USER",
     },
     designation: {
-      type: String,
-      enum: [
-        "STUDENT",
-        "ALUMNI",
-        "FACULTY",
-        "STAFF",
-        "CLUB LEAD",
-        "CLUB MEMBER",
-        "CLUB COORDINATOR",
-        "HOD",
-        "FACULTY COORDINATOR",
-      ],
-      default: "STUDENT",
+      type: [{ type: String, enum: DESIGNATIONS }],
+      default: () => ["STUDENT"],
+      validate: {
+        validator: (values) => new Set(values).size === values.length,
+        message: "Designations must be unique",
+      },
+    },
+    designationNotificationPending: {
+      type: Boolean,
+      default: false,
     },
     solvedQuestions: [
       {
@@ -192,6 +198,11 @@ const UserSchema = new mongoose.Schema(
     timestamps: { createdAt: "created_at", updatedAt: "updated_at" },
   }
 );
+
+UserSchema.pre("validate", function (next) {
+  if (this.designation.includes("ALUMNI")) this.passedOut = true;
+  next();
+});
 
 UserSchema.pre("save", async function (next) {
   const user = this;

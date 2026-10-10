@@ -6,8 +6,8 @@
   height: 35px;
   width: 3px;
   border: 2px solid rgb(255, 255, 255);
-  @apply p-[1.7rem] px-[1.6rem] box-content flex justify-center mb-4 cursor-pointer rounded-full relative;
-  @apply sm:p-[1.5rem] sm:px-[1.3rem] sm:h-[25px];
+  @apply p-[1.5rem] px-[1.3rem] h-[25px] box-content flex justify-center mb-4 cursor-pointer rounded-full relative;
+  @apply sm:p-[1.7rem] sm:px-[1.6rem] sm:h-[35px];
   transition: all 0.2s;
 }
 
@@ -21,8 +21,8 @@
   width: 4px;
   animation: scrollDown 2.1s infinite forwards;
   animation-timing-function: cubic-bezier(0.15, 0.41, 0.69, 0.94);
-  @apply rounded-full bg-primary-light absolute top-6;
-  @apply sm:h-[12px] sm:w-[3px];
+  @apply rounded-full bg-primary-light absolute top-6 h-[12px] w-[3px];
+  @apply sm:h-[14px] sm:w-[4px];
   transition: background-color 0.2s;
 }
 

@@ -176,8 +176,7 @@ export const addQuizQuestion = async (questionData) => {
     await QuizQuestion.create(payload);
 
     // Invalidate caches
-    revalidatePath("/events/contests");
-    revalidatePath("/events/contests/questions");
+    revalidatePath(`/playground/quiz/${slug}`);
 
     return {
       message: "Quiz question successfully added",
@@ -217,9 +216,11 @@ export const deleteQuizQuestion = async (questionId) => {
   try {
     await connect();
 
-    await QuizQuestion.deleteOne({ _id: questionId });
-    revalidatePath("/events/contests");
-    revalidatePath("/events/contests/questions");
+    const question = await QuizQuestion.findById(questionId).select("slug").lean();
+    if (!question) throw new Error("Question not found.");
+    const result = await QuizQuestion.deleteOne({ _id: questionId });
+    if (!result.deletedCount) throw new Error("Question not found.");
+    revalidatePath(`/playground/quiz/${question.slug}`);
     return { message: "Question deleted", type: "success", success: true };
   } catch (error) {
     console.log(error);

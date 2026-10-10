@@ -3,7 +3,6 @@ import connect from "@/utils/dbConnect";
 import Query from "@/models/Query";
 import { convertIdsToString } from "@/utils/helper";
 import { cache } from "react";
-import { revalidatePath } from "next/cache";
 
 export const getQueries = cache(async () => {
   try {
@@ -57,8 +56,6 @@ export async function maerkQueryResolved(_id) {
     }
 
     await Query.updateOne({ _id }, { resolved: true });
-    revalidatePath("/misc/queries");
-
     return { message: "Query Resolved", type: "success", success: true };
   } catch (error) {
     return { message: error.message, type: "error", success: false };

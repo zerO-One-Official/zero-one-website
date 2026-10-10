@@ -35,7 +35,7 @@ export async function createFaq(question, answer) {
     }
 
     await Faq.create({ question, answer });
-    revalidatePath("/misc/faqs");
+    revalidatePath("/faqs");
     return {
       message: "FAQ Added Successfully",
       type: "success",
@@ -74,7 +74,7 @@ export async function updateFaq(_id, question, answer) {
       { new: true }
     ).lean();
 
-    revalidatePath("/misc/faqs");
+    revalidatePath("/faqs");
     return {
       faq: convertIdsToString(updatedFaq),
       type: "success",
@@ -108,7 +108,7 @@ export async function deleteFaq(_id) {
     }
 
     await Faq.deleteOne({ _id });
-    revalidatePath("/misc/faqs");
+    revalidatePath("/faqs");
     return {
       message: "FAQ Deleted Successfully",
       type: "success",

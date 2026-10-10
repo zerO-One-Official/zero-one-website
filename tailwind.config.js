@@ -11,6 +11,10 @@ export default withUt({
   ],
   theme: {
   	extend: {
+  		screens: {
+  			xs: "450px",
+  			"3xl": "1800px"
+  		},
   		boxShadow: {
   			btn: '4px 6px 10px #000, inset 4px 6px 10px #0d0d0d',
   			'btn-lg': '4px 6px 10px #0000006b, inset 4px 6px 10px #232222',
@@ -74,38 +78,6 @@ export default withUt({
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
-  		}
-  	},
-  	screens: {
-  		'3xl': {
-  			min: '1800px'
-  		},
-  		m2xl: {
-  			min: '1500px'
-  		},
-  		'2xl': {
-  			min: '1500px'
-  		},
-  		xl: {
-  			min: '1200px'
-  		},
-  		'2lg': {
-  			min: '1024px'
-  		},
-  		m2lg: {
-  			min: '1024px'
-  		},
-  		lg: {
-  			min: '920px'
-  		},
-  		md: {
-  			min: '768px'
-  		},
-  		sm: {
-  			min: '600px'
-  		},
-  		xs: {
-  			min: '450px'
   		}
   	}
   },
