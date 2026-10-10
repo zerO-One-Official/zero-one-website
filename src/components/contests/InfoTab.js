@@ -30,7 +30,7 @@ export const InfoTab = ({ event }) => {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-1 items-center gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-4">
         <div className="flex-1 h-full flex flex-col gap-4 p-4 bg-white/5 border border-white/5 shadow-cus rounded-3xl ">
           <h3 className="text-2xl font-semibold flex items-center gap-2 text-accent">
             <MapPin className="h-6 w-6 stroke-accent" />

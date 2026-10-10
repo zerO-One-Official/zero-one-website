@@ -79,7 +79,7 @@ const ContestPage = async ({ event, searchParams }) => {
                 replace={true}
                 href={tab.href}
                 key={index}
-                className={`flex items-center justify-center gap-2 xs:p-2 p-4 flex-1 text-xl fill-primary-light stroke-primary-light ${
+                className={`flex items-center justify-center gap-2 p-2 xs:p-4 flex-1 text-xl fill-primary-light stroke-primary-light ${
                   activeTab === tab.label.toLocaleLowerCase()
                     ? "bg-white/5 border border-white/5 shadow-cus"
                     : "border-transparent"
@@ -87,7 +87,7 @@ const ContestPage = async ({ event, searchParams }) => {
                 title={tab.label}
               >
                 {tab.icon}
-                <label className="text-inherit font-medium sm:hidden pointer-events-none">
+                <label className="hidden text-inherit font-medium pointer-events-none sm:inline">
                   {tab.label}
                 </label>
               </Link>

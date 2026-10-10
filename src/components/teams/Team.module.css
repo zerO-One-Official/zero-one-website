@@ -9,7 +9,7 @@
 }
 
 .cardContainer {
-  @apply gap-8 grid grid-cols-4 lg:grid-cols-1 3xl:grid-cols-2 items-center justify-center;
+  @apply gap-8 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 items-center justify-center;
 }
 
 .cardContainer .card:hover {

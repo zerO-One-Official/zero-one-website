@@ -14,7 +14,7 @@ const TeamParticipant = ({ team, contestId }) => {
         }`}
         onClick={() => setexpanded((prev) => !prev)}
       >
-        <p className="text-2xl sm:text-lg font-bold text-primary-light/30">
+        <p className="text-lg sm:text-2xl font-bold text-primary-light/30">
           {team[0].rank}
         </p>
         <h2 className="font-bold text-2xl">{team[0].team}</h2>
@@ -22,7 +22,7 @@ const TeamParticipant = ({ team, contestId }) => {
           <div className="ml-auto">
             {team[0].rank <= 3 ? (
               <Medal
-                className={`h-12 w-12 -translate-y-0 sm:-translate-y-[23px] sm:w-10 sm:h-10 ${
+                className={`h-10 w-10 -translate-y-[23px] sm:-translate-y-0 sm:h-12 sm:w-12 ${
                   team[0].rank === 1
                     ? "fill-yellow-400 text-yellow-400"
                     : team[0].rank === 2

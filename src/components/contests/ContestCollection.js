@@ -23,7 +23,7 @@ const ContestCollection = ({
   return (
     <main className="container-70 flex flex-col gap-8 min-h-screen pt-16 pb-20">
       <div className="flex flex-col gap-4 text-center">
-        <h1 className="text-5xl sm:text-4xl font-semibold text-accent">
+        <h1 className="text-4xl sm:text-5xl font-semibold text-accent">
           {isMyContests ? "My Contests" : "Contests"}
         </h1>
         <p className="text-foreground/70">

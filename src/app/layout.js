@@ -8,6 +8,7 @@ import NextTopLoader from "nextjs-toploader";
 import "./polyfills";
 import localFont from "next/font/local";
 import { Toaster } from "sonner";
+import BackButton from "@/components/navigation/BackButton";
 
 const gilroy = localFont({
   src: [
@@ -92,6 +93,7 @@ export default async function RootLayout({ children }) {
         />
         <Providers>
           <Header />
+          <BackButton />
           <SocialsBar />
           {children}
           <Footer />

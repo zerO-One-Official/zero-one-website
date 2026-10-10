@@ -101,7 +101,7 @@ export default function ProfileForm({ user }) {
     <div className="w-full flex flex-col mt-16">
       <form onSubmit={submitForm} className="flex flex-col ">
         <div className="flex flex-col border border-white/5 shadow-cus  p-6 rounded-3xl">
-          <div className="flex flex-row lg:flex-col gap-2 items-center justify-center w-full">
+          <div className="flex flex-col lg:flex-row gap-2 items-center justify-center w-full">
             <StyledInput
               type="desc"
               value={userProfile?.bio}
@@ -111,7 +111,7 @@ export default function ProfileForm({ user }) {
               disabled={loading}
             />
           </div>
-          <div className="flex flex-row lg:flex-col gap-2 items-center justify-center w-full relative">
+          <div className="flex flex-col lg:flex-row gap-2 items-center justify-center w-full relative">
             <StyledInput
               value={userProfile?.username}
               name="username"
@@ -120,7 +120,7 @@ export default function ProfileForm({ user }) {
               disabled={loading}
             />
           </div>
-          <div className="flex flex-row lg:flex-col gap-2 items-center justify-center w-full">
+          <div className="flex flex-col lg:flex-row gap-2 items-center justify-center w-full">
             <StyledInput
               type="email"
               value={userProfile?.email}
@@ -139,7 +139,7 @@ export default function ProfileForm({ user }) {
             />
           </div>
 
-          <div className="flex flex-row lg:flex-col gap-2 items-center justify-center w-full">
+          <div className="flex flex-col lg:flex-row gap-2 items-center justify-center w-full">
             <StyledInput
               value={userProfile?.gitHub}
               name="gitHub"
@@ -172,7 +172,7 @@ export default function ProfileForm({ user }) {
         onSubmit={updatePassword}
       >
         <BottomGlitter text="Update Password" />
-        <div className="flex flex-row lg:flex-col gap-2 items-center justify-center w-full mt-10">
+        <div className="flex flex-col lg:flex-row gap-2 items-center justify-center w-full mt-10">
           <StyledInput
             type="password"
             value={password?.oldPass}
@@ -186,7 +186,7 @@ export default function ProfileForm({ user }) {
             }}
           />
         </div>
-        <div className="flex flex-row lg:flex-col gap-2 items-center justify-center w-full">
+        <div className="flex flex-col lg:flex-row gap-2 items-center justify-center w-full">
           <StyledInput
             type="password"
             value={password?.newPass}

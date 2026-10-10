@@ -13,16 +13,16 @@ function ThankYou({ show }) {
   return (
     <div
       style={{ transition: "all 400ms ease-in-out" }}
-      className={`mt-28 mb-12 pt-10 pb-8 sm:mt-20 sm:mb-10 absolute ${
+      className={`mt-20 mb-10 pt-10 pb-8 xl:mt-28 xl:mb-12 absolute ${
         show ? "visible relative" : "invisible"
       }`}
     >
-      <h1 className="text-7xl sm:text-5xl">
+      <h1 className="text-5xl xl:text-7xl">
         Thank You!
         <br />
         We&apos;ll be in touch shortly.
       </h1>
-      <p className="mt-20 w-3/5 text-lg xl:w-3/5 sm:w-3/4 sm:text-base">
+      <p className="mt-20 w-full xl:w-3/5 text-base sm:text-lg">
         Feel free to explore our
         <Link className="text-accent" href="/">
           website
@@ -72,13 +72,13 @@ const ContactPage = () => {
     <section className="container-70 overflow-hidden mx-auto">
       <ThankYou show={show} />
       <div className={`${show ? "invisible hidden" : "visible"} z-10`}>
-        <div className="mt-28 mb-12 pt-10 pb-8 sm:mt-20 sm:mb-10">
-          <h1 className="text-7xl sm:text-5xl text-center">
+        <div className="mt-20 mb-10 pt-10 pb-8 xl:mt-28 xl:mb-12">
+          <h1 className="text-5xl xl:text-7xl text-center">
             Interested?
             <br />
             Let&apos;s talk!
           </h1>
-          <p className="mt-20 text-lg sm:text-base text-center">
+          <p className="mt-20 text-base sm:text-lg text-center">
             Just fill this simple form in and we will contact you promptly. Hate
             forms? Drop us a line at{" "}
             <span>
@@ -90,7 +90,7 @@ const ContactPage = () => {
         </div>
         <div className="mt-16">
           <form ref={form} onSubmit={sendEmail} className="flex flex-col gap-2">
-            <div className="flex justify-between items-center gap-2 flex-wrap xl:flex-col xl:justify-start xl:items-start">
+            <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-2 flex-wrap">
               <StyledInput
                 id="nameInput"
                 value={name}
@@ -98,7 +98,7 @@ const ContactPage = () => {
                 name="name"
                 label="Your name"
                 required
-                className="w-3/5"
+                className="w-full xl:w-1/2"
               />
               <StyledInput
                 value={roll}
@@ -107,7 +107,7 @@ const ContactPage = () => {
                 type="number"
                 label="Your Roll no."
                 required
-                className="w-3/5"
+                className="w-full xl:w-1/2"
               />
             </div>
             <StyledInput
@@ -117,7 +117,7 @@ const ContactPage = () => {
               type="email"
               label="Your email"
               required
-              className="w-4/5"
+              className="w-full xl:w-4/5"
             />
             <StyledInput
               type="desc"

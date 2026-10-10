@@ -28,7 +28,7 @@ export const Participant = ({
   const participantContent = (
     <>
       {rank != null ? (
-        <p className="text-2xl sm:text-lg font-bold scale-110 text-primary-light/30">
+        <p className="text-lg sm:text-2xl font-bold scale-110 text-primary-light/30">
           {rank}
         </p>
       ) : null}
@@ -46,7 +46,7 @@ export const Participant = ({
         </div>
       )}
       <div>
-        <h2 className="capitalize text-xl sm:text-base font-medium">
+        <h2 className="capitalize text-base sm:text-xl font-medium">
           {participant?.firstName} {participant?.lastName}
         </h2>
         {participant?.roll ? (

@@ -24,7 +24,7 @@ const EditProfile = async ({ params }) => {
   return (
     <>
       <section className="w-full mt-16 flex flex-col items-center gap-6 border border-l-white/5 border-t-white/5 border-r-black/25 border-b-black/25  shadow-cus  p-6 rounded-3xl relative">
-        <div className="flex w-full md:gap-6 gap-10 items-center sm:flex-col">
+        <div className="flex w-full flex-col sm:flex-row md:gap-6 gap-10 items-center">
           <div className="p-2 border-4 md:border-2 border-accent rounded-full shrink-0">
             <ProfilePhotoUpload
               profilePic={profilePic}
@@ -32,10 +32,10 @@ const EditProfile = async ({ params }) => {
             />
           </div>
           <div className="p-4 ">
-            <h1 className="capitalize text-4xl md:text-3xl font-semibold sm:text-center">
+            <h1 className="capitalize text-3xl sm:text-4xl font-semibold text-center sm:text-left">
               {user.firstName} {user.lastName}
             </h1>
-            <p className="text-white/60 capitalize text-xl sm:text-lg sm:text-center font-semibold">
+            <p className="text-white/60 capitalize text-lg sm:text-xl text-center sm:text-left font-semibold">
               {user.branch}
             </p>
 

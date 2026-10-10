@@ -39,7 +39,7 @@ const ActivateAccountForm = () => {
           onSubmit={handleSubmit}
           className="flex flex-col gap-4 w-11/12 mx-auto"
         >
-          <div className="flex gap-4 md:gap-2 justify-between items-center flex-wrap xl:flex-col xl:justify-start xl:items-start">
+          <div className="flex flex-col xl:flex-row gap-2 xl:gap-4 justify-between items-start xl:items-center flex-wrap">
             <StyledInput
               disabled={form.loading}
               id="password"

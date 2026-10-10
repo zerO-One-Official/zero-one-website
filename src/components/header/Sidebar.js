@@ -179,6 +179,13 @@ function Sidebar({ isMounted, unmount }) {
               >
                 Our Teams
               </Link>
+              <Link
+                href="/alumni"
+                className="block w-fit px-4 py-3 text-lg font-medium text-white hover:bg-secondary rounded-full transition-all duration-200 ease-in-out"
+                onClick={unmount}
+              >
+                Alumni
+              </Link>
             </div>
           </li>
 

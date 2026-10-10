@@ -33,7 +33,7 @@ function TeamCard({
         <div className="flex gap-4 p-2 w-full">
           <Logo />
         </div>
-        <div className="relative xs:h-60 lg:h-56 h-72 z-10 w-full overflow-hidden text-center bg-cyan-100 flex items-center justify-center">
+        <div className="relative h-60 sm:h-72 lg:h-56 z-10 w-full overflow-hidden text-center bg-cyan-100 flex items-center justify-center">
           {imageSrc ? (
             <Image
               height={240}

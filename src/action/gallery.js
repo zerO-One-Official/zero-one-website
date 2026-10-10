@@ -33,7 +33,7 @@ export const addGalleryImages = async (eventName, urls) => {
     const insertingData = urls.map((url) => ({ eventName, url }));
     await Gallery.insertMany(insertingData);
 
-    revalidatePath("/misc/gallery");
+    revalidatePath("/gallery");
 
     return {
       message: "Images added successfully",
@@ -69,7 +69,7 @@ export const deleteGalleryImage = async (_id) => {
 
     await deleteFile(image.url);
     await Gallery.deleteOne({ _id });
-    revalidatePath("/misc/gallery");
+    revalidatePath("/gallery");
 
     return {
       message: "Image deleted successfully",

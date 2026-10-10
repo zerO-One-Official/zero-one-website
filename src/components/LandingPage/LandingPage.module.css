@@ -19,19 +19,26 @@
 }
 
 .content {
-  @apply absolute w-full left-1/2 flex justify-center items-center flex-wrap;
-  transform: translate(-50%, -50%);
-  top: 40%;
-  left: 50%;
+  @apply static w-full flex justify-center items-center flex-wrap my-10 px-3;
   z-index: 55;
   @apply md:justify-center md:w-full;
-  @apply sm:static sm:transform-none sm:my-10 sm:px-3;
+}
+
+@media (min-width: 640px) {
+  .content {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    padding: 0;
+  }
 }
 
 .content > h1 {
   @apply cursor-default text-primary-light/60;
   @apply my-8 mx-4 z-30 font-extrabold relative;
-  @apply text-5xl xs:text-7xl;
+  @apply text-5xl sm:text-7xl;
 }
 
 .content > h1:hover {

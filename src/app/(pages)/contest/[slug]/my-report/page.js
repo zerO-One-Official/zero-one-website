@@ -1,7 +1,6 @@
 import { getContestAttemptReport } from "@/action/contestAttempt";
 import Markdown from "@/components/markdown/Markdown";
 import ReadOnlyContestCode from "@/components/contests/ReadOnlyContestCode";
-import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
@@ -23,12 +22,6 @@ const ContestAttemptReportPage = async ({ params }) => {
             Contest report unavailable
           </h1>
           <p className="mt-3 text-foreground/70">{result.message}</p>
-          <Link
-            href={`/contest/${slug}?type=contest&tab=info`}
-            className="mt-6 inline-block text-accent hover:underline"
-          >
-            Back to contest
-          </Link>
         </section>
       </main>
     );
@@ -38,12 +31,6 @@ const ContestAttemptReportPage = async ({ params }) => {
 
   return (
     <main className="container-70 flex min-h-screen flex-col gap-6 py-16">
-      <Link
-        href={`/contest/${slug}?type=contest&tab=info`}
-        className="w-fit text-accent hover:underline"
-      >
-        Back to contest
-      </Link>
       <header className="rounded-3xl border border-white/10 bg-white/5 p-6">
         <h1 className="text-4xl font-semibold text-accent">
           {report.contestName} report

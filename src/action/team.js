@@ -48,7 +48,7 @@ export const addTeamMember = async (data) => {
       designation,
       group,
     });
-    revalidatePath("/misc/teams");
+    revalidatePath("/teams");
     return {
       type: "success",
       message: "Team member added successfully",

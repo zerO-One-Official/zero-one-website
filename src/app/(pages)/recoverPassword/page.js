@@ -51,7 +51,7 @@ const SignupPage = () => {
           onSubmit={sendPasswordResetLink}
           className="flex flex-col gap-4 mt-8 "
         >
-          <div className="flex gap-4 md:gap-2 justify-between items-center flex-wrap xl:flex-col xl:justify-start xl:items-start">
+          <div className="flex flex-col xl:flex-row gap-2 xl:gap-4 justify-between items-start xl:items-center">
             <StyledInput
               id="emailOrRoll"
               value={emailOrRoll}
@@ -70,7 +70,7 @@ const SignupPage = () => {
           <Button
             variant={"filled"}
             type="submit"
-            className={"w-auto md:w-full ml-auto"}
+            className={"w-full md:w-auto ml-auto"}
             loading={loading}
           >
             Send Reset Link

@@ -10,6 +10,8 @@ const CompanySchema = new mongoose.Schema(
       type: String,
       required: [true, "Please Upload Company Logo."],
     },
+    logo: { type: String },
+    url: { type: String },
   },
   { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }
 );

@@ -52,3 +52,16 @@ npm run lint
 npm run build
 npm start
 ```
+
+## User designations
+
+The shared user model defaults roles to `USER` and stores designations as an
+array, defaulting to `["STUDENT"]`. Profiles display all assigned designations
+and remain compatible with existing single-string records. Administrators
+manage designations and the alumni directory in the admin panel. See its
+README for the optional legacy-user migration.
+Users saved with an `ALUMNI` designation are marked `passedOut=true`; removing
+the designation does not reset that graduation status.
+`lateralEntry` defaults to `false` and is managed by admins on the user profile.
+When true, the displayed batch is one year earlier than the roll prefix:
+a roll beginning with `21` belongs to the 2020 batch instead of 2021.

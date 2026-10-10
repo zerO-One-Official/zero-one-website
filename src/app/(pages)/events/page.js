@@ -12,14 +12,14 @@ export default async function Events() {
   const { ongoing, upcoming, past } = splitEventsByStatus(events);
 
   return (
-    <main className="mt-10 mb-8 sm:my-8 px-20 2xl:px-10 xl:px-8 sm:px-6 xs:px-3">
+    <main className="mt-10 mb-8 px-3 xs:px-4 sm:px-6 xl:px-8 2xl:px-10 3xl:px-20">
       <section className="flex flex-col gap-10 items-center">
         <Trophy className="text-accent size-36" />
-        <h2 className={`text-6xl sm:text-5xl font-semibold`}>
+        <h2 className={`text-5xl xl:text-6xl font-semibold`}>
           ZERO ONE Events
         </h2>
         <div
-          className={`mb-10 sm:mb-7 sm:text-lg box-border w-3/5 xl:w-full xl:pl-0 text-center`}
+          className={`mb-7 xl:mb-10 text-lg box-border w-full xl:w-3/5 text-center`}
         >
           Zero One Coding Club hosts fun events like workshops, hackathons, and
           contests. These help us learn and have a good time. We get to improve
