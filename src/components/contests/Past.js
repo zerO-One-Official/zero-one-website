@@ -22,7 +22,7 @@ export const Past = ({ events }) => {
         </h2>
       </div>
       {events.length ? (
-        <div className="space-y-2 text-lg xl:text-2xl mb-7 xl:mb-10 mt-10 xl:mt-0 pl-0 xl:pl-11 box-border w-full xl:w-3/5 xl:mt-16">
+        <div className="space-y-2 text-lg xl:text-2xl mb-7 xl:mb-10 mt-10 pl-0 xl:pl-11 box-border w-full xl:w-3/5 xl:mt-16">
           {events.map((event) => {
             const eventDate = new Date(event.startDate);
             return (
