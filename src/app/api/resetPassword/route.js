@@ -5,10 +5,9 @@ import { generateAccessCode } from "@/utils/helper";
 import { resetEmail } from "@/lib/emailTemplates";
 import { sendMail } from "@/lib/sendMail";
 
-dbConnect();
-
 export async function POST(req) {
   try {
+    await dbConnect();
     const reqBody = await req.json();
     const { emailOrRoll } = reqBody;
 
@@ -86,6 +85,7 @@ export async function POST(req) {
 
 export async function PUT(req) {
   try {
+    await dbConnect();
     const reqBody = await req.json();
 
     console.log(reqBody);

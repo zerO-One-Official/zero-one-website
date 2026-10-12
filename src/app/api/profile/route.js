@@ -6,10 +6,9 @@ import { options } from "../auth/[...nextauth]/options";
 import { checkDuplicateUser, deleteFile } from "@/utils/server";
 import { revalidatePath } from "next/cache";
 
-dbConnect();
-
 export async function GET() {
   try {
+    await dbConnect();
     const session = await getServerSession(options);
     const id = session?.user?._id;
 
@@ -46,6 +45,7 @@ export async function GET() {
 
 export async function PUT(req) {
   try {
+    await dbConnect();
     const session = await getServerSession(options);
     const id = session?.user?._id;
 
@@ -191,6 +191,7 @@ export async function PUT(req) {
 }
 export async function PATCH(req) {
   try {
+    await dbConnect();
     const session = await getServerSession(options);
     const id = session?.user?._id;
 

@@ -2,10 +2,9 @@ import { NextResponse } from "next/server";
 import dbConnect from "@/utils/dbConnect";
 import User from "@/models/User";
 
-dbConnect();
-
 export async function GET(req, { params }) {
   try {
+    await dbConnect();
     const { token } = params;
     const user = await User.findOne({ token }).select("firstName");
 

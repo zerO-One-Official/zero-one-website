@@ -5,6 +5,15 @@ import { useEffect } from "react";
 
 const Providers = ({ children }) => {
   useEffect(() => {
+    const handleNumberInputWheel = (event) => {
+      if (
+        event.target instanceof HTMLInputElement &&
+        event.target.type === "number"
+      ) {
+        event.target.blur();
+      }
+    };
+
     let mouseX = 0;
     let mouseY = 0;
 
@@ -34,12 +43,15 @@ const Providers = ({ children }) => {
       mouseX = event.clientX;
       mouseY = event.clientY;
     });
+    document.addEventListener("wheel", handleNumberInputWheel, true);
 
-    return () =>
+    return () => {
+      document.removeEventListener("wheel", handleNumberInputWheel, true);
       document.removeEventListener("mousemove", (event) => {
         mouseX = event.clientX;
         mouseY = event.clientY;
       });
+    };
   }, []);
 
   return (
