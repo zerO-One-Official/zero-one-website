@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
 
 export const POST = async (req) => {
   try {
-    connect();
+    await connect();
     const reqBody = await req.json();
     const { name, email, roll, message } = reqBody;
 

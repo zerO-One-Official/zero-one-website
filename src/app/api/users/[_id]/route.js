@@ -3,10 +3,9 @@ import dbConnect from "@/utils/dbConnect";
 import User from "@/models/User";
 import { isValidMongooseId } from "@/utils/server";
 
-dbConnect();
-
 export async function GET(req, { params }) {
   try {
+    await dbConnect();
     const { _id } = params;
     if (!_id || !isValidMongooseId(_id)) {
       return NextResponse.json(
@@ -38,6 +37,7 @@ export async function GET(req, { params }) {
 
 export async function PUT(req, { params }) {
   try {
+    await dbConnect();
     const { _id } = params;
     if (!_id || !isValidMongooseId(_id)) {
       return NextResponse.json(

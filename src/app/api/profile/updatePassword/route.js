@@ -5,10 +5,9 @@ import User from "@/models/User";
 import { getServerSession } from "next-auth";
 import { options } from "../../auth/[...nextauth]/options";
 
-dbConnect();
-
 export async function PUT(req) {
   try {
+    await dbConnect();
     const session = await getServerSession(options);
     const id = session?.user?._id;
 
