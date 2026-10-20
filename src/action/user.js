@@ -14,6 +14,7 @@ import { joiningEmail, resetEmail } from "@/utils/emailTemplates";
 import { sendMail } from "./mail";
 import { validateAndNormalizeOtherLinks, validateSignup } from "@/lib/validators";
 import bcrypt from "bcryptjs";
+import { after } from "next/server";
 
 export const getUsers = cache(async () => {
   try {
@@ -248,21 +249,18 @@ export async function sendPasswordResetLink(emailOrRoll) {
     // Send the Email
     const subject = "Password Reset Link";
     const html = resetEmail(token);
-    const messageId = await sendMail(user.email, subject, html);
-
-    if (messageId) {
-      return {
-        message: "Reset Link has been sent.",
-        type: "success",
-        success: true,
-      };
-    } else {
-      return {
-        message: "Failed to send Reset Link. Please try again",
-        type: "error",
-        success: false,
-      };
-    }
+    after(async () => {
+      try {
+        await sendMail(user.email, subject, html);
+      } catch (error) {
+        console.error("Password reset email delivery failed:", error);
+      }
+    });
+    return {
+      message: "Reset link queued for delivery.",
+      type: "success",
+      success: true,
+    };
   } catch (error) {
     console.error(error);
     return {
@@ -379,17 +377,17 @@ export async function signup(form) {
     // 5. Send Welcome Email
     const subject = "Welcome to Zero One Coding Club!";
     const html = joiningEmail(token);
-    const emailSent = await sendMail(email, subject, html);
-
-    if (!emailSent) {
-      console.warn("Failed to send welcome email to:", email);
-    }
+    after(async () => {
+      try {
+        await sendMail(email, subject, html);
+      } catch (error) {
+        console.error(`Welcome email delivery failed for ${email}:`, error);
+      }
+    });
 
     return {
-      message: emailSent
-        ? "Member created successfully. Welcome email sent."
-        : "Failed to send welcome email. Please Contact to Club Lead",
-      type: emailSent ? "success" : "error",
+      message: "Member created successfully. Welcome email queued for delivery.",
+      type: "success",
       success: true,
     };
   } catch (error) {

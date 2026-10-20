@@ -1,4 +1,3 @@
-import loading from "@/app/loading";
 import ActivateAccountForm from "@/components/forms/activateAccountForm";
 import BottomGlitter from "@/components/StyledText/BottomGlitter";
 
@@ -8,7 +7,6 @@ export const metadata = {
 };
 
 const ActivateAccountPage = () => {
-  const isLoading= loading
   return (
     <section className="container-70 text-lg">
       <div className="mt-16">

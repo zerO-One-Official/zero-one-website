@@ -2,7 +2,7 @@ import connect from "@/utils/dbConnect";
 import { contactEmail } from "@/lib/emailTemplates";
 import { sendMail } from "@/lib/sendMail";
 import Contact from "@/models/Query";
-import { NextResponse } from "next/server";
+import { after, NextResponse } from "next/server";
 
 export const POST = async (req) => {
   try {
@@ -14,8 +14,14 @@ export const POST = async (req) => {
 
     const html = contactEmail({ name, email, roll, message: formattedMessage });
 
-    await sendMail(process.env.EMAIL, `${name} ${roll}`, html);
     await Contact.create({ name, email, roll, message: formattedMessage });
+    after(async () => {
+      try {
+        await sendMail(process.env.EMAIL, `${name} ${roll}`, html);
+      } catch (error) {
+        console.error("Contact form email delivery failed:", error);
+      }
+    });
 
     return NextResponse.json(
       {

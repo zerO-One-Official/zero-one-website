@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Github, GraduationCap, Linkedin, Mail, Phone, UserCircle2 } from "lucide-react";
+import { BiEdit } from "react-icons/bi";
 import { getAlumniJourney } from "@/action/alumniJourney";
 import { getUser } from "@/action/user";
 import AlumniJourneyView from "@/components/alumni/AlumniJourneyView";
@@ -40,7 +41,11 @@ export default async function AlumniProfilePage({ params }) {
     <main className="container-70 flex min-h-[calc(100vh-88px)] flex-col gap-6 pt-16">
       <div className="flex flex-wrap items-center justify-end gap-3">
         {data.canEdit && (
-          <Link href={`/user/${username}/journey`} className="rounded-md border px-4 py-2 text-sm hover:bg-secondary">
+          <Link
+            href={`/user/${username}/journey`}
+            className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-white/10"
+          >
+            <BiEdit aria-hidden="true" className="h-4 w-4 shrink-0" />
             Edit alumni journey
           </Link>
         )}

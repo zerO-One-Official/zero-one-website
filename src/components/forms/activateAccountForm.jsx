@@ -1,14 +1,18 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
+import { resetPassword } from "@/action/user";
 import StyledInput from "../input/StyledInput";
 import Button from "../button/Button";
 import { MdOutlineCloudDone } from "react-icons/md";
 
 const ActivateAccountForm = () => {
-  const token = useSearchParams().get("token");
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token");
+  const next = searchParams.get("next");
   //   if (!token) redirect("/login");
 
   const [form, setForm] = useState({
@@ -27,8 +31,36 @@ const ActivateAccountForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (form.loading || !token) return;
-    if (form.password !== form.confirmPassword)
-      return toast.error("Password does not matched.");
+    if (form.password !== form.confirmPassword) {
+      toast.error("Passwords do not match.");
+      return;
+    }
+
+    setForm((prev) => ({ ...prev, loading: true }));
+    try {
+      const result = await resetPassword(token, form.password);
+      toast[result.type](
+        result.success && next
+          ? "Password set. Continue with your alumni journey."
+          : result.message,
+      );
+      if (result.success) {
+        let destination = "/login";
+        if (next) {
+          try {
+            const url = new URL(next, window.location.origin);
+            if (url.origin === window.location.origin) {
+              destination = `${url.pathname}${url.search}${url.hash}`;
+            }
+          } catch {}
+        }
+        router.push(destination);
+      }
+    } catch (error) {
+      toast.error(error.message || "Unable to activate your account.");
+    } finally {
+      setForm((prev) => ({ ...prev, loading: false }));
+    }
   };
 
   return (
@@ -48,6 +80,7 @@ const ActivateAccountForm = () => {
               name="password"
               label="Create Password"
               required
+              minLength={6}
               className="w-full"
               type="password"
             />
@@ -71,7 +104,7 @@ const ActivateAccountForm = () => {
             variant={"filled"}
             type="submit"
             className={"ml-auto"}
-            loading={loading}
+            loading={form.loading}
           >
             <MdOutlineCloudDone className="fill-inherit" />
             Activate Account

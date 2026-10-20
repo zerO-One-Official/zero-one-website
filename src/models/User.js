@@ -36,7 +36,10 @@ const UserSchema = new mongoose.Schema(
     profilePic: {
       type: String,
       trim: true,
-      validate: [validator.isURL, "Invalid profile picture URL"],
+      validate: {
+        validator: (value) => !value || validator.isURL(value),
+        message: "Invalid profile picture URL",
+      },
     },
     bio: {
       type: String,
@@ -91,11 +94,11 @@ const UserSchema = new mongoose.Schema(
     },
     phone: {
       type: Number,
-      required: [true, "Please provide your Mobile number"],
       unique: true,
+      sparse: true,
       validate: {
-        validator: function (v) {
-          return /^\d{10}$/.test(v.toString());
+        validator: function (value) {
+          return value == null || /^\d{10}$/.test(value.toString());
         },
         message: "Mobile Number must be a valid 10-digit number",
       },
@@ -116,6 +119,10 @@ const UserSchema = new mongoose.Schema(
       type: String,
       select: false,
       minlength: [6, "Password must be at least 6 characters"],
+    },
+    token: {
+      type: String,
+      select: false,
     },
     role: {
       type: String,
@@ -219,6 +226,10 @@ UserSchema.pre("save", async function (next) {
 
   next();
 });
+
+if (process.env.NODE_ENV === "development" && mongoose.models.User) {
+  mongoose.deleteModel("User");
+}
 
 const User = mongoose.models.User || mongoose.model("User", UserSchema);
 export default User;

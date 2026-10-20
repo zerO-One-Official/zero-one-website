@@ -8,6 +8,7 @@ import BottomGlitter from "@/components/StyledText/BottomGlitter";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
 import { validateAndNormalizeOtherLinks } from "@/lib/validators";
+import { normalizeDesignations } from "@/lib/designations";
 
 const normalizeProfileValue = (field, value) => {
   if (value == null) return "";
@@ -37,6 +38,7 @@ export default function ProfileForm({ user }) {
   const [loading, setLoading] = useState(false);
 
   const [userProfile, setUserProfile] = useState(user);
+  const isAlumni = normalizeDesignations(userProfile?.designations).includes("ALUMNI");
 
   const [password, setPassword] = useState({
     oldPass: "",
@@ -52,7 +54,7 @@ export default function ProfileForm({ user }) {
 
     try {
       setLoading(true);
-      const { email, phone, username, gitHub, linkedIn, bio } = userProfile;
+      const { email, phone, username, gitHub, linkedIn, bio, roll, registrationNumber } = userProfile;
       const otherLinks = validateAndNormalizeOtherLinks(userProfile.otherLinks || []);
       const res = await fetch("/api/profile", {
         method: "PUT",
@@ -64,6 +66,7 @@ export default function ProfileForm({ user }) {
           linkedIn,
           bio,
           otherLinks,
+          ...(isAlumni ? { roll, registrationNumber } : {}),
         }),
       });
 
@@ -173,6 +176,30 @@ export default function ProfileForm({ user }) {
               disabled={loading}
             />
           </div>
+          {isAlumni && (
+            <div className="flex flex-col items-center justify-center gap-2 w-full lg:flex-row">
+              <StyledInput
+                value={userProfile?.roll || ""}
+                name="roll"
+                label="Roll Number"
+                inputMode="numeric"
+                pattern="[0-9]{5}"
+                maxLength={5}
+                onChange={handleChange}
+                disabled={loading}
+              />
+              <StyledInput
+                value={userProfile?.registrationNumber || ""}
+                name="registrationNumber"
+                label="Registration Number"
+                inputMode="numeric"
+                pattern="[0-9]{11}"
+                maxLength={11}
+                onChange={handleChange}
+                disabled={loading}
+              />
+            </div>
+          )}
 
           <div className="flex flex-col lg:flex-row gap-2 items-center justify-center w-full">
             <StyledInput
@@ -197,7 +224,7 @@ export default function ProfileForm({ user }) {
             }
             disabled={loading}
           />
-          {["email", "phone", "username", "gitHub", "linkedIn", "bio"].some(
+          {["email", "phone", "username", "gitHub", "linkedIn", "bio", ...(isAlumni ? ["roll", "registrationNumber"] : [])].some(
             (field) =>
               normalizeProfileValue(field, user[field]) !==
               normalizeProfileValue(field, userProfile[field]),

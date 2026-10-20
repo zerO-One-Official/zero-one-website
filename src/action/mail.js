@@ -2,6 +2,7 @@
 
 const { contactEmail } = require("@/utils/emailTemplates");
 import nodemailer from "nodemailer";
+import { after } from "next/server";
 
 export const sendMail = async (to, subject, html) => {
   try {
@@ -61,10 +62,16 @@ export const sendInfoMail = async (mail) => {
 
     const html = contactEmail(heading, buttonLabel, link, message);
 
-    await sendMail(recieversMail, subject, html);
+    after(async () => {
+      try {
+        await sendMail(recieversMail, subject, html);
+      } catch (error) {
+        console.error("Background email delivery failed:", error);
+      }
+    });
 
     return {
-      message: "emails sent Successfully.",
+      message: "Email queued for background delivery.",
       type: "success",
       success: true,
     };
