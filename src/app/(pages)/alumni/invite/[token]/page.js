@@ -6,7 +6,8 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata() {
   return {
-    title: "Complete your alumni journey | ZERO ONE",
+    title: "Complete Your Alumni Journey",
+    description: "Complete your ZERO ONE Coding Club alumni profile and journey.",
     robots: { index: false, follow: false },
   };
 }

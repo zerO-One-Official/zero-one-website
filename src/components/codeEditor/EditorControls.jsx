@@ -27,6 +27,7 @@ const EditorControls = ({
   // Editor config
   readOnly = false,
   className = "",
+  onRunRequest,
 }) => {
   // Get state directly from Zustand store
   const selectedLanguage = useCodeEditorLanguage();
@@ -38,6 +39,10 @@ const EditorControls = ({
   const runCode = useCodeEditorRunCode();
   const submitCode = useCodeEditorSubmitCode();
   const resetCode = useCodeEditorResetCode();
+  const handleRun = () => {
+    if (onRunRequest) onRunRequest();
+    else runCode();
+  };
   return (
     <div
       className={`w-full z-10 flex items-center justify-end gap-2 bg-background/95 backdrop-blur-sm rounded-lg p-3 shadow-lg ${className}`}
@@ -79,7 +84,7 @@ const EditorControls = ({
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
-              onClick={runCode}
+              onClick={handleRun}
               disabled={loading}
               size="sm"
               title="Run code (Ctrl+R)"
@@ -105,7 +110,7 @@ const EditorControls = ({
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
-              onClick={runCode}
+              onClick={handleRun}
               disabled={loading}
               size="sm"
               title="Submit code (Ctrl+S)"

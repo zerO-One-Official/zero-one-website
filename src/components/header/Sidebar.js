@@ -203,14 +203,14 @@ function Sidebar({ isMounted, unmount }) {
                 Resources
               </Link>
               <Link
-                href="/practice"
+                href="/playground"
                 className="block w-fit px-4 py-3 text-lg font-medium text-white hover:bg-secondary rounded-full transition-all duration-200 ease-in-out"
                 onClick={unmount}
               >
                 Playground
               </Link>
               <Link
-                href="/playground"
+                href="/practice"
                 className="block w-fit px-4 py-3 text-lg font-medium text-white hover:bg-secondary rounded-full transition-all duration-200 ease-in-out"
                 onClick={unmount}
               >

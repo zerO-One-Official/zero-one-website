@@ -5,6 +5,7 @@ import { Bold, Heading2, Italic, Link2, List, ListOrdered, Quote } from "lucide-
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import MarkdownContent from "@/components/alumni/MarkdownContent";
+import inputStyles from "@/components/input/styled-input.module.css";
 
 const tools = [
   { id: "heading", label: "Heading", icon: Heading2 },
@@ -16,9 +17,11 @@ const tools = [
   { id: "link", label: "Link", icon: Link2 },
 ];
 
-export default function MarkdownEditorField({ label, description, value, onChange, maxLength, disabled = false, rows = 8 }) {
+export default function MarkdownEditorField({ label, description, value, onChange, maxLength, disabled = false, required = false, name, rows = 8, appearance = "default" }) {
   const textareaRef = useRef(null);
   const [preview, setPreview] = useState(false);
+  const [focused, setFocused] = useState(false);
+  const underlined = appearance === "underlined";
 
   const format = (action) => {
     const input = textareaRef.current;
@@ -65,9 +68,9 @@ export default function MarkdownEditorField({ label, description, value, onChang
   };
 
   return (
-    <section className="space-y-3">
+    <section className={underlined ? `${inputStyles.inputContainer} space-y-3` : "space-y-3"}>
       <div>
-        <h3 className="font-semibold">{label}</h3>
+        {!underlined && <h3 className="font-semibold">{label}</h3>}
         {description && <p className="text-sm text-muted-foreground">{description}</p>}
       </div>
       <div className="flex flex-wrap items-center gap-1">
@@ -82,14 +85,27 @@ export default function MarkdownEditorField({ label, description, value, onChang
             ))}
           </div>
         )}
-        <span className="ml-auto text-xs text-muted-foreground">{value.length}/{maxLength}</span>
+        {maxLength !== undefined && (
+          <span className="ml-auto text-xs text-muted-foreground">{value.length}/{maxLength}</span>
+        )}
       </div>
       {preview ? (
         <div className="min-h-24 rounded-md border p-4">
+          {underlined && <h3 className="text-xl xs:text-2xl font-extralight text-white">{label}</h3>}
           {value ? <MarkdownContent>{value}</MarkdownContent> : <p className="text-sm text-muted-foreground">Nothing to preview yet.</p>}
         </div>
       ) : (
-        <Textarea ref={textareaRef} disabled={disabled} maxLength={maxLength} rows={rows} value={value} aria-label={label} onChange={(event) => onChange(event.target.value)} />
+        <div className={underlined ? "relative" : undefined}>
+          <Textarea ref={textareaRef} id={name} disabled={disabled} required={required} name={name} maxLength={maxLength} rows={rows} value={value} aria-label={label} onChange={(event) => onChange(event.target.value)} onFocus={() => underlined && setFocused(true)} onBlur={() => underlined && setFocused(false)} className={`focus-visible:ring-0 focus-visible:ring-offset-0 ${underlined ? inputStyles.textarea : ""}`} />
+          {underlined && (
+            <label
+              className={`${inputStyles.label} ${focused || value ? inputStyles.transform : ""}`}
+              htmlFor={name}
+            >
+              {label}
+            </label>
+          )}
+        </div>
       )}
     </section>
   );

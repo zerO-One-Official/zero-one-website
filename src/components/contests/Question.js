@@ -1,14 +1,10 @@
 import Link from "next/link";
 import Markdown from "@/components/markdown/Markdown";
 import { Badge } from "@/components/ui/badge";
-
-const difficultyStyles = {
-  easy: "border-green-400/30 bg-green-400/10 text-green-300",
-  medium: "border-yellow-400/30 bg-yellow-400/10 text-yellow-300",
-  hard: "border-red-400/30 bg-red-400/10 text-red-300",
-  basic: "border-blue-400/30 bg-blue-400/10 text-blue-300",
-  expert: "border-purple-400/30 bg-purple-400/10 text-purple-300",
-};
+import {
+  getDifficultyBadgeClassName,
+  pointsBadgeClassName,
+} from "@/components/contests/questionBadgeStyles";
 
 export const Question = ({
   question,
@@ -26,8 +22,8 @@ export const Question = ({
   const playgroundUrl = contestSlug && !isContestCompleted
     ? `/contest/${contestSlug}/attempt`
     : isQuizQuestion
-    ? `/playground/quiz/${question.slug}`
-    : `/playground/coding/${question.slug}`;
+    ? `/practice/quiz/${question.slug}`
+    : `/practice/coding/${question.slug}`;
   const difficulty = question.difficulty?.toLowerCase();
   const typeLabel = isQuizQuestion
     ? question.questionType || "Quiz"
@@ -64,18 +60,22 @@ export const Question = ({
           {difficulty ? (
             <Badge
               variant="outline"
-              className={
-                difficultyStyles[difficulty] ||
-                "border-white/15 bg-white/5 text-foreground/70"
-              }
+              className={getDifficultyBadgeClassName(difficulty)}
             >
               {difficulty}
+            </Badge>
+          ) : null}
+          {question.point != null ? (
+            <Badge
+              variant="outline"
+              className={`${pointsBadgeClassName} normal-case`}
+            >
+              {question.point} points
             </Badge>
           ) : null}
         </div>
       </div>
       <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-foreground/60">
-        {question.point ? <span>{question.point} points</span> : null}
         {timeLimitSeconds ? <span>{timeLimitSeconds} seconds</span> : null}
       </div>
       {question.description || question.desc ? (

@@ -535,12 +535,6 @@ const ContestAttempt = ({ context }) => {
             Contest unavailable
           </h1>
           <p className="mt-3 text-foreground/70">{context.message}</p>
-          <Link
-            href="/contests"
-            className="mt-6 inline-block text-accent hover:underline"
-          >
-            Back to contests
-          </Link>
         </section>
       </main>
     );
@@ -575,12 +569,6 @@ const ContestAttempt = ({ context }) => {
           <p className="mt-3 text-foreground/70">
             Register for this contest before starting an attempt.
           </p>
-          <Link
-            href={`/contest/${context.contest.slug}`}
-            className="mt-6 inline-block text-accent hover:underline"
-          >
-            Back to contest
-          </Link>
         </section>
       </main>
     );
@@ -604,14 +592,7 @@ const ContestAttempt = ({ context }) => {
             >
               View report
             </Link>
-          ) : (
-            <Link
-              href="/my-contests"
-              className="mt-6 inline-block text-accent hover:underline"
-            >
-              Back to My Contests
-            </Link>
-          )}
+          ) : null}
         </section>
       </main>
     );
@@ -650,12 +631,6 @@ const ContestAttempt = ({ context }) => {
               {canResume ? "Resume fullscreen contest" : "Start fullscreen contest"}
             </Button>
           ) : null}
-          <Link
-            href={`/contest/${context.contest.slug}`}
-            className="mt-6 block text-accent hover:underline"
-          >
-            Back to contest
-          </Link>
         </section>
       </main>
     );

@@ -7,9 +7,12 @@ import connect from "@/utils/dbConnect";
 import { convertIdsToString, generateAccessCode } from "@/utils/helper";
 import { deleteFile, uploadFile } from "@/utils/server";
 import { cache } from "react";
+import { getServerSession } from "next-auth";
+import { revalidatePath } from "next/cache";
+import { options } from "@/app/api/auth/[...nextauth]/options";
 import { joiningEmail, resetEmail } from "@/utils/emailTemplates";
 import { sendMail } from "./mail";
-import { validateSignup } from "@/lib/validators";
+import { validateAndNormalizeOtherLinks, validateSignup } from "@/lib/validators";
 import bcrypt from "bcryptjs";
 
 export const getUsers = cache(async () => {
@@ -76,36 +79,55 @@ export const getUserContests = cache(async (userId) => {
   }
 });
 
-export const updateProfilePic = async ({ profilePic, username }) => {
+export const updateProfilePic = async ({ profilePic }) => {
+  let pendingProfilePic = "";
+  let profilePicSaved = false;
   try {
     await connect();
 
-    const user = await User.findOne({ username }).select("profilePic");
-    if (!user) {
-      return {
-        type: "error",
-        message: "User not found",
-        success: false,
-      };
+    const session = await getServerSession(options);
+    const userId = session?.user?._id;
+    if (!userId) throw new Error("You are not allowed to update this profile photo.");
+    if (typeof profilePic !== "string" || !profilePic.trim()) throw new Error("Profile photo URL is required.");
+    pendingProfilePic = profilePic;
+    const user = await User.findById(userId).select("profilePic username");
+    if (!user) throw new Error("User not found.");
+    const previousProfilePic = user.profilePic;
+    if (profilePic === previousProfilePic) {
+      pendingProfilePic = "";
+      return { type: "success", message: "Profile picture is unchanged.", success: true };
     }
-    if (user.profilePic) {
-      deleteFile(user.profilePic);
-    }
-    await User.updateOne(
-      { username },
-      {
-        $set: {
-          profilePic,
-        },
+    user.profilePic = profilePic;
+    await user.save();
+    profilePicSaved = true;
+    pendingProfilePic = "";
+    revalidatePath(`/user/${user.username}`);
+    revalidatePath("/teams");
+    let cleanupWarning = "";
+    if (previousProfilePic) {
+      try {
+        if (!await deleteFile(previousProfilePic)) {
+          cleanupWarning = " The previous photo is not an UploadThing file and could not be removed automatically.";
+        }
+      } catch (cleanupError) {
+        console.error("Previous profile photo cleanup failed:", cleanupError);
+        cleanupWarning = " The new photo is saved, but the previous photo could not be removed.";
       }
-    );
+    }
 
     return {
-      type: "success",
-      message: "Profile picture updated successfully",
+      type: cleanupWarning ? "warning" : "success",
+      message: `Profile picture updated successfully.${cleanupWarning}`,
       success: true,
     };
   } catch (error) {
+    if (pendingProfilePic && !profilePicSaved) {
+      try {
+        await deleteFile(pendingProfilePic);
+      } catch (cleanupError) {
+        console.error("Unattached profile photo cleanup failed:", cleanupError);
+      }
+    }
     return {
       type: "error",
       message: error.message,
@@ -298,13 +320,15 @@ export async function signup(form) {
       email,
       phone,
       branch,
-      designation,
+      designations,
       role,
       gender,
       profilePic,
+      otherLinks = [],
     } = form;
 
     validateSignup(form);
+    const normalizedOtherLinks = validateAndNormalizeOtherLinks(otherLinks);
 
     // 3. Check for Existing User
     const existingUser = await User.findOne({
@@ -348,7 +372,8 @@ export async function signup(form) {
       password: hasedPassword,
       token,
       role,
-      designation,
+      designations,
+      otherLinks: normalizedOtherLinks,
     });
 
     // 5. Send Welcome Email

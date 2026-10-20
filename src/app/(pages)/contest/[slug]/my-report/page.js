@@ -2,6 +2,11 @@ import { getContestAttemptReport } from "@/action/contestAttempt";
 import Markdown from "@/components/markdown/Markdown";
 import ReadOnlyContestCode from "@/components/contests/ReadOnlyContestCode";
 
+export const metadata = {
+  title: "Contest Report",
+  description: "Review your answers, score, and results from a ZERO ONE contest.",
+};
+
 export const dynamic = "force-dynamic";
 
 const formatDateTime = (value) =>

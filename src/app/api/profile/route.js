@@ -5,6 +5,7 @@ import { getServerSession } from "next-auth";
 import { options } from "../auth/[...nextauth]/options";
 import { checkDuplicateUser, deleteFile } from "@/utils/server";
 import { revalidatePath } from "next/cache";
+import { validateAndNormalizeOtherLinks } from "@/lib/validators";
 
 export async function GET() {
   try {
@@ -53,7 +54,6 @@ export async function PUT(req) {
     const {
       email,
       phone,
-      profilePic,
       username,
       gitHub,
       linkedIn,
@@ -86,15 +86,33 @@ export async function PUT(req) {
       );
     }
 
-    if (profilePic && profilePic !== user.profilePic) {
-      deleteFile(user.profilePic);
-      user.profilePic = profilePic;
+    const normalizedEmail =
+      typeof email === "string" ? email.trim().toLowerCase() : email;
+    const normalizedPhone =
+      phone === "" || phone == null ? phone : Number(phone);
+    const normalizedUsername =
+      typeof username === "string" ? username.trim().toLowerCase() : username;
+    const normalizedGitHub =
+      typeof gitHub === "string" ? gitHub.trim() : gitHub;
+    const normalizedLinkedIn =
+      typeof linkedIn === "string" ? linkedIn.trim() : linkedIn;
+    const normalizedBio = typeof bio === "string" ? bio.trim() : bio;
+    let normalizedOtherLinks;
+    if (otherLinks !== undefined) {
+      try {
+        normalizedOtherLinks = validateAndNormalizeOtherLinks(otherLinks);
+      } catch (error) {
+        return NextResponse.json(
+          { message: error.message, type: "error", success: false },
+          { status: 400 }
+        );
+      }
     }
 
     if (
-      email &&
-      email !== user.email &&
-      (await checkDuplicateUser("email", email))
+      normalizedEmail &&
+      normalizedEmail !== user.email &&
+      (await checkDuplicateUser("email", normalizedEmail, user._id))
     ) {
       return NextResponse.json(
         {
@@ -106,9 +124,10 @@ export async function PUT(req) {
       );
     }
     if (
-      phone &&
-      phone !== user.phone &&
-      (await checkDuplicateUser("phone", phone))
+      normalizedPhone != null &&
+      normalizedPhone !== "" &&
+      normalizedPhone !== user.phone &&
+      (await checkDuplicateUser("phone", normalizedPhone, user._id))
     ) {
       return NextResponse.json(
         {
@@ -120,9 +139,9 @@ export async function PUT(req) {
       );
     }
     if (
-      gitHub &&
-      gitHub !== user.gitHub &&
-      (await checkDuplicateUser("gitHub", gitHub))
+      normalizedGitHub &&
+      normalizedGitHub !== user.gitHub &&
+      (await checkDuplicateUser("gitHub", normalizedGitHub, user._id))
     ) {
       return NextResponse.json(
         {
@@ -134,9 +153,9 @@ export async function PUT(req) {
       );
     }
     if (
-      linkedIn &&
-      linkedIn !== user.linkedIn &&
-      (await checkDuplicateUser("linkedIn", linkedIn))
+      normalizedLinkedIn &&
+      normalizedLinkedIn !== user.linkedIn &&
+      (await checkDuplicateUser("linkedIn", normalizedLinkedIn, user._id))
     ) {
       return NextResponse.json(
         {
@@ -148,17 +167,18 @@ export async function PUT(req) {
       );
     }
 
-    user.phone = phone;
-    user.email = email;
-    user.gitHub = gitHub;
-    user.linkedIn = linkedIn;
-    user.bio = bio;
-    user.otherLinks = otherLinks;
+    user.phone = normalizedPhone;
+    user.email = normalizedEmail;
+    user.gitHub = normalizedGitHub;
+    user.linkedIn = normalizedLinkedIn;
+    user.bio = normalizedBio;
+    if (normalizedOtherLinks) user.otherLinks = normalizedOtherLinks;
 
-    if (username !== user.username) {
-      const duplicateUsername = await User.findOne({ username }).select([
-        "username",
-      ]);
+    if (normalizedUsername !== user.username) {
+      const duplicateUsername = await User.findOne({
+        username: normalizedUsername,
+        _id: { $ne: user._id },
+      }).select(["username"]);
       if (duplicateUsername)
         return NextResponse.json(
           {
@@ -168,7 +188,7 @@ export async function PUT(req) {
           },
           { status: 409 }
         );
-      user.username = username;
+      user.username = normalizedUsername;
     }
 
     const newProfile = await user.save();
@@ -185,11 +205,20 @@ export async function PUT(req) {
   } catch (error) {
     return NextResponse.json(
       { message: error.message, type: "error", success: false },
-      { status: 500 }
+      {
+        status:
+          error.name === "ValidationError" || error.name === "CastError"
+            ? 400
+            : error.code === 11000
+              ? 409
+              : 500,
+      }
     );
   }
 }
 export async function PATCH(req) {
+  let pendingProfilePic = "";
+  let profilePicSaved = false;
   try {
     await dbConnect();
     const session = await getServerSession(options);
@@ -209,33 +238,71 @@ export async function PATCH(req) {
       );
     }
 
-    const user = await User.findById(id).select(["profilePic"]);
+    if (typeof profilePic !== "string" || !profilePic.trim()) {
+      throw new Error("Profile photo URL is required.");
+    }
+    pendingProfilePic = profilePic;
+
+    const user = await User.findById(id).select(["profilePic", "username"]);
 
     if (!user) {
+      try {
+        await deleteFile(pendingProfilePic);
+      } catch (cleanupError) {
+        console.error("Unattached profile photo cleanup failed:", cleanupError);
+      }
+      pendingProfilePic = "";
       return NextResponse.json(
         { message: "You don't have an account", type: "error", success: false },
         { status: 404 }
       );
     }
 
-    if (profilePic && profilePic !== user.profilePic) {
-      deleteFile(user.profilePic);
-      user.profilePic = profilePic;
+    const previousProfilePic = user.profilePic;
+    if (profilePic === previousProfilePic) {
+      pendingProfilePic = "";
+      return NextResponse.json(
+        { profile: user, message: "Profile photo is unchanged.", type: "success", success: true },
+        { status: 200 },
+      );
     }
 
+    user.profilePic = profilePic;
     const newProfile = await user.save();
+    profilePicSaved = true;
+    pendingProfilePic = "";
     revalidatePath("/teams");
+    revalidatePath(`/user/${user.username}`);
+
+    let cleanupWarning = "";
+    if (previousProfilePic) {
+      try {
+        if (!await deleteFile(previousProfilePic)) {
+          cleanupWarning = " The previous photo is not an UploadThing file and could not be removed automatically.";
+        }
+      } catch (cleanupError) {
+        console.error("Previous profile photo cleanup failed:", cleanupError);
+        cleanupWarning = " The new photo is saved, but the previous photo could not be removed.";
+      }
+    }
 
     return NextResponse.json(
       {
         profile: newProfile,
-        message: "Profile Updated Successfully",
-        type: "success",
+        message: `Profile photo updated successfully.${cleanupWarning}`,
+        type: cleanupWarning ? "warning" : "success",
         success: true,
       },
       { status: 200 }
     );
   } catch (error) {
+    if (pendingProfilePic && !profilePicSaved) {
+      try {
+        await deleteFile(pendingProfilePic);
+      } catch (cleanupError) {
+        console.error("Unattached profile photo cleanup failed:", cleanupError);
+      }
+    }
     return NextResponse.json(
       { message: error.message, type: "error", success: false },
       { status: 500 }

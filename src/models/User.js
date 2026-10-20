@@ -122,7 +122,7 @@ const UserSchema = new mongoose.Schema(
       enum: ["USER", "ADMIN"],
       default: "USER",
     },
-    designation: {
+    designations: {
       type: [{ type: String, enum: DESIGNATIONS }],
       default: () => ["STUDENT"],
       validate: {
@@ -130,7 +130,7 @@ const UserSchema = new mongoose.Schema(
         message: "Designations must be unique",
       },
     },
-    designationNotificationPending: {
+    designationsNotificationPending: {
       type: Boolean,
       default: false,
     },
@@ -200,7 +200,7 @@ const UserSchema = new mongoose.Schema(
 );
 
 UserSchema.pre("validate", function (next) {
-  if (this.designation.includes("ALUMNI")) this.passedOut = true;
+  if (this.designations.includes("ALUMNI")) this.passedOut = true;
   next();
 });
 

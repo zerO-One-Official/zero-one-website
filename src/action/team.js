@@ -15,7 +15,7 @@ export const getTeams = cache(async () => {
       .populate({
         path: "user",
         model: User,
-        select: "firstName lastName profilePic username designation",
+        select: "firstName lastName profilePic username designations email gitHub linkedIn otherLinks",
       })
       .sort({ createdAt: -1 })
       .lean();

@@ -3,9 +3,8 @@ import ActivateAccountForm from "@/components/forms/activateAccountForm";
 import BottomGlitter from "@/components/StyledText/BottomGlitter";
 
 export const metadata = {
-  title: "Avtivate Account",
-  description:
-    "Zero-one Coding Club of Motihari College of Engineering, Motihari",
+  title: "Activate Account",
+  description: "Activate your ZERO ONE Coding Club account.",
 };
 
 const ActivateAccountPage = () => {

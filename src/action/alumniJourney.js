@@ -54,8 +54,8 @@ function normalizeJourney(input) {
 }
 
 async function findAlumni(username) {
-  const user = await User.findOne({ username }).select("_id username firstName lastName designation profilePic").lean();
-  if (!user || !normalizeDesignations(user.designation).includes("ALUMNI")) {
+  const user = await User.findOne({ username }).select("_id username firstName lastName designations profilePic").lean();
+  if (!user || !normalizeDesignations(user.designations).includes("ALUMNI")) {
     throw new Error("Alumni profile not found.");
   }
   return user;
@@ -100,12 +100,12 @@ export async function getAlumniJourneyByInvite(token) {
     inviteTokenExpiresAt: { $gt: new Date() },
   })
     .select("+inviteTokenHash +inviteTokenExpiresAt")
-    .populate("user", "_id username firstName lastName profilePic designation")
+    .populate("user", "_id username firstName lastName profilePic designations")
     .populate("timeline.company", "name logo image url")
     .populate("timeline.institute", "name type logo image")
     .lean();
   const user = journey?.user;
-  if (!user || !normalizeDesignations(user.designation).includes("ALUMNI")) return null;
+  if (!user || !normalizeDesignations(user.designations).includes("ALUMNI")) return null;
   const [companies, institutes] = await Promise.all([
     Company.find({}).select("name logo image url").collation({ locale: "en", strength: 2 }).sort({ name: 1 }).lean(),
     Institute.find({}).select("name type logo image").collation({ locale: "en", strength: 2 }).sort({ name: 1 }).lean(),
@@ -123,7 +123,7 @@ export async function getAlumniJourneyByInvite(token) {
 
 export async function getPublicAlumniDirectory() {
   await connect();
-  const users = await User.find({ designation: "ALUMNI", showOnWebsite: true })
+  const users = await User.find({ designations: "ALUMNI", showOnWebsite: true })
     .select("_id username firstName lastName profilePic branch roll lateralEntry")
     .sort({ roll: 1, firstName: 1, lastName: 1 })
     .lean();
@@ -192,9 +192,9 @@ export async function saveAlumniJourneyByInvite(token, input) {
     }).select("+inviteTokenHash +inviteTokenExpiresAt user").lean();
     if (!invite) throw new Error("This alumni invitation link is invalid or expired.");
     const user = await User.findById(invite.user)
-      .select("_id username designation")
+      .select("_id username designations")
       .lean();
-    if (!user || !normalizeDesignations(user.designation).includes("ALUMNI")) {
+    if (!user || !normalizeDesignations(user.designations).includes("ALUMNI")) {
       throw new Error("Alumni profile not found.");
     }
     const value = normalizeJourney(input);

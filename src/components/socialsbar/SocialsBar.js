@@ -17,7 +17,7 @@ const hiddenSocialsPaths = [
 function SocialsBarUI() {
   const pathname = usePathname();
 
-  const socialRef = useRef();
+  const socialRef = useRef(null);
 
   const [prevScrollY, setPrevScrollY] = useState(0);
 
@@ -31,8 +31,9 @@ function SocialsBarUI() {
       if (Math.abs(window.scrollY - prevScrollY) > 300) {
         setPrevScrollY(window.scrollY);
 
-        if ((socialRef?.current && scrolledDown) || scrolledUp) {
-          socialRef.current.style.right = scrolledDown ? "-300px" : "0";
+        const socialBar = socialRef.current;
+        if (socialBar && (scrolledDown || scrolledUp)) {
+          socialBar.style.right = scrolledDown ? "-300px" : "0";
         }
       }
     };

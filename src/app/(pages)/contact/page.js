@@ -1,6 +1,7 @@
 "use client";
 import Button from "@/components/button/Button";
 import StyledInput from "@/components/input/StyledInput";
+import MarkdownEditorField from "@/components/alumni/MarkdownEditorField";
 import { useRouter } from "next/navigation";
 import React, { useRef, useState } from "react";
 import { LuSend } from "react-icons/lu";
@@ -46,13 +47,14 @@ const ContactPage = () => {
   const form = useRef();
 
   const sendEmail = async (e) => {
-    setLoading(true);
     e.preventDefault();
 
-    if (!name || !email || !message) {
+    if (!name || !email || !message.trim()) {
       toast.error("Please fill all fields.");
+      return;
     }
 
+    setLoading(true);
     try {
       const res = await addQuery({ name, email, message, roll });
 
@@ -90,7 +92,7 @@ const ContactPage = () => {
         </div>
         <div className="mt-16">
           <form ref={form} onSubmit={sendEmail} className="flex flex-col gap-2">
-            <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-2 flex-wrap">
+            <div className="flex flex-col md:flex-row justify-between items-start xl:items-center gap-4 flex-wrap">
               <StyledInput
                 id="nameInput"
                 value={name}
@@ -119,14 +121,14 @@ const ContactPage = () => {
               required
               className="w-full xl:w-4/5"
             />
-            <StyledInput
-              type="desc"
+            <MarkdownEditorField
+              required
               value={message}
-              onChange={(e) => setMessage(e.target.value)}
+              onChange={setMessage}
               name="message"
               label="Your message"
-              required
-              className="w-4/5"
+              rows={6}
+              appearance="underlined"
             />
             <Button
               variant={"filled"}

@@ -19,8 +19,9 @@ const ProfilePic = ({ quality = 80 }) => {
       quality={quality}
       width={48}
       height={48}
+      sizes="40px"
       alt={data.user.name}
-      className="object-cover object-center w-10 h-10 rounded-full"
+      className="aspect-square h-10 w-10 rounded-full object-cover object-center"
     />
   ) : (
     <UserCircle2 className="w-full h-full" />

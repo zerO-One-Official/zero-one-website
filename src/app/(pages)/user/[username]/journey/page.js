@@ -8,13 +8,19 @@ import AlumniJourneyView from "@/components/alumni/AlumniJourneyView";
 export async function generateMetadata({ params }) {
   const { username } = await params;
   const user = await getUser(username);
-  return { title: user ? `${user.firstName} ${user.lastName || ""} Alumni Journey` : "Alumni Journey" };
+  const name = user
+    ? `${user.firstName} ${user.lastName || ""}`.trim()
+    : "Alumni";
+  return {
+    title: `${name} Alumni Journey`,
+    description: `View the alumni journey and career milestones for ${name}.`,
+  };
 }
 
 export default async function AlumniJourneyPage({ params }) {
   const { username } = await params;
   const profile = await getUser(username);
-  if (!profile || !normalizeDesignations(profile.designation).includes("ALUMNI")) notFound();
+  if (!profile || !normalizeDesignations(profile.designations).includes("ALUMNI")) notFound();
   const data = await getAlumniJourney(username);
   const name = [data.user.firstName, data.user.lastName].filter(Boolean).join(" ");
   return (
