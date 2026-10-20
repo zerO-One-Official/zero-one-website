@@ -49,6 +49,7 @@ const CodeEditor = ({
   // Styling
   className = "",
   height = "100%",
+  onRunRequest,
 }) => {
   // Get state directly from Zustand store
   const code = useCodeEditorCode();
@@ -137,7 +138,8 @@ const CodeEditor = ({
             bindKey: { win: "Ctrl-R", mac: "Cmd-R" },
             exec: () => {
               if (!loading) {
-                runCode();
+                if (onRunRequest) onRunRequest();
+                else runCode();
               }
             },
           },

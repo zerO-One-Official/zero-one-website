@@ -19,7 +19,7 @@ const MONTHS = [
 ];
 
 export const metadata = {
-  title: "Alumni | ZERO ONE",
+  title: "Alumni",
   description:
     "Explore ZERO ONE alumni by graduating batch, education, and career timeline.",
 };

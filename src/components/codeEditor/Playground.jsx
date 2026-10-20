@@ -1,5 +1,8 @@
 "use client";
 
+import { useState } from "react";
+import { usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
 import {
   ResizablePanelGroup,
   ResizablePanel,
@@ -9,6 +12,8 @@ import Question from "./Question";
 import CodeEditor from "./CodeEditor";
 import TestCases from "./TestCases";
 import { EditorControls } from ".";
+import LoginRequiredDialog from "@/components/auth/LoginRequiredDialog";
+import { useCodeEditorRunCode } from "@/stores/codeEditorStore";
 
 const Playground = ({
   problem = null,
@@ -17,14 +22,25 @@ const Playground = ({
   readOnly = false,
   autoComplete = true,
 }) => {
+  const pathname = usePathname();
+  const { status: sessionStatus } = useSession();
+  const runCode = useCodeEditorRunCode();
+  const [loginDialogOpen, setLoginDialogOpen] = useState(false);
+  const handleRunRequest = () => {
+    if (sessionStatus !== "authenticated") {
+      setLoginDialogOpen(true);
+      return;
+    }
+    runCode();
+  };
   // Static panel sizes for now
   const leftPanelSize = 40;
   const rightTopPanelSize = 60;
 
   return (
-    <div className={`bg-background text-foreground p-1 ${className}`}>
+    <div className={`container-70 bg-background text-foreground p-1 ${className}`}>
       {/* Editor Controls */}
-      <EditorControls readOnly={readOnly} />
+      <EditorControls readOnly={readOnly} onRunRequest={handleRunRequest} />
 
       {/* Main Content */}
       <div className="h-[calc(100vh-150px)]">
@@ -66,6 +82,7 @@ const Playground = ({
                     allowedLanguages={problem?.allowedLanguages}
                     readOnly={readOnly}
                     className="h-full"
+                    onRunRequest={handleRunRequest}
                   />
                 </div>
               </ResizablePanel>
@@ -93,6 +110,11 @@ const Playground = ({
           </ResizablePanel>
         </ResizablePanelGroup>
       </div>
+      <LoginRequiredDialog
+        open={loginDialogOpen}
+        onOpenChange={setLoginDialogOpen}
+        callbackUrl={pathname}
+      />
     </div>
   );
 };

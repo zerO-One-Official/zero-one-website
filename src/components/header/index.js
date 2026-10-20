@@ -5,17 +5,14 @@ import MobileNavigation from "./mobile-navigation";
 
 const Header = () => {
   return (
-    <header
-      className={`sticky top-0 left-0 right-0 w-full flex justify-between items-center z-[100] transition-all border border-transparent py-3 px-3 xs:px-6 sm:px-8 xl:px-20  bg-background`}
-    >
-      <Logo size="default" />
-      <div className="flex items-center gap-6">
-        {/* Desktop Navlist */}
-        <DesktopNavigation />
-        {/* Mobile Navlist */}
-        <MobileNavigation />
-        {/* Login Btn */}
-        <LoginBtn />
+    <header className="sticky top-0 left-0 right-0 z-[100] w-full border border-transparent bg-background transition-all">
+      <div className="container-70 flex items-center justify-between py-3">
+        <Logo size="default" />
+        <div className="flex items-center gap-6">
+          <DesktopNavigation />
+          <MobileNavigation />
+          <LoginBtn />
+        </div>
       </div>
     </header>
   );

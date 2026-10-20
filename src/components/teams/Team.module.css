@@ -9,11 +9,7 @@
 }
 
 .cardContainer {
-  @apply gap-8 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 items-center justify-center;
-}
-
-.cardContainer .card:hover {
-  @apply scale-[1.06] opacity-100;
+  @apply grid w-full grid-cols-1 items-center justify-center gap-6 sm:grid-cols-2 2xl:grid-cols-4;
 }
 
 .card::before {

@@ -10,18 +10,20 @@ export async function generateMetadata({ params }) {
 
   return {
     title: question?.name || "Question not found",
-    description: question?.description || "Quiz question",
+    description:
+      question?.description ||
+      "Practice quiz questions with ZERO ONE Coding Club.",
   };
 }
 
-const QuizPlaygroundPage = async ({ params, searchParams }) => {
+const PracticeQuizQuestionPage = async ({ params, searchParams }) => {
   const { slug } = await params;
   const { contest: contestSlug } = (await searchParams) || {};
   if (contestSlug) redirect(`/contest/${contestSlug}/attempt`);
   const { question } = await getQuizQuestion(slug);
 
   if (!question) notFound();
-  return <QuizPlayground question={question} contestSlug={contestSlug} />;
+  return <QuizPlayground question={question} />;
 };
 
-export default QuizPlaygroundPage;
+export default PracticeQuizQuestionPage;

@@ -339,7 +339,7 @@ function QuestionsTable({ questions: data }) {
             placeholder="Search problems..."
             value={globalFilter ?? ""}
             onChange={(event) => setGlobalFilter(String(event.target.value))}
-            className="pl-10"
+            className="rounded-full border-white/10 bg-white/5 pl-10 focus-visible:border-accent focus-visible:ring-accent focus-visible:ring-offset-0"
           />
         </div>
 
@@ -354,7 +354,7 @@ function QuestionsTable({ questions: data }) {
                 ?.setFilterValue(value === "all" ? "" : value)
             }
           >
-            <SelectTrigger className="w-32">
+            <SelectTrigger className="w-32 rounded-full border-white/10 bg-white/5">
               <SelectValue placeholder="Difficulty" />
             </SelectTrigger>
             <SelectContent>
@@ -413,7 +413,7 @@ function QuestionsTable({ questions: data }) {
             variant="outline"
             size="sm"
             onClick={clearFilters}
-            className="gap-2"
+            className="gap-2 rounded-full border-white/10 bg-white/5 hover:bg-white/10"
           >
             <RotateCcw className="h-4 w-4" />
             Clear
@@ -426,7 +426,7 @@ function QuestionsTable({ questions: data }) {
               table.setPageSize(Number(value));
             }}
           >
-            <SelectTrigger className="w-20">
+            <SelectTrigger className="w-20 rounded-full border-white/10 bg-white/5">
               <SelectValue placeholder={table.getState().pagination.pageSize} />
             </SelectTrigger>
             <SelectContent side="top">
@@ -455,9 +455,9 @@ function QuestionsTable({ questions: data }) {
         </div>
       </div>
       {/* Enhanced Table with Scrollable Body */}
-      <div className="rounded-md border bg-background">
+      <div className="overflow-hidden rounded-2xl border border-white/5 bg-white/5">
         <Table>
-          <TableHeader className="sticky top-0 bg-background z-10">
+          <TableHeader className="sticky top-0 z-10 bg-white/5">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id} className="border-b">
                 {headerGroup.headers.map((header) => {
@@ -483,13 +483,13 @@ function QuestionsTable({ questions: data }) {
                 table.getRowModel().rows.map((row) => (
                   <TableRow
                     key={row.id}
-                    className="hover:bg-muted/50 transition-colors"
+                    className="transition-colors hover:bg-white/5"
                     data-state={row.getIsSelected() && "selected"}
                   >
                     {row.getVisibleCells().map((cell) => (
                       <TableCell key={cell.id} className="py-0">
                         <Link
-                          href={`/practice/${row.original.slug}`}
+                          href={`/practice/coding/${row.original.slug}`}
                           className="block w-full h-full cursor-pointer py-3"
                         >
                           {flexRender(
@@ -533,7 +533,7 @@ function QuestionsTable({ questions: data }) {
             size="sm"
             onClick={() => table.setPageIndex(0)}
             disabled={!table.getCanPreviousPage()}
-            className="hidden sm:flex"
+            className="hidden rounded-full sm:flex"
           >
             First
           </Button>
@@ -544,6 +544,7 @@ function QuestionsTable({ questions: data }) {
             size="sm"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
+            className="rounded-full"
           >
             <ChevronLeft className="h-4 w-4 mr-1" />
             Previous
@@ -574,7 +575,7 @@ function QuestionsTable({ questions: data }) {
                     variant={pageNum === pageIndex ? "default" : "outline"}
                     size="sm"
                     onClick={() => table.setPageIndex(pageNum)}
-                    className="w-8 h-8 p-0"
+                    className="h-8 w-8 rounded-full p-0"
                   >
                     {pageNum + 1}
                   </Button>
@@ -589,6 +590,7 @@ function QuestionsTable({ questions: data }) {
             size="sm"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
+            className="rounded-full"
           >
             Next
             <ChevronRight className="h-4 w-4 ml-1" />
@@ -600,7 +602,7 @@ function QuestionsTable({ questions: data }) {
             size="sm"
             onClick={() => table.setPageIndex(table.getPageCount() - 1)}
             disabled={!table.getCanNextPage()}
-            className="hidden sm:flex"
+            className="hidden rounded-full sm:flex"
           >
             Last
           </Button>

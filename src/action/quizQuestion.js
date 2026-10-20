@@ -7,6 +7,48 @@ import { revalidatePath } from "next/cache";
 import { cache } from "react";
 import { convertIdsToString } from "@/utils/helper";
 
+const getQuestionsUnavailableForPractice = async () => {
+  const contests = await Contest.find({
+    status: { $in: ["DRAFT", "LIVE"] },
+    sections: {
+      $elemMatch: {
+        questions: {
+          $elemMatch: { questionDomain: "QuizQuestion" },
+        },
+      },
+    },
+  })
+    .select("sections.questions")
+    .lean();
+
+  return [
+    ...new Set(
+      contests.flatMap((contest) =>
+        (contest.sections || []).flatMap((section) =>
+          (section.questions || [])
+            .filter((entry) => entry.questionDomain === "QuizQuestion")
+            .map((entry) => String(entry.question))
+        )
+      )
+    ),
+  ];
+};
+
+const isQuestionUnavailableForPractice = (questionId) =>
+  Contest.exists({
+    status: { $in: ["DRAFT", "LIVE"] },
+    sections: {
+      $elemMatch: {
+        questions: {
+          $elemMatch: {
+            question: questionId,
+            questionDomain: "QuizQuestion",
+          },
+        },
+      },
+    },
+  });
+
 export const getQuizQuestions = cache(async (fields) => {
   try {
     await connect();
@@ -27,6 +69,29 @@ export const getQuizQuestions = cache(async (fields) => {
   }
 });
 
+export const getPracticeQuizQuestions = cache(async () => {
+  try {
+    await connect();
+
+    const unavailableQuestionIds = await getQuestionsUnavailableForPractice();
+    const questions = await QuizQuestion.find({
+      _id: { $nin: unavailableQuestionIds },
+    })
+      .select("_id name slug description questionType answerType difficulty point")
+      .sort({ created_at: -1 })
+      .lean();
+
+    return {
+      questions: convertIdsToString(questions),
+      type: "success",
+      success: true,
+    };
+  } catch (error) {
+    console.error("Error fetching practice quiz questions:", error);
+    return { message: error.message, type: "error", success: false };
+  }
+});
+
 export const getQuizQuestion = async (slug) => {
   try {
     await connect();
@@ -39,6 +104,14 @@ export const getQuizQuestion = async (slug) => {
     if (!question) {
       return {
         message: "Question not found",
+        type: "error",
+        success: false,
+      };
+    }
+
+    if (await isQuestionUnavailableForPractice(question._id)) {
+      return {
+        message: "This quiz question is not available for practice.",
         type: "error",
         success: false,
       };
@@ -70,28 +143,16 @@ export const checkQuizAnswer = async (slug, answer) => {
       };
     }
 
-    const protectedByContest = await Contest.exists({
-      status: "LIVE",
-      sections: {
-        $elemMatch: {
-          questions: {
-            $elemMatch: {
-              question: question._id,
-              questionDomain: "QuizQuestion",
-            },
-          },
-        },
-      },
-    });
-    if (protectedByContest) {
+    if (await isQuestionUnavailableForPractice(question._id)) {
       return {
-        message: "Contest answers are not available through answer checking.",
+        message: "This quiz question is not available for practice.",
         type: "error",
         success: false,
       };
     }
 
     let correct = false;
+    let correctOptions = [];
     if (question.answerType === "CODE") {
       const normalize = (code) => String(code || "").replace(/\s+/g, "");
       correct =
@@ -103,7 +164,7 @@ export const checkQuizAnswer = async (slug, answer) => {
         ? [...new Set(answer.selectedOptions)]
         : [];
       const availableOptions = question.options.map((option) => option.value);
-      const correctOptions = question.options
+      correctOptions = question.options
         .filter((option) => option.isCorrect)
         .map((option) => option.value);
       const submittedOptionsAreValid = submittedOptions.every((option) =>
@@ -119,6 +180,7 @@ export const checkQuizAnswer = async (slug, answer) => {
     return {
       message: correct ? "Correct answer" : "Not quite. Try again.",
       correct,
+      correctOptions,
       type: "success",
       success: true,
     };
@@ -176,7 +238,7 @@ export const addQuizQuestion = async (questionData) => {
     await QuizQuestion.create(payload);
 
     // Invalidate caches
-    revalidatePath(`/playground/quiz/${slug}`);
+    revalidatePath(`/practice/quiz/${slug}`);
 
     return {
       message: "Quiz question successfully added",
@@ -220,7 +282,7 @@ export const deleteQuizQuestion = async (questionId) => {
     if (!question) throw new Error("Question not found.");
     const result = await QuizQuestion.deleteOne({ _id: questionId });
     if (!result.deletedCount) throw new Error("Question not found.");
-    revalidatePath(`/playground/quiz/${question.slug}`);
+    revalidatePath(`/practice/quiz/${question.slug}`);
     return { message: "Question deleted", type: "success", success: true };
   } catch (error) {
     console.log(error);

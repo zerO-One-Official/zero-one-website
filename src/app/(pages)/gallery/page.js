@@ -2,6 +2,11 @@ import { getGalleryImages } from "@/action/gallery";
 import BottomGlitter from "@/components/StyledText/BottomGlitter";
 import { GalleryImages } from "@/components/gallery/gallery";
 
+export const metadata = {
+  title: "Gallery",
+  description: "Explore photos from ZERO ONE Coding Club events and activities.",
+};
+
 const GalleryPage = async () => {
   const gallery = (await getGalleryImages()) || [];
 
@@ -18,7 +23,7 @@ const GalleryPage = async () => {
 
   return (
     <>
-      <div className="mt-10 mb-8 px-3 xs:px-4 sm:px-6 xl:px-8 2xl:px-10 3xl:px-20">
+      <div className="container-70 mt-10 mb-8">
         <div className="flex flex-col justify-between items-center">
           <BottomGlitter text="Our Gallery" />
           {/* <AnimatedScrollButton scrollTo="scrolled-to" /> */}

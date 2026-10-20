@@ -3,6 +3,7 @@ export const DESIGNATIONS = [
   "ALUMNI",
   "FACULTY",
   "STAFF",
+  "DIRECTOR",
   "CLUB LEAD",
   "CLUB MEMBER",
   "CLUB COORDINATOR",

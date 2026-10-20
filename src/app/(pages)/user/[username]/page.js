@@ -18,6 +18,8 @@ import { capitalizeFirstLetter } from "@/utils/helper";
 import { notFound } from "next/navigation";
 import { UserCircle2 } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 function ProfileDetail({ icon: Icon, label, children }) {
   return (
     <div className="flex min-w-0 items-start gap-3 rounded-xl border border-white/5 bg-white/[0.03] p-3">
@@ -40,6 +42,7 @@ export async function generateMetadata({ params }) {
 
   return {
     title: name,
+    description: `View ${name}'s ZERO ONE Coding Club profile, achievements, and coding activity.`,
   };
 }
 
@@ -62,7 +65,7 @@ const UserPage = async ({ params }) => {
   const loggedInUser = session?.user?.username;
 
   const user = await getUser(username);
-  const isAlumni = normalizeDesignations(user?.designation).includes("ALUMNI");
+  const isAlumni = normalizeDesignations(user?.designations).includes("ALUMNI");
   const canViewAlumniProfile = isAlumni && (user.showOnWebsite === true || loggedInUser === username);
 
   const userEvents = await getUserContests(user?._id);
@@ -94,7 +97,7 @@ const UserPage = async ({ params }) => {
               {user.username}
             </p>
             <div className="mt-3 flex flex-wrap justify-center gap-2 sm:justify-start">
-              {normalizeDesignations(user.designation).map((designation) => (
+              {normalizeDesignations(user.designations).map((designation) => (
                 <span key={designation} className="rounded-full border border-accent/25 bg-accent/10 px-2.5 py-1 text-xs font-semibold text-accent">
                   {designation}
                 </span>

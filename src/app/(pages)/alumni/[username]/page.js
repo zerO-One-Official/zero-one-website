@@ -13,17 +13,23 @@ import { options } from "@/app/api/auth/[...nextauth]/options";
 export async function generateMetadata({ params }) {
   const { username } = await params;
   const user = await getUser(username);
-  if (!user || !normalizeDesignations(user.designation).includes("ALUMNI") || user.showOnWebsite !== true) {
-    return { title: "Alumni profile | ZERO ONE" };
+  if (!user || !normalizeDesignations(user.designations).includes("ALUMNI") || user.showOnWebsite !== true) {
+    return {
+      title: "Alumni Profile",
+      description: "View a ZERO ONE Coding Club alumni profile.",
+    };
   }
-  return { title: `${user.firstName} ${user.lastName || ""} | ZERO ONE Alumni` };
+  return {
+    title: `${user.firstName} ${user.lastName || ""} Alumni Profile`,
+    description: `Learn about ${user.firstName} ${user.lastName || ""}, a ZERO ONE Coding Club alumnus.`,
+  };
 }
 
 export default async function AlumniProfilePage({ params }) {
   const { username } = await params;
   const session = await getServerSession(options);
   const user = await getUser(username);
-  if (!user || !normalizeDesignations(user.designation).includes("ALUMNI")) notFound();
+  if (!user || !normalizeDesignations(user.designations).includes("ALUMNI")) notFound();
   const isOwnProfile = session?.user?.username === username;
   if (user.showOnWebsite !== true && !isOwnProfile) notFound();
   const data = await getAlumniJourney(username);

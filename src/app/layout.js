@@ -74,11 +74,11 @@ const gilroy = localFont({
 
 export const metadata = {
   title: {
-    default: "ZERO ONE Coding Club",
-    template: "%s | ZERO ONE Coding Club",
+    default: "Home | ZERO ONE CODING CLUB",
+    template: "%s | ZERO ONE CODING CLUB",
   },
   description:
-    "ZERO ONE Coding Club Club of Motihari College of Engineering, Motihari",
+    "ZERO ONE Coding Club at Motihari College of Engineering, Motihari.",
 };
 
 export default async function RootLayout({ children }) {

@@ -9,16 +9,24 @@ export const metadata = {
     "Zero-one Coding Club of Motihari College of Engineering, Motihari",
 };
 
+export const dynamic = "force-dynamic";
+
 async function Teams() {
   const { teams } = await getTeams();
 
   const groupedData = teams.reduce((result, current) => {
-    if (!result[current.group]) {
-      result[current.group] = [];
+    const group = current.group === "founding members" ? "core members" : current.group;
+    if (!result[group]) {
+      result[group] = [];
     }
-    result[current.group].push(current);
+    result[group].push(current);
     return result;
   }, {});
+  const groupOrder = ["directors", "core members", "current members", "past members"];
+  const orderedGroups = [
+    ...groupOrder.filter((group) => groupedData[group]),
+    ...Object.keys(groupedData).filter((group) => !groupOrder.includes(group)),
+  ];
 
   return (
     <section className="mt-16 mb-12 container-70">
@@ -31,19 +39,21 @@ async function Teams() {
         </h3>
       </div>
 
-      <div className={`flex flex-col gap-14 lg:items-center`}>
+      <div className="flex w-full flex-col gap-14 lg:items-center">
         {groupedData &&
-          Object.keys(groupedData).map((group) => (
-            <div key={group}>
-              <h2 className={Styles.postHead}>{group}</h2>
+          orderedGroups.map((group) => (
+            <div key={group} className="w-full">
+              <h2 className={Styles.postHead}>
+                {group.replace(/\b\w/g, (character) => character.toUpperCase())}
+              </h2>
               <div className={`${Styles.cardContainer}`}>
                 {groupedData[group].map((team) => (
                   <TeamCard
                     key={team._id}
                     name={`${team.user.firstName} ${team.user.lastName}`}
-                    position={team.position}
+                    username={team.user.username}
+                    position={(team.roles?.length ? team.roles : [team.designation]).join(", ")}
                     imageSrc={`${team.user.profilePic}`}
-                    lazyImageSrc={`${team.user.profilePic}`}
                     gitHub={team.user.gitHub}
                     linkedIn={team.user.linkedIn}
                     email={team.user.email}

@@ -1,7 +1,7 @@
 
 export const metadata = {
-    title: 'ZERO ONE | Activate',
-    description: 'Zero-one Coding Club of Motihari College of Engineering, Motihari',
+    title: "Set Password",
+    description: "Set or update your ZERO ONE Coding Club account password.",
 }
 
 

@@ -1,5 +1,40 @@
 import { branchOptions } from "@/utils/helper";
 import { DESIGNATIONS, normalizeDesignations } from "@/lib/designations";
+import validator from "validator";
+
+export function validateAndNormalizeOtherLinks(otherLinks) {
+  if (!Array.isArray(otherLinks)) {
+    throw new Error("Other links must be a list.");
+  }
+
+  const normalizedLinks = [];
+  const platforms = new Set();
+  for (const item of otherLinks) {
+    if (!item || typeof item !== "object") {
+      throw new Error("Each other link must include a platform and URL.");
+    }
+
+    const platform = typeof item.platform === "string"
+      ? item.platform.trim().toLowerCase()
+      : "";
+    const link = typeof item.link === "string" ? item.link.trim() : "";
+    if (!platform && !link) continue;
+    if (!platform || !link) {
+      throw new Error("Each other link needs a platform name and URL.");
+    }
+    if (platforms.has(platform)) {
+      throw new Error("Other link platform names must be unique.");
+    }
+    if (!validator.isURL(link)) {
+      throw new Error(`Enter a valid URL for ${platform}.`);
+    }
+
+    platforms.add(platform);
+    normalizedLinks.push({ platform, link });
+  }
+
+  return normalizedLinks;
+}
 
 export const validateSignup = (form) => {
   const {
@@ -13,19 +48,20 @@ export const validateSignup = (form) => {
     gender,
     branch,
     role,
-    designation,
+    designations,
     phone,
+    otherLinks = [],
   } = form;
   if (role !== "ADMIN" && role !== "USER") {
     throw new Error("Role must be either ADMIN or USER.");
   }
-  const designations = normalizeDesignations(designation);
+  const normalizedDesignations = normalizeDesignations(designations);
   if (
-    !designations.length ||
-    designations.some((value) => !DESIGNATIONS.includes(value)) ||
-    new Set(designations).size !== designations.length
+    !normalizedDesignations.length ||
+    normalizedDesignations.some((value) => !DESIGNATIONS.includes(value)) ||
+    new Set(normalizedDesignations).size !== normalizedDesignations.length
   )
-    throw new Error("enter a valid designation.");
+    throw new Error("Enter valid, unique designations.");
   if (!["MALE", "FEMALE", "OTHER"].includes(gender))
     throw new Error("choose a valid gender.");
 
@@ -47,10 +83,11 @@ export const validateSignup = (form) => {
   const facultyDesignations = [
     "FACULTY",
     "STAFF",
+    "DIRECTOR",
     "FACULTY COORDINATOR",
     "HOD",
   ];
-  const isFaculty = designations.some((value) => facultyDesignations.includes(value));
+  const isFaculty = normalizedDesignations.some((value) => facultyDesignations.includes(value));
 
   if (!isFaculty) {
     if (!roll || !registrationNumber)
@@ -80,4 +117,6 @@ export const validateSignup = (form) => {
   if (!/^\d{10}$/.test(String(parseInt(phone)))) {
     throw new Error("Invalid phone number. Must be 10 digits.");
   }
+
+  validateAndNormalizeOtherLinks(otherLinks);
 };

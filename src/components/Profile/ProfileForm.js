@@ -1,13 +1,38 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Button from "@/components/button/Button";
 import StyledInput from "@/components/input/StyledInput";
+import OtherLinksEditor from "@/components/Profile/OtherLinksEditor";
 import BottomGlitter from "@/components/StyledText/BottomGlitter";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
+import { validateAndNormalizeOtherLinks } from "@/lib/validators";
+
+const normalizeProfileValue = (field, value) => {
+  if (value == null) return "";
+  if (field === "phone") {
+    const phone = String(value).trim();
+    const numericPhone = Number(phone);
+    return phone && Number.isFinite(numericPhone) ? numericPhone : phone;
+  }
+  const normalized = String(value).trim();
+  return field === "email" || field === "username"
+    ? normalized.toLowerCase()
+    : normalized;
+};
+
+const normalizeOtherLinks = (links) =>
+  (Array.isArray(links) ? links : [])
+    .map((link) => ({
+      platform: String(link.platform ?? "").trim().toLowerCase(),
+      link: String(link.link ?? "").trim(),
+    }))
+    .filter((link) => link.platform || link.link);
 
 export default function ProfileForm({ user }) {
   const { data: session, update } = useSession();
+  const router = useRouter();
 
   const [loading, setLoading] = useState(false);
 
@@ -27,8 +52,8 @@ export default function ProfileForm({ user }) {
 
     try {
       setLoading(true);
-      const { email, phone, username, gitHub, linkedIn, bio, otherLinks } =
-        userProfile;
+      const { email, phone, username, gitHub, linkedIn, bio } = userProfile;
+      const otherLinks = validateAndNormalizeOtherLinks(userProfile.otherLinks || []);
       const res = await fetch("/api/profile", {
         method: "PUT",
         body: JSON.stringify({
@@ -54,6 +79,7 @@ export default function ProfileForm({ user }) {
             username: data.profile.username,
           },
         });
+        router.replace(`/user/${encodeURIComponent(data.profile.username)}/edit`);
         console.log(data.profile.username);
       }
 
@@ -98,7 +124,7 @@ export default function ProfileForm({ user }) {
   };
 
   return (
-    <div className="w-full flex flex-col mt-16">
+    <div className="w-full flex flex-col">
       <form onSubmit={submitForm} className="flex flex-col ">
         <div className="flex flex-col border border-white/5 shadow-cus  p-6 rounded-3xl">
           <div className="flex flex-col lg:flex-row gap-2 items-center justify-center w-full">
@@ -107,6 +133,7 @@ export default function ProfileForm({ user }) {
               value={userProfile?.bio}
               name="bio"
               label="Bio"
+              maxLength={280}
               onChange={handleChange}
               disabled={loading}
             />
@@ -116,6 +143,9 @@ export default function ProfileForm({ user }) {
               value={userProfile?.username}
               name="username"
               label="Username"
+              required
+              minLength={3}
+              maxLength={30}
               onChange={handleChange}
               disabled={loading}
             />
@@ -126,14 +156,19 @@ export default function ProfileForm({ user }) {
               value={userProfile?.email}
               name="email"
               label="Email"
+              required
               onChange={handleChange}
               disabled={loading}
             />
             <StyledInput
-              type="number"
+              type="tel"
               value={userProfile?.phone}
               name="phone"
               label="Phone"
+              inputMode="numeric"
+              pattern="[0-9]{10}"
+              maxLength={10}
+              required
               onChange={handleChange}
               disabled={loading}
             />
@@ -155,12 +190,20 @@ export default function ProfileForm({ user }) {
               disabled={loading}
             />
           </div>
-          {user?.email !== userProfile?.email ||
-          user?.bio !== userProfile?.bio ||
-          user?.phone !== userProfile?.phone ||
-          user?.gitHub !== userProfile?.gitHub ||
-          user?.linkedIn !== userProfile?.linkedIn ||
-          user?.username !== userProfile?.username ? (
+          <OtherLinksEditor
+            links={userProfile?.otherLinks || []}
+            onChange={(otherLinks) =>
+              setUserProfile((prev) => ({ ...prev, otherLinks }))
+            }
+            disabled={loading}
+          />
+          {["email", "phone", "username", "gitHub", "linkedIn", "bio"].some(
+            (field) =>
+              normalizeProfileValue(field, user[field]) !==
+              normalizeProfileValue(field, userProfile[field]),
+          ) ||
+          JSON.stringify(normalizeOtherLinks(user.otherLinks)) !==
+            JSON.stringify(normalizeOtherLinks(userProfile.otherLinks)) ? (
             <Button type="submit" className="ml-auto" loading={loading}>
               Update Profile
             </Button>

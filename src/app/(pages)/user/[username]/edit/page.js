@@ -13,6 +13,7 @@ export async function generateMetadata({ params }) {
 
   return {
     title: `Edit ${name}`,
+    description: `Update ${name}'s ZERO ONE Coding Club profile.`,
   };
 }
 const EditProfile = async ({ params }) => {
@@ -22,8 +23,8 @@ const EditProfile = async ({ params }) => {
   const { email, phone, profilePic, gitHub, otherLinks, linkedIn, bio } = user;
 
   return (
-    <>
-      <section className="w-full mt-16 flex flex-col items-center gap-6 border border-l-white/5 border-t-white/5 border-r-black/25 border-b-black/25  shadow-cus  p-6 rounded-3xl relative">
+    <main className="container-70 flex flex-col gap-6 py-12">
+      <section className="w-full flex flex-col items-center gap-6 border border-l-white/5 border-t-white/5 border-r-black/25 border-b-black/25 shadow-cus p-6 rounded-3xl relative">
         <div className="flex w-full flex-col sm:flex-row md:gap-6 gap-10 items-center">
           <div className="p-2 border-4 md:border-2 border-accent rounded-full shrink-0">
             <ProfilePhotoUpload
@@ -39,7 +40,7 @@ const EditProfile = async ({ params }) => {
               {user.branch}
             </p>
 
-            <p className="text-white/60 flex items-center sm:justify-center">
+            <p className="text-white/60 flex items-center sm:justify-start nowrap justify-center">
               <IoSchool className="stroke-white/60 md:w-4 md:h-4 w-6 h-6 mr-2" />
               {user.roll}
             </p>
@@ -57,7 +58,7 @@ const EditProfile = async ({ params }) => {
           bio,
         }}
       />
-    </>
+    </main>
   );
 };
 
