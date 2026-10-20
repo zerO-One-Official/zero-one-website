@@ -12,6 +12,7 @@ const LoginBtn = ({ unmount = () => {} }) => {
   const [active, setActive] = useState(false);
 
   const { data } = useSession();
+  const isAdmin = data?.user?.role === "ADMIN";
 
   const popUpRef = useRef(null);
 
@@ -64,7 +65,7 @@ const LoginBtn = ({ unmount = () => {} }) => {
           </div>
           <div className="flex flex-col gap-2 w-full ">
             <div className="flex flex-row gap-1">
-              {data && data.user && data.user.role === "ADMIN" ? (
+              {isAdmin ? (
                 <Link
                   href={process.env.NEXT_PUBLIC_ADMIN_URL || "http://localhost:3001"}
                   className="flex-1 bg-white/5 p-2 py-3 flex justify-center hover:bg-white/10 transition-all items-center rounded-r-none rounded-full"
@@ -75,7 +76,7 @@ const LoginBtn = ({ unmount = () => {} }) => {
               <Link
                 href={`/user/${data.user.username}`}
                 onClick={unmount}
-                className="flex-1 bg-white/5 p-2 py-3 flex justify-center hover:bg-white/10 transition-all items-center rounded-l-none rounded-full"
+                className={`flex-1 bg-white/5 p-2 py-3 flex justify-center hover:bg-white/10 transition-all items-center rounded-full ${isAdmin ? "lg:rounded-l-none" : ""}`}
               >
                 Profile
               </Link>

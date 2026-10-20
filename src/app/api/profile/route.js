@@ -6,6 +6,7 @@ import { options } from "../auth/[...nextauth]/options";
 import { checkDuplicateUser, deleteFile } from "@/utils/server";
 import { revalidatePath } from "next/cache";
 import { validateAndNormalizeOtherLinks } from "@/lib/validators";
+import { normalizeDesignations } from "@/lib/designations";
 
 export async function GET() {
   try {
@@ -60,6 +61,7 @@ export async function PUT(req) {
       bio,
       otherLinks,
     } = reqBody;
+    const { roll, registrationNumber } = reqBody;
 
     if (!session || !id) {
       return NextResponse.json(
@@ -86,6 +88,15 @@ export async function PUT(req) {
       );
     }
 
+    const hasAcademicIdentifiers = Object.hasOwn(reqBody, "roll") || Object.hasOwn(reqBody, "registrationNumber");
+    const isAlumni = normalizeDesignations(user.designations).includes("ALUMNI");
+    if (hasAcademicIdentifiers && !isAlumni) {
+      return NextResponse.json(
+        { message: "Only alumni can update roll and registration numbers.", type: "error", success: false },
+        { status: 403 }
+      );
+    }
+
     const normalizedEmail =
       typeof email === "string" ? email.trim().toLowerCase() : email;
     const normalizedPhone =
@@ -97,6 +108,10 @@ export async function PUT(req) {
     const normalizedLinkedIn =
       typeof linkedIn === "string" ? linkedIn.trim() : linkedIn;
     const normalizedBio = typeof bio === "string" ? bio.trim() : bio;
+    const normalizedRoll = typeof roll === "string" ? roll.trim() : roll;
+    const normalizedRegistrationNumber = typeof registrationNumber === "string"
+      ? registrationNumber.trim()
+      : registrationNumber;
     let normalizedOtherLinks;
     if (otherLinks !== undefined) {
       try {
@@ -165,6 +180,37 @@ export async function PUT(req) {
         },
         { status: 409 }
       );
+    }
+
+    if (isAlumni && Object.hasOwn(reqBody, "roll")) {
+      if (normalizedRoll && !/^\d{5}$/.test(normalizedRoll)) {
+        return NextResponse.json(
+          { message: "Roll number must be a valid 5-digit number.", type: "error", success: false },
+          { status: 400 }
+        );
+      }
+      if (normalizedRoll && await checkDuplicateUser("roll", normalizedRoll, user._id)) {
+        return NextResponse.json(
+          { message: "Roll number is used in another account.", type: "error", success: false },
+          { status: 409 }
+        );
+      }
+      user.roll = normalizedRoll || undefined;
+    }
+    if (isAlumni && Object.hasOwn(reqBody, "registrationNumber")) {
+      if (normalizedRegistrationNumber && !/^\d{11}$/.test(normalizedRegistrationNumber)) {
+        return NextResponse.json(
+          { message: "Registration number must be a valid 11-digit number.", type: "error", success: false },
+          { status: 400 }
+        );
+      }
+      if (normalizedRegistrationNumber && await checkDuplicateUser("registrationNumber", normalizedRegistrationNumber, user._id)) {
+        return NextResponse.json(
+          { message: "Registration number is used in another account.", type: "error", success: false },
+          { status: 409 }
+        );
+      }
+      user.registrationNumber = normalizedRegistrationNumber || undefined;
     }
 
     user.phone = normalizedPhone;

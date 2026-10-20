@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { after, NextResponse } from "next/server";
 import dbConnect from "@/utils/dbConnect";
 import User from "@/models/User";
 import { generateAccessCode } from "@/utils/helper";
@@ -52,28 +52,23 @@ export async function POST(req) {
 
     // ============= Sending the Mail =============
     html = resetEmail(token);
-    const messageId = await sendMail(to, subject, html);
+    after(async () => {
+      try {
+        await sendMail(to, subject, html);
+      } catch (error) {
+        console.error("Password reset email delivery failed:", error);
+      }
+    });
     // ============= Sending the Mail =============
 
-    if (messageId) {
-      return NextResponse.json(
-        {
-          message: "Reset Link has been sent.",
-          type: "success",
-          success: true,
-        },
-        { status: 200 }
-      );
-    } else {
-      return NextResponse.json(
-        {
-          message: "Failed to send Reset Link. please try again",
-          type: "error",
-          success: false,
-        },
-        { status: 500 }
-      );
-    }
+    return NextResponse.json(
+      {
+        message: "Reset link queued for delivery.",
+        type: "success",
+        success: true,
+      },
+      { status: 200 }
+    );
   } catch (error) {
     console.log(error);
     return NextResponse.json(

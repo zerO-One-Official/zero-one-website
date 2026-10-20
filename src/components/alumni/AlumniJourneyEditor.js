@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "nextjs-toploader/app";
 import { toast } from "sonner";
 import { Plus, Trash2 } from "lucide-react";
 import { saveAlumniJourney, saveAlumniJourneyByInvite } from "@/action/alumniJourney";
@@ -64,7 +64,7 @@ export default function AlumniJourneyEditor({ username, initialValue, companies,
         ? await saveAlumniJourneyByInvite(inviteToken, value)
         : await saveAlumniJourney(username, value);
       toast[result.type](result.message);
-      if (result.success) router.refresh();
+      if (result.success) router.replace(`/user/${encodeURIComponent(username)}`);
     } catch (error) {
       toast.error(error.message);
     } finally {
@@ -73,7 +73,7 @@ export default function AlumniJourneyEditor({ username, initialValue, companies,
   };
 
   return (
-    <form onSubmit={save} className="space-y-8">
+    <form onSubmit={save} className="flex flex-col gap-8">
       <section className="space-y-4">
         <div>
           <h2 className="text-xl font-semibold">Timeline</h2>
@@ -165,7 +165,7 @@ export default function AlumniJourneyEditor({ username, initialValue, companies,
           disabled={busy}
         />
       ))}
-      <Button disabled={busy}>{busy ? "Saving journey..." : "Save journey"}</Button>
+      <Button className="ml-auto" disabled={busy}>{busy ? "Saving journey..." : "Save journey"}</Button>
     </form>
   );
 }

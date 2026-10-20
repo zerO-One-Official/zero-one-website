@@ -117,7 +117,7 @@ function Sidebar({ isMounted, unmount }) {
                   <Link
                     href={`/user/${data.user.username}`}
                     onClick={unmount}
-                    className="flex-1 bg-white/5 p-2 py-3 flex justify-center hover:bg-white/10 transition-all items-center xs:rounded-l-none rounded-full"
+                    className={`flex-1 bg-white/5 p-2 py-3 flex justify-center hover:bg-white/10 transition-all items-center rounded-full ${data.user.role === "ADMIN" ? "xs:rounded-l-none" : ""}`}
                   >
                     Profile
                   </Link>

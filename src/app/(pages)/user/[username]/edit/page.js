@@ -20,7 +20,7 @@ const EditProfile = async ({ params }) => {
   const { username } = await params;
   const user = await getUser(username);
   console.log(user);
-  const { email, phone, profilePic, gitHub, otherLinks, linkedIn, bio } = user;
+  const { email, phone, profilePic, gitHub, otherLinks, linkedIn, bio, designations, roll, registrationNumber } = user;
 
   return (
     <main className="container-70 flex flex-col gap-6 py-12">
@@ -56,6 +56,9 @@ const EditProfile = async ({ params }) => {
           otherLinks,
           linkedIn,
           bio,
+          designations,
+          roll,
+          registrationNumber,
         }}
       />
     </main>

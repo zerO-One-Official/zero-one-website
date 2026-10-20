@@ -35,7 +35,8 @@ export default async function middleware(req) {
   // IF the user is authenticated and trying to access the login page, redirect to home page
   if (
     isAuthenticated &&
-    authenticationUrl.some((url) => pathname.startsWith(url))
+    authenticationUrl.some((url) => pathname.startsWith(url)) &&
+    !(pathname === "/activateAccount" && req.nextUrl.searchParams.has("token"))
   ) {
     return NextResponse.redirect(new URL("/", req.url));
   }

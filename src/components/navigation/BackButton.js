@@ -1,11 +1,22 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
+import { useRouter } from "nextjs-toploader/app";
+import { useTopLoader } from "nextjs-toploader";
+import { useEffect } from "react";
 import { ArrowLeft } from "lucide-react";
 
 export default function BackButton() {
   const router = useRouter();
+  const topLoader = useTopLoader();
   const pathname = usePathname();
+
+  useEffect(() => {
+    const startForHistoryNavigation = () => topLoader.start();
+    window.addEventListener("popstate", startForHistoryNavigation);
+    return () => window.removeEventListener("popstate", startForHistoryNavigation);
+  }, [topLoader]);
+
   if (pathname === "/") return null;
 
   const alumniMatch = pathname.match(/^\/alumni\/([^/]+)$/);
@@ -28,7 +39,10 @@ export default function BackButton() {
         type="button"
         onClick={() => {
           if (contextualBack) router.push(contextualBack.href);
-          else if (window.history.length > 1) router.back();
+          else if (window.history.length > 1) {
+            topLoader.start();
+            router.back();
+          }
           else router.push("/");
         }}
         className="inline-flex items-center gap-2 rounded-lg border border-white/10 backdrop-blur-lg  px-3 py-2 text-sm font-medium shadow-lg transition-colors hover:border-accent/50 hover:text-accent"
